@@ -1,0 +1,322 @@
+<html>
+<head>
+  <title>Backbone demos</title>
+  <script src="js/jquery.min.js"></script>
+  <script src="js/underscore.min.js"></script>
+  <script src="js/backbone.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="css/custom.css">
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Ageloff/Walker</h1>
+    <p>Welcome to our personal inventory list.</p>
+  </header>
+
+  <div class="main-stats">
+    <div class="row stats-row">
+      <div class="col-md-3 col-sm-3 stat">
+        <div class="data">
+            <span class="number">14</span>
+            items
+        </div>
+      </div>
+      <div class="col-md-5 col-sm-5 stat last">
+        <div class="data">
+            <span class="number">$2,340</span>
+            total value
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div role="main">
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th class="title">Title</th>
+          <th class="category">Category</th>
+          <th class="value">Value</th>
+          <th class="select"></th>
+        </tr>
+      </thead>
+      <tbody id="inventory">
+      </tbody>
+    </table>
+    <button class="btn" id="add_item">Add Item</button>
+  </div>
+
+</div>
+
+<script type="text/template" id="item-template">
+  <tr>
+    <td><%= title %></td>
+    <td><%= category %></td>
+    <td><%= value %></td>
+    <td><input id="item_complete" type="checkbox" <%= completed ? 'checked="checked"' : '' %>></td>
+  </tr>
+</script>
+
+<!-- BACKUP TEMPLATE
+
+  <div class="thumbnail">
+    <small><%= $.format.date( new Date( date ), 'MMMM yyyy' ) %></small>
+    <img src="<%= coverImage %>" alt="<%= title %>">
+    <div class="caption">
+      <h4><%= title %></h4>
+      <p><%= category %></p>
+      <p>$<%= value %></p>
+      <p><% _.each( tags, function( keyobj ) {%> <%= keyobj.tag %><% } ); %></p>
+      <p><a href="#" class="btn btn-danger delete">Delete</a></p>
+    </div>
+  </div>
+
+-->
+
+<script>
+
+
+/* -----
+   MODEL
+   ----- */
+  var Item = Backbone.Model.extend({
+
+    defaults: {
+      title: '',
+      category: '',
+      value: null
+    },
+
+    validate: function(attributes) {
+      if (attributes.title === '') {
+        return 'Remember to set a title for your item'
+      }
+    },
+
+    initialize: function() {
+      console.log('This model has been initialized.')
+      this.on('change', function(){
+        console.log('- Values for this model have changed.');
+      });
+      this.on('invalid', function(model, error){
+        console.log(error);
+      });
+    }
+
+  });
+
+
+
+/* -----
+   VIEWS
+   ----- */
+  var ListView = Backbone.View.extend({
+
+    render: function() {
+
+      var items = this.model.get('items');
+
+      _.each(items, function(item){
+          var itemView = new ItemView({ model: item });
+          this.$el.append( itemView.render().el );
+        }, this);
+
+      }
+
+  });
+
+
+  var ItemView = Backbone.View.extend({
+
+    tagName:  'tr',
+
+    events: {
+      'click .toggle': 'toggleCompleted',
+      'dblclick label': 'edit',
+      'click .destroy': 'clear',
+      'blur .edit': 'close'
+    },
+
+    render: function(){
+      this.$el.html(this.template(this.model.attributes));
+      return this;
+    }
+
+  });
+
+
+
+/* -----------
+   COLLECTIONS
+   ----------- */
+  var ItemCollection = Backbone.Collection.extend({
+    model: Item,
+    // define route to get models from server
+    url: '/inventory'
+  });
+
+  var ItemsCollection = new ItemCollection();
+
+  ItemsCollection.on({
+    'add': itemAdded,
+    'remove': itemRemoved,
+    'change:completed': changeCompleted,
+    'reset': collectionReset
+  });
+
+  ItemsCollection.add([
+    { id: 1, title: 'Computerz', category: 'Electonics', value: 750, completed: false },
+    { id: 2, title: 'Speakers', category: 'Electonics', value: 250, completed: false },
+    { id: 3, title: 'Keyboard', category: 'Electonics', value: 100, completed: true }
+  ]);
+
+  function itemAdded(model) {
+    console.log('Added', model.get('title'));
+  }
+
+  function itemRemoved(model) {
+    console.log('Removed', model.get('title'));
+  }
+
+  function changeCompleted(model) {
+    console.log('Completed', model.get('title'));
+  }
+
+  function collectionReset(ItemCollection, options) {
+    console.log('Collection reset.', options.previousModels);
+  }
+
+
+/* -----
+   ROUTER
+   ------ */
+   var InventoryRouter = Backbone.Router.extend({
+
+    routes: {
+
+        "about" : "showAbout",
+        /* http://localhost:3000/#item/5 */
+
+        "item/:id" : "getItem",
+        /* http://localhost:3000/#item/5 */
+
+        "search/:query" : "searchItems",
+        /* http://localhost:3000/#search/computer */
+
+        "search/:query/p:page" : "searchItems",
+        /* http://localhost:3000/#search/job/p1 */
+
+        "*other" : "defaultRoute"
+        /* http://localhost:3000/# <anything> */,
+
+    },
+
+    showAbout: function(){
+    },
+
+    getItem: function(id){
+        /*
+        Note that the id matched in the above route will be passed to this function
+        */
+        console.log("You are trying to reach todo " + id);
+    },
+
+    searchItems: function(query, page){
+        var page_number = page || 1;
+        console.log("Page number: " + page_number + " of the results for todos containing the word: " + query);
+    },
+
+    defaultRoute: function(other){
+        console.log('Invalid. You attempted to reach:' + other);
+    }
+});
+
+/* Now that we have a router setup, we need to instantiate it */
+
+var itemRouter = new InventoryRouter();
+
+Backbone.history.start();
+
+
+/* ----------
+   PLAYGROUND
+   ---------- */
+  // ItemsCollection.set([
+  //   { id: 1, title: 'Computer', completed: true },
+  //   { id: 2, value: 400, completed: true },
+  //   { id: 4, title: 'Keyboard', category: 'Electronics', value: '50', completed: false }
+  // ]);
+
+
+  // Sort alphabetically
+  var sortedByAlphabet = ItemsCollection.sortBy(function (item) {
+    return item.get("title").toLowerCase();
+  });
+
+  console.log("- Now sorted: ");
+  sortedByAlphabet.forEach(function(model){
+    console.log(model.get('title'));
+  });
+
+  // Display collection Size
+  console.log('Collection size', ItemsCollection.length);
+
+  // Iterate through a collection and map each value
+  var count = 1;
+  console.log(ItemsCollection.map(function(model){
+    return count++ + ". " + model.get('title');
+  }));
+
+  // Reset Collection
+  // ItemsCollection.reset();
+
+  // Return max and min values
+  ItemsCollection.max(function(model){
+    return model.id;
+  }).id;
+
+  ItemsCollection.min(function(model){
+    return model.id;
+  }).id;
+
+  // Pluck a specific attribute
+  var captions = ItemsCollection.pluck('value');
+  console.log(captions)
+
+  // Confirm if any of the values in a collection pass an iterator truth test
+  ItemsCollection.any(function(model){
+    console.log(model.id === 2);
+  });
+
+  // Is the collection empty
+  var isEmpty = ItemsCollection.isEmpty();
+  console.log('is empty?', isEmpty);
+
+  // By complete (or incomplete) items
+  var byCompleted = ItemsCollection.groupBy('completed');
+  var completed = new Backbone.Collection(byCompleted[false]);
+  console.log(completed.pluck('title'));
+
+  // Fetch models
+  ItemsCollection.fetch();
+
+  var items = ItemsCollection.get(2);
+  items.set('title', ''); // <-- will trigger validate because empty
+  items.save(); // sends HTTP PUT to /inventory/2
+
+  // Saving a model to the server
+  var newItem = new ItemCollection;
+  // newItem.create({title: 'Monitor', category: 'Electonics', value: 1200, completed: false}); // sends HTTP POST to /todos and adds to collection
+
+  // Delete something
+  // items.destroy(); // sends HTTP DELETE to /todos/2 and removes from collection
+
+
+</script>
+
+</body>
+</html>
+

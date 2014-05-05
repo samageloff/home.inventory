@@ -1,54 +1,143 @@
+// Module dependencies.
+var application_root = __dirname,
+  express = require('express'), //Web framework
+  path = require('path'), //Utilities for dealing with file paths
+  mongoose = require('mongoose'); //MongoDB integration
 
-/**
- * Module dependencies
- */
+// Create server
+var app = express();
 
-var express = require('express')
-var passport = require('passport')
-var env = process.env.NODE_ENV || 'development'
-var config = require('./config/config')[env]
-var mongoose = require('mongoose')
-var fs = require('fs')
+// Configure server
+app.configure(function() {
 
-require('express-namespace')
+  console.log(application_root)
 
-// Connect to mongodb
-var connect = function () {
-  var options = { server: { socketOptions: { keepAlive: 1 } } }
-  mongoose.connect(config.db, options)
-}
-connect()
+  // parses request body and populates request.body
+  app.use(express.bodyParser());
 
-// Error handler
-mongoose.connection.on('error', function (err) {
-  console.log(err)
-})
+  // checks request.body for HTTP method overrides
+  app.use(express.methodOverride());
 
-// Reconnect when closed
-mongoose.connection.on('disconnected', function () {
-  connect()
-})
+  // Where to serve static content
+  app.use(express.static(__dirname));
 
-// Bootstrap models
-fs.readdirSync(__dirname + '/app/models').forEach(function (file) {
-  if (~file.indexOf('.js')) require(__dirname + '/app/models/' + file)
-})
+  // perform route lookup based on url and HTTP method
+  app.use(app.router);
 
-// Bootstrap passport config
-require('./config/passport')(passport, config)
+  // Show all errors in development
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+});
 
-var app = express()
+// Routes
+app.get('/api', function(request, response) {
+  response.send('Library API is runnings');
+});
 
-// Bootstrap application settings
-require('./config/express')(app, passport)
+// Get a list of all items
+app.get('/api/items', function(request, response) {
+  return ItemModel.find(function(err, items) {
+      if(!err) {
+          console.log('app get', items);
+          return response.send(items);
+      } else {
+          return console.log(err);
+      }
+  });
+});
 
-// Bootstrap routes
-require('./config/routes')(app, passport)
+// Get a single item by id
+app.get('/api/items/:id', function(request, response) {
+  return ItemModel.findById(request.params.id, function(err, item) {
+      if(!err) {
+          return response.send(item);
+      } else {
+          return console.log(err);
+      }
+  });
+});
 
-// Start the app by listening on <port>
-var port = process.env.PORT || 3000
-app.listen(port)
-console.log('Express app started on port '+port)
+// Insert an item
+app.post('/api/items', function(request, response) {
+  var item = new ItemModel({
+      date: request.body.date,
+      title: request.body.title,
+      category: request.body.category,
+      itemImage: request.body.itemImage,
+      value: request.body.value,
+      tags: request.body.tags
+  });
+  item.save(function(err) {
+      if(!err) {
+          console.log('app post', item);
+          return console.log('created');
+      } else {
+          return console.log(err);
+      }
+  });
+  return response.send(item);
+});
 
-// Expose app
-module.exports = app
+// Update an item
+app.put('/api/items/:id', function(request, response) {
+  console.log('Updating item ' + request.body.title);
+  return ItemModel.findById(request.params.id, function(err, item) {
+      item.title = request.body.title;
+      item.category = request.body.category;
+      item.date = request.body.date;
+      item.itemImage = request.body.itemImage;
+      item.value = request.body.value;
+      item.tags = request.body.tags;
+
+      return item.save(function(err) {
+          if(!err) {
+              console.log('app put', item);
+              console.log('item updated');
+          } else {
+              console.log(err);
+          }
+          return response.send(item);
+      });
+  });
+});
+
+// Delete an item
+app.delete('/api/items/:id', function(request, response) {
+  console.log('Deleting item with id: ' + request.params.id);
+  return ItemModel.findById(request.params.id, function(err, item) {
+    return item.remove(function(err) {
+      if(!err) {
+          console.log('Item removed');
+          return response.send('');
+      } else {
+          console.log(err);
+      }
+    });
+  });
+});
+
+// Start server
+var port = 3000;
+app.listen(port, function() {
+  console.log('Express server listening on port %d in %s mode', port, app.settings.env);
+});
+
+// Connect to database
+mongoose.connect('localhost', 'inventory_database');
+
+// Schemas
+var Item = new mongoose.Schema({
+  date: Date,
+  title: String,
+  category: String,
+  itemImage: String,
+  value: Number,
+  tags: [ Tags ]  // reference to schema below
+});
+
+var Tags = new mongoose.Schema({
+  tag: String
+});
+
+// Models
+var ItemModel = mongoose.model('Item', Item);
+
