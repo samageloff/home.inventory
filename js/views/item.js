@@ -1,6 +1,4 @@
-var app = app || {};
-
-app.ItemView = Backbone.View.extend({
+ItemView = Backbone.View.extend({
 
   tagName: 'tr',
   template: _.template($('#itemTemplate').html()),
@@ -11,7 +9,6 @@ app.ItemView = Backbone.View.extend({
 
   deleteItem: function(e) {
     e.preventDefault();
-
     if (window.confirm('Are you sure?')) {
 
       //Delete model
@@ -25,6 +22,7 @@ app.ItemView = Backbone.View.extend({
   render: function() {
     //this.el is what we defined in tagName. use $el to get access to jQuery html() function
     this.$el.html(this.template(this.model.toJSON()));
+
     return this;
   }
 });

@@ -1,8 +1,6 @@
-var app = app || {};
+Inventory = Backbone.Collection.extend({
 
-app.Inventory = Backbone.Collection.extend({
-
-  model: app.Item,
+  model: Item,
   url: '/api/items',
 
   initialize: function() {
@@ -45,20 +43,6 @@ app.Inventory = Backbone.Collection.extend({
 
     totalCount.html(this.length);
     valueWrap.html(sum);
-   },
-
-   displayAlert: function(d) {
-
-      var container = $('<div />').addClass('alert alert-success');
-
-      container.text('You are magical.');
-
-      container.prependTo('.main-stats');
-
-      var removeAlert = setTimeout(function() {
-        container.fadeOut('slow');
-      }, 1000);
-
    }
 
 });

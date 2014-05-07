@@ -4,7 +4,7 @@ var application_root = __dirname,
   path = require('path'), //Utilities for dealing with file paths
   mongoose = require('mongoose'); //MongoDB integration
 
-// Create server
+//Create server
 var app = express();
 
 // Configure server
@@ -12,19 +12,19 @@ app.configure(function() {
 
   console.log(application_root)
 
-  // parses request body and populates request.body
+  //parses request body and populates request.body
   app.use(express.bodyParser());
 
-  // checks request.body for HTTP method overrides
+  //checks request.body for HTTP method overrides
   app.use(express.methodOverride());
 
-  // Where to serve static content
+  //Where to serve static content
   app.use(express.static(__dirname));
 
-  // perform route lookup based on url and HTTP method
+  //perform route lookup based on url and HTTP method
   app.use(app.router);
 
-  // Show all errors in development
+  //Show all errors in development
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 
@@ -36,23 +36,22 @@ app.get('/api', function(request, response) {
 // Get a list of all items
 app.get('/api/items', function(request, response) {
   return ItemModel.find(function(err, items) {
-      if(!err) {
-          console.log('app get', items);
-          return response.send(items);
-      } else {
-          return console.log(err);
-      }
+    if(!err) {
+        return response.send(items);
+    } else {
+        return console.log(err);
+    }
   });
 });
 
-// Get a single item by id
+//Get a single item by id
 app.get('/api/items/:id', function(request, response) {
   return ItemModel.findById(request.params.id, function(err, item) {
-      if(!err) {
-          return response.send(item);
-      } else {
-          return console.log(err);
-      }
+    if(!err) {
+        return response.send(item);
+    } else {
+        return console.log(err);
+    }
   });
 });
 
@@ -67,12 +66,12 @@ app.post('/api/items', function(request, response) {
       tags: request.body.tags
   });
   item.save(function(err) {
-      if(!err) {
-          console.log('app post', item);
-          return console.log('created');
-      } else {
-          return console.log(err);
-      }
+    if(!err) {
+        console.log('app post', item);
+        return console.log('created');
+    } else {
+        return console.log(err);
+    }
   });
   return response.send(item);
 });
@@ -81,26 +80,26 @@ app.post('/api/items', function(request, response) {
 app.put('/api/items/:id', function(request, response) {
   console.log('Updating item ' + request.body.title);
   return ItemModel.findById(request.params.id, function(err, item) {
-      item.title = request.body.title;
-      item.category = request.body.category;
-      item.date = request.body.date;
-      item.itemImage = request.body.itemImage;
-      item.value = request.body.value;
-      item.tags = request.body.tags;
+    item.title = request.body.title;
+    item.category = request.body.category;
+    item.date = request.body.date;
+    item.itemImage = request.body.itemImage;
+    item.value = request.body.value;
+    item.tags = request.body.tags;
 
-      return item.save(function(err) {
-          if(!err) {
-              console.log('app put', item);
-              console.log('item updated');
-          } else {
-              console.log(err);
-          }
-          return response.send(item);
-      });
+    return item.save(function(err) {
+      if(!err) {
+          console.log('app put', item);
+          console.log('item updated');
+      } else {
+          console.log(err);
+      }
+      return response.send(item);
+    });
   });
 });
 
-// Delete an item
+//Delete an item
 app.delete('/api/items/:id', function(request, response) {
   console.log('Deleting item with id: ' + request.params.id);
   return ItemModel.findById(request.params.id, function(err, item) {
@@ -116,13 +115,13 @@ app.delete('/api/items/:id', function(request, response) {
 });
 
 // Start server
-var port = 3000;
+var port = 3001;
 app.listen(port, function() {
   console.log('Express server listening on port %d in %s mode', port, app.settings.env);
 });
 
 // Connect to database
-mongoose.connect('localhost', 'inventory_database');
+mongoose.connect('mongodb://localhost/inventory_database');
 
 // Schemas
 var Item = new mongoose.Schema({

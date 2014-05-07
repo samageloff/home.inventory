@@ -89,7 +89,7 @@ html, body {
   background-color: #fdfdfd;
   border-bottom: 1px solid #efeef3;
   margin-bottom: 3em;
-/*  position: fixed;*/
+  position: fixed;
   width: 100%;
   z-index: 2;
 }
@@ -150,6 +150,10 @@ html, body {
 .container {
   margin-bottom: 3em;
   padding: 0;
+}
+
+.container-padded {
+  margin: 2em;
 }
 
 .alert {
@@ -274,20 +278,15 @@ html, body {
   right: 0;
 }
 
-.delete-item,
-.edit-item {
+.delete-item {
   padding: 4px 10px 0px;
   color: #666;
 }
 
-.delete-item:hover,
-.edit-item:hover {
+.delete-item:hover {
   text-decoration: none;
 }
 
-.edit-item {
-  padding-top: 2px;
-}
 
 .fade {
   opacity: 0;
@@ -297,10 +296,6 @@ html, body {
   transition: opacity 250ms;
 }
 
-
-.container-padded {
-  margin: 0 2em;
-}
 
 @media
   only screen and (-webkit-min-device-pixel-ratio : 1.5),
