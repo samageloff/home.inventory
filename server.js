@@ -114,6 +114,31 @@ app.delete('/api/items/:id', function(request, response) {
   });
 });
 
+// Get a list of categies
+app.get('/api/categories', function(request, response) {
+   console.log('Get all categories: ');
+   return ItemModel.find().distinct('category', function(err, items) {
+    if(!err) {
+      return response.send(items);
+    } else {
+      return console.log(err);
+    }
+  });
+});
+
+
+// Get a list of items by category
+app.get('/api/category/:name', function(request, response) {
+   console.log('Searching item with category: ' + request.params.name);
+   return ItemModel.find({ category: request.params.name }, function(err, items) {
+    if(!err) {
+      return response.send(items);
+    } else {
+      return console.log(err);
+    }
+  });
+});
+
 // Start server
 var port = 3001;
 app.listen(port, function() {
