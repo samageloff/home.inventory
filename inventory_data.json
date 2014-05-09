@@ -1,0 +1,11 @@
+{ "date" : { "$date" : 1391215424961 }, "title" : "Kitchen Table", "category" : "Furniture", "itemImage" : "", "value" : 475, "_id" : { "$oid" : "52ec43415cba6e0000000002" }, "tags" : [ "" ], "__v" : 0 }
+{ "date" : { "$date" : 1391215564557 }, "title" : "Chagall Print", "category" : "Art", "itemImage" : "", "value" : 150, "_id" : { "$oid" : "52ec43cd5cba6e0000000003" }, "tags" : [ "" ], "__v" : 0 }
+{ "date" : { "$date" : 1391215633247 }, "title" : "Apple Mac Mini", "category" : "Computer", "itemImage" : "", "value" : 650, "_id" : { "$oid" : "52ec44115cba6e0000000004" }, "tags" : [ "" ], "__v" : 0 }
+{ "date" : { "$date" : 1398729314926 }, "title" : "Martin Acoustic Guitar", "category" : "Instrument", "itemImage" : "", "value" : 750, "_id" : { "$oid" : "535eea6298c8b01513000001" }, "tags" : [ "" ], "__v" : 0 }
+{ "_id" : { "$oid" : "536c340f2b616e2ee824cb4c" }, "date" : { "$date" : 1393634624961 }, "title" : "Couch", "category" : "Furniture", "itemImage" : "", "value" : 275, "tags" : [ "" ], "__v" : 0 }
+{ "_id" : { "$oid" : "536c351f2b616e2ee824cb4d" }, "date" : { "$date" : 1357001024961 }, "title" : "Kline Print", "category" : "Art", "itemImage" : "", "value" : 250, "tags" : [ "" ], "__v" : 0 }
+{ "_id" : { "$oid" : "536c3563923b49a550737bcb" }, "date" : { "$date" : 1391215424961 }, "title" : "Kline Print", "category" : "Art", "itemImage" : "", "value" : 250, "tags" : [ "" ], "__v" : 0 }
+{ "_id" : { "$oid" : "536c3563923b49a550737bcc" }, "date" : { "$date" : 1388537024961 }, "title" : "Dentist Cabinet", "category" : "Furniture", "itemImage" : "", "value" : 75, "tags" : [ "" ], "__v" : 0 }
+{ "_id" : { "$oid" : "536c35a8923b49a550737bcd" }, "date" : { "$date" : 1393634624961 }, "title" : "Alesis Speakers", "category" : "Electronics", "itemImage" : "", "value" : 150, "tags" : [ "" ], "__v" : 0 }
+{ "_id" : { "$oid" : "536c35a8923b49a550737bce" }, "date" : { "$date" : 1393634624961 }, "title" : "Desk", "category" : "Furniture", "itemImage" : "", "value" : 500, "tags" : [ "" ], "__v" : 0 }
+{ "_id" : { "$oid" : "536c35a8923b49a550737bcf" }, "date" : { "$date" : 1393634624961 }, "title" : "Kitchen Chairs + Bench", "category" : "Furniture", "itemImage" : "", "value" : 250, "tags" : [ "" ], "__v" : 0 }
