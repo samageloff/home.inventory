@@ -1,3 +1,6 @@
+var formData = {};
+var app = app || {};
+
 Item = Backbone.Model.extend({
 
   defaults: {
@@ -8,6 +11,8 @@ Item = Backbone.Model.extend({
     itemValue: 0,
     tags: ''
   },
+
+  urlRoot: '/api/items',
 
   validate: function(attributes) {
     // if (attributes.title === '') {

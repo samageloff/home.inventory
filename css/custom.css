@@ -270,7 +270,7 @@ html, body {
   -webkit-overflow-scrolling : touch;
 }
 
-.btn.add-item {
+#new-item {
   margin: 17px 17px 0;
   padding: 8px 11px 5px;
   position: absolute;

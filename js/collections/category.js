@@ -7,7 +7,6 @@ Inventory = Backbone.Collection.extend({
 
     this.on('reset', function() {
       this.updateDash();
-      $('body').addClass('in');
     });
 
    },

@@ -1,8 +1,3 @@
-$(function() {
-  new InventoryView();
-});
-
-
 /*
 $.support.touch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;
 events: (function() {

@@ -1,5 +1,3 @@
-var formData = {};
-
 InventoryView = Backbone.View.extend({
 
   el: '#items',
@@ -38,11 +36,9 @@ InventoryView = Backbone.View.extend({
     else {
       fileDisplayArea.innerHTML = "File not supported!";
     }
-
   },
 
   nextStep: function(e) {
-
   },
 
   addItem: function(e) {
@@ -59,10 +55,9 @@ InventoryView = Backbone.View.extend({
   },
 
   initialize: function() {
-    this.collection = new Inventory();
-    this.collection.fetch({reset: true});
     this.listenTo(this.collection, 'add', this.renderItem);
     this.listenTo(this.collection, 'reset', this.render);
+    this.listenTo(this.collection, 'reset', this.renderHeader);
     this.render();
   },
 
@@ -79,8 +74,12 @@ InventoryView = Backbone.View.extend({
     var itemView = new ItemView({
       model: item
     });
-    $('.modal').modal('hide');
     $('#inventory-wrap').append(itemView.render().el);
+  },
+
+  renderHeader: function() {
+    var headerView = new HeaderView({});
+    $('.container-fluid').append(headerView.render().el);
   }
 
 });
