@@ -1,6 +1,5 @@
 # home.inventory
-## aka "moveable"
-### is a web-based application
+### is a web-based utility
 
 it is built with:
 * ---- backbone
@@ -8,6 +7,4 @@ it is built with:
 *     -- mongo
 *       - node
 
-the end goal is to give the user an easy to use interface
-enabling them to document belongings, and retrieve information
-about them
+designed to enable the user to document belongings, and retrieve information about them.
