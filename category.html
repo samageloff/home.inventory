@@ -1,0 +1,487 @@
+<html>
+<head>
+  <title>Backbone demos</title>
+
+  <script src="js/lib/jquery.min.js"></script>
+  <script src="js/lib/underscore.min.js"></script>
+  <script src="js/lib/backbone.min.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="css/custom.css">
+</head>
+<body>
+
+<div class="container-fluid">
+
+  <div class="main-stats">
+    <div class="row stats-row">
+      <div class="col-md-3 col-sm-3 stat">
+        <div class="data">
+            <span class="number">0</span>items
+        </div>
+      </div>
+      <div class="col-md-5 col-sm-5 stat last">
+        <div class="data">
+            <span class="number">$0</span>total value
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div role="main">
+    <ul id="category-list"></ul>
+  </div>
+
+</div>
+
+<script type="text/template" id="category-item-template">
+  <a href="#/category/<%= category %>"><%= category %></a>
+</script>
+
+
+<script>
+
+var Item = Backbone.Model.extend({
+  defaults: {
+    title: '',
+    category: '',
+    value: 0
+  }
+});
+
+var Library = Backbone.Collection.extend({
+  model: Item
+});
+
+var ItemView = Backbone.View.extend({
+  tagName: 'li',
+  className: 'category-item',
+  template: _.template($('#category-item-template').html()),
+
+  render: function() {
+    this.$el.html(this.template(this.model.toJSON()));
+    return this;
+  }
+});
+
+var LibraryView = Backbone.View.extend({
+
+  el: '#category-list',
+
+  initialize: function(initialItems) {
+    this.collection = new Library(initialItems);
+    this.render();
+  },
+
+  render: function() {
+    var groupByCategory = this.collection.groupBy('category');
+    var arr = _.keys(groupByCategory);
+
+    this.collection.each(function(item) {
+      this.renderItem(item);
+    }, this);
+
+    // console.log(groupByCategory, _.keys(groupByCategory));
+  },
+
+  renderItem: function(item) {
+    var itemView = new ItemView({ model: item });
+    this.$el.append(itemView.render().el);
+  }
+
+});
+
+$(function() {
+  var items = [
+  {
+    "date": "2014-02-01T00:43:44.961Z",
+    "title": "Kitchen Table",
+    "category": "Furniture",
+    "itemImage": "",
+    "value": 475,
+    "_id": "52ec43415cba6e0000000002",
+    "__v": 0,
+    "tags": [
+      ""
+    ]
+  },
+  {
+    "date": "2014-02-01T00:46:04.557Z",
+    "title": "Chagall Print",
+    "category": "Art",
+    "itemImage": "",
+    "value": 150,
+    "_id": "52ec43cd5cba6e0000000003",
+    "__v": 0,
+    "tags": [
+      ""
+    ]
+  },
+  {
+    "date": "2014-02-01T00:47:13.247Z",
+    "title": "Apple Mac Mini",
+    "category": "Computer",
+    "itemImage": "",
+    "value": 650,
+    "_id": "52ec44115cba6e0000000004",
+    "__v": 0,
+    "tags": [
+      ""
+    ]
+  },
+  {
+    "date": "2014-04-28T23:55:14.926Z",
+    "title": "Martin Acoustic Guitar",
+    "category": "Instrument",
+    "itemImage": "",
+    "value": 750,
+    "_id": "535eea6298c8b01513000001",
+    "__v": 0,
+    "tags": [
+      ""
+    ]
+  },
+  {
+    "_id": "536c340f2b616e2ee824cb4c",
+    "date": "2014-03-01T00:43:44.961Z",
+    "title": "Couch",
+    "category": "Furniture",
+    "itemImage": "",
+    "value": 275,
+    "__v": 0,
+    "tags": [
+      ""
+    ]
+  },
+  {
+    "_id": "536c351f2b616e2ee824cb4d",
+    "date": "2013-01-01T00:43:44.961Z",
+    "title": "Kline Print",
+    "category": "Art",
+    "itemImage": "",
+    "value": 250,
+    "__v": 0,
+    "tags": [
+      ""
+    ]
+  },
+  {
+    "_id": "536c3563923b49a550737bcc",
+    "date": "2014-01-01T00:43:44.961Z",
+    "title": "Dentist Cabinet",
+    "category": "Furniture",
+    "itemImage": "",
+    "value": 75,
+    "__v": 0,
+    "tags": [
+      ""
+    ]
+  },
+  {
+    "_id": "536c35a8923b49a550737bcd",
+    "date": "2014-03-01T00:43:44.961Z",
+    "title": "Alesis Speakers",
+    "category": "Electronics",
+    "itemImage": "",
+    "value": 150,
+    "__v": 0,
+    "tags": [
+      ""
+    ]
+  },
+  {
+    "_id": "536c35a8923b49a550737bce",
+    "date": "2014-03-01T00:43:44.961Z",
+    "title": "Desk",
+    "category": "Furniture",
+    "itemImage": "",
+    "value": 500,
+    "__v": 0,
+    "tags": [
+      ""
+    ]
+  },
+  {
+    "_id": "536c35a8923b49a550737bcf",
+    "date": "2014-03-01T00:43:44.961Z",
+    "title": "Kitchen Chairs + Bench",
+    "category": "Furniture",
+    "itemImage": "",
+    "value": 250,
+    "__v": 0,
+    "tags": [
+      ""
+    ]
+  },
+  {
+    "date": "2014-05-11T16:18:41.882Z",
+    "title": "Couch",
+    "category": "Furniture",
+    "itemImage": "",
+    "value": 500,
+    "_id": "536fa2eaa2ce07c29e000005",
+    "__v": 0,
+    "tags": [
+      ""
+    ]
+  },
+  {
+    "date": "2014-05-11T16:20:20.631Z",
+    "title": "Rowenta Iron",
+    "category": "Home Goods",
+    "itemImage": "",
+    "value": 150,
+    "_id": "536fa34da2ce07c29e000006",
+    "__v": 0,
+    "tags": [
+      ""
+    ]
+  },
+  {
+    "_id": "5370b82be0c6b00a8361d0af",
+    "title": "Kitchen Table",
+    "category": "Furniture",
+    "value": null,
+    "tags": []
+  },
+  {
+    "_id": "5370b89e2f26e4af79612ac2",
+    "title": "Kitchen Table",
+    "category": "Furniture",
+    "itemImage": "",
+    "value": 475,
+    "tags": [
+      ""
+    ]
+  },
+  {
+    "_id": "5370b89e2f26e4af79612ac3",
+    "title": "Chagall Print",
+    "category": "Art",
+    "itemImage": "",
+    "value": 150,
+    "tags": [
+      ""
+    ]
+  },
+  {
+    "_id": "5370b89e2f26e4af79612ac4",
+    "title": "Apple Mac Mini",
+    "category": "Computer",
+    "itemImage": "",
+    "value": 650,
+    "tags": [
+      ""
+    ]
+  },
+  {
+    "_id": "5370b89e2f26e4af79612ac5",
+    "title": "Martin Acoustic Guitar",
+    "category": "Instrument",
+    "itemImage": "",
+    "value": 750,
+    "tags": [
+      ""
+    ]
+  },
+  {
+    "_id": "5370b89e2f26e4af79612ac6",
+    "title": "Couch",
+    "category": "Furniture",
+    "itemImage": "",
+    "value": 275,
+    "tags": [
+      ""
+    ]
+  },
+  {
+    "_id": "5370b89e2f26e4af79612ac7",
+    "title": "Kline Print",
+    "category": "Art",
+    "itemImage": "",
+    "value": 250,
+    "tags": [
+      ""
+    ]
+  },
+  {
+    "_id": "5370b89e2f26e4af79612ac8",
+    "title": "Kline Print",
+    "category": "Art",
+    "itemImage": "",
+    "value": 250,
+    "tags": [
+      ""
+    ]
+  },
+  {
+    "_id": "5370b89e2f26e4af79612ac9",
+    "title": "Dentist Cabinet",
+    "category": "Furniture",
+    "itemImage": "",
+    "value": 75,
+    "tags": [
+      ""
+    ]
+  },
+  {
+    "_id": "5370b89e2f26e4af79612aca",
+    "title": "Alesis Speakers",
+    "category": "Electronics",
+    "itemImage": "",
+    "value": 150,
+    "tags": [
+      ""
+    ]
+  },
+  {
+    "_id": "5370b89e2f26e4af79612acb",
+    "title": "Desk",
+    "category": "Furniture",
+    "itemImage": "",
+    "value": 500,
+    "tags": [
+      ""
+    ]
+  },
+  {
+    "_id": "5370b89e2f26e4af79612acc",
+    "title": "Kitchen Chairs + Bench",
+    "category": "Furniture",
+    "itemImage": "",
+    "value": 250,
+    "tags": [
+      ""
+    ]
+  },
+  {
+    "_id": "5370ba8c2f26e4af79612acd",
+    "title": "Hanging Lamp",
+    "category": "Lighting",
+    "value": 75,
+    "tags": []
+  },
+  {
+    "_id": "5370ba8c2f26e4af79612ace",
+    "title": "Table Lamp (White)",
+    "category": "Lighting",
+    "value": 75,
+    "tags": []
+  },
+  {
+    "_id": "5370ba8c2f26e4af79612acf",
+    "title": "Navajo Rug",
+    "category": "Rugs",
+    "value": 1000,
+    "tags": []
+  },
+  {
+    "_id": "5370ba8c2f26e4af79612ad0",
+    "title": "Pakistani Prayer Rug",
+    "category": "Rugs",
+    "value": 750,
+    "tags": []
+  },
+  {
+    "_id": "5370ba8c2f26e4af79612ad1",
+    "title": "Moroccan Rug",
+    "category": "Rugs",
+    "value": 250,
+    "tags": []
+  },
+  {
+    "_id": "5370ba8c2f26e4af79612ad2",
+    "title": "Buddah Head",
+    "category": "Decor",
+    "value": 75,
+    "tags": []
+  },
+  {
+    "_id": "5370ba8c2f26e4af79612ad3",
+    "title": "Matt Shlion Piece",
+    "category": "Art",
+    "value": 250,
+    "tags": []
+  },
+  {
+    "_id": "5370ba8c2f26e4af79612ad4",
+    "title": "Swan Pair",
+    "category": "Decor",
+    "value": 500,
+    "tags": []
+  },
+  {
+    "_id": "5370ba8c2f26e4af79612ad5",
+    "title": "Bird Print",
+    "category": "Art",
+    "value": 150,
+    "tags": []
+  },
+  {
+    "_id": "5370ba8c2f26e4af79612ad6",
+    "title": "Franz Metronome",
+    "category": "Instruments",
+    "value": 100,
+    "tags": []
+  },
+  {
+    "_id": "5370ba8c2f26e4af79612ad7",
+    "title": "Thunderbird Monitor",
+    "category": "Electronics",
+    "value": 1000,
+    "tags": []
+  },
+  {
+    "_id": "5370ba8c2f26e4af79612ad8",
+    "title": "Walker Blossoms",
+    "category": "Art",
+    "value": 250,
+    "tags": []
+  },
+  {
+    "_id": "5370ba8c2f26e4af79612ad9",
+    "title": "Walker Penguins",
+    "category": "Art",
+    "value": 100,
+    "tags": []
+  },
+  {
+    "_id": "5370ba8c2f26e4af79612ada",
+    "title": "Ageloff Big Simon",
+    "category": "Art",
+    "value": 400,
+    "tags": []
+  },
+  {
+    "_id": "5370ba8c2f26e4af79612adb",
+    "title": "Old Fan",
+    "category": "Small Appliances",
+    "value": 50,
+    "tags": []
+  },
+  {
+    "_id": "5370ba8c2f26e4af79612adc",
+    "title": "Coffee Grinder",
+    "category": "Coffee & Tea",
+    "value": 150,
+    "tags": []
+  },
+  {
+    "_id": "5370ba8c2f26e4af79612add",
+    "title": "Djembe",
+    "category": "Instruments",
+    "value": 150,
+    "tags": []
+  }
+];
+
+  new LibraryView(items);
+
+});
+
+
+</script>
+
+</body>
+</html>
+
