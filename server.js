@@ -114,10 +114,10 @@ app.delete('/api/items/:id', function(request, response) {
   });
 });
 
-// Get a list of categies
+// Get a list of categories + counts
 app.get('/api/categories', function(request, response) {
-   console.log('Get all categories: ');
-   return ItemModel.find().distinct('category', function(err, items) {
+   console.log('Get all categories + counts');
+   return ItemModel.aggregate({ $group: { _id: '$category', count: { $sum: 1 } }}, function(err, items) {
     if(!err) {
       return response.send(items);
     } else {
