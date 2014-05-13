@@ -61,6 +61,12 @@ app.post('/api/items', function(request, response) {
       date: request.body.date,
       title: request.body.title,
       category: request.body.category,
+      slug: function() {
+        return request.body.category
+          .toLowerCase()
+          .replace(/[^\w ]+/g,'')
+          .replace(/ +/g,'-');
+      },
       itemImage: request.body.itemImage,
       value: request.body.value,
       tags: request.body.tags
@@ -82,6 +88,7 @@ app.put('/api/items/:id', function(request, response) {
   return ItemModel.findById(request.params.id, function(err, item) {
     item.title = request.body.title;
     item.category = request.body.category;
+    item.slug = request.body.category;
     item.date = request.body.date;
     item.itemImage = request.body.itemImage;
     item.value = request.body.value;
@@ -116,8 +123,8 @@ app.delete('/api/items/:id', function(request, response) {
 
 // Get a list of items by category
 app.get('/api/category/:name', function(request, response) {
-   console.log('Searching item with category: ' + request.params.name);
-   return ItemModel.find({ category: request.params.name }, function(err, items) {
+  console.log('Searching item with category: ' + request.params.name);
+  return ItemModel.find({ category: request.params.name }, function(err, items) {
     if(!err) {
       return response.send(items);
     } else {
@@ -128,11 +135,18 @@ app.get('/api/category/:name', function(request, response) {
 
 // Get a list of categories + counts
 app.get('/api/categories', function(request, response) {
-   console.log('Get all categories + counts');
-   return ItemModel.aggregate({ $group: { _id: '$category', count: { $sum: 1 } }}, function(err, items) {
+  console.log('Get all categories + counts');
+  return ItemModel.aggregate({
+    $group: {
+      _id: '$category',
+      count: { $sum: 1 }
+    }
+  },
+  function(err, items) {
     if(!err) {
       return response.send(items);
-    } else {
+    }
+    else {
       return console.log(err);
     }
   });
@@ -150,6 +164,7 @@ mongoose.connect('mongodb://localhost/inventory_database');
 // Item Schema
 var Item = new mongoose.Schema({
   _id: String,
+  slug: String,
   count: Number,
   date: Date,
   title: String,

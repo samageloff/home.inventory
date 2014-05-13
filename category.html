@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>Backbone demos</title>
+  <title>Inventory</title>
 
   <script src="js/lib/jquery.min.js"></script>
   <script src="js/lib/underscore.min.js"></script>
@@ -29,13 +29,13 @@
   </div>
 
   <div role="main">
-    <ul id="category-list"></ul>
+    <ul class="list-group" id="category-list"></ul>
   </div>
 
 </div>
 
 <script type="text/template" id="category-item-template">
-  <a href="#/category/<%= _id %>"><%= _id %> (<%= count %>)</a>
+  <a href="#/category/<%= slug %>"><%= _id %></a><span class="badge"><%= count %></span>
 </script>
 
 
@@ -44,6 +44,7 @@
 var Item = Backbone.Model.extend({
   defaults: {
     _id: '',
+    slug: '',
     count: 0
   }
 });
@@ -55,7 +56,7 @@ var Library = Backbone.Collection.extend({
 
 var CategoryView = Backbone.View.extend({
   tagName: 'li',
-  className: 'category-item',
+  className: 'list-group-item',
   template: _.template($('#category-item-template').html()),
 
   render: function() {
@@ -72,8 +73,6 @@ var LibraryView = Backbone.View.extend({
     this.collection.fetch({reset: true});
     this.render();
 
-    console.log('', this.collection)
-
     this.listenTo(this.collection, 'reset', this.render)
   },
 
@@ -87,7 +86,6 @@ var LibraryView = Backbone.View.extend({
     var categoryView = new CategoryView({ model: item });
     this.$el.append(categoryView.render().el);
   }
-
 });
 
 $(function() {

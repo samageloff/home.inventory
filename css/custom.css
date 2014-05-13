@@ -88,7 +88,6 @@ html, body {
 .main-stats {
   background-color: #fdfdfd;
   border-bottom: 1px solid #efeef3;
-  margin-bottom: 3em;
   width: 100%;
   z-index: 2;
 }
