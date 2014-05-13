@@ -114,10 +114,10 @@ app.delete('/api/items/:id', function(request, response) {
   });
 });
 
-// Get a list of categories + counts
-app.get('/api/categories', function(request, response) {
-   console.log('Get all categories + counts');
-   return ItemModel.aggregate({ $group: { _id: '$category', count: { $sum: 1 } }}, function(err, items) {
+// Get a list of items by category
+app.get('/api/category/:name', function(request, response) {
+   console.log('Searching item with category: ' + request.params.name);
+   return ItemModel.find({ category: request.params.name }, function(err, items) {
     if(!err) {
       return response.send(items);
     } else {
@@ -126,11 +126,10 @@ app.get('/api/categories', function(request, response) {
   });
 });
 
-
-// Get a list of items by category
-app.get('/api/category/:name', function(request, response) {
-   console.log('Searching item with category: ' + request.params.name);
-   return ItemModel.find({ category: request.params.name }, function(err, items) {
+// Get a list of categories + counts
+app.get('/api/categories', function(request, response) {
+   console.log('Get all categories + counts');
+   return ItemModel.aggregate({ $group: { _id: '$category', count: { $sum: 1 } }}, function(err, items) {
     if(!err) {
       return response.send(items);
     } else {
@@ -148,20 +147,16 @@ app.listen(port, function() {
 // Connect to database
 mongoose.connect('mongodb://localhost/inventory_database');
 
-// Schemas
+// Item Schema
 var Item = new mongoose.Schema({
+  _id: String,
+  count: Number,
   date: Date,
   title: String,
   category: String,
   itemImage: String,
-  value: Number,
-  tags: [ Tags ]  // reference to schema below
-});
-
-var Tags = new mongoose.Schema({
-  tag: String
+  value: Number
 });
 
 // Models
 var ItemModel = mongoose.model('Item', Item);
-
