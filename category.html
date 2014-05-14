@@ -28,7 +28,7 @@
     </div>
   </div>
 
-  <div role="main">
+  <div role="main" id="main">
     <ul class="list-group" id="category-list"></ul>
   </div>
 
@@ -38,6 +38,25 @@
   <a href="#/category/<%= slug %>"><%= _id %></a><span class="badge"><%= count %></span>
 </script>
 
+<script type="text/template" id="new-item-template">
+  <form id="newItem" action="#" enctype="multipart/form-data">
+    <input id="date" class="collect" type="hidden" type="text" value="">
+    <div class="form-group">
+      <div class="icon-camera"></div>
+      <input id="fileInput" class="form-control" capture="camera" accept="image/*" type="file" name="files[]" />
+    <div id="fileDisplayArea"></div>
+    </div>
+    <div class="form-group">
+      <input id="title" class="form-control collect" type="text" placeholder="Title" />
+    </div>
+    <div class="form-group">
+      <input id="category" class="form-control collect" type="text" placeholder="Category" />
+    </div>
+    <div class="form-group">
+      <input id="value" class="form-control collect" type="text" placeholder="Value" />
+    </div>
+  </form>
+</script>
 
 <script>
 
@@ -50,8 +69,13 @@ var Item = Backbone.Model.extend({
 });
 
 var Library = Backbone.Collection.extend({
+
   url: 'api/categories',
-  model: Item
+  model: Item,
+
+  initialize : function (options) {
+    this.options = options || {};
+  }
 });
 
 var CategoryView = Backbone.View.extend({
@@ -65,10 +89,20 @@ var CategoryView = Backbone.View.extend({
   }
 });
 
+var NewItemView = Backbone.View.extend({
+  tagName: 'div',
+  className: 'new-item',
+  template: _.template($('#new-item-template').html()),
+
+  render: function() {
+    return this;
+  }
+});
+
 var LibraryView = Backbone.View.extend({
   el: '#category-list',
 
-  initialize: function(items) {
+  initialize: function() {
     this.collection = new Library();
     this.collection.fetch({reset: true});
     this.render();
@@ -85,11 +119,74 @@ var LibraryView = Backbone.View.extend({
   renderCategory: function(item) {
     var categoryView = new CategoryView({ model: item });
     this.$el.append(categoryView.render().el);
+  },
+
+  onClose: function(){
+    this.model.unbind('change', this.render);
   }
+});
+
+Backbone.View.prototype.close = function() {
+  this.remove();
+  this.unbind();
+  if (this.onClose) {
+    this.onClose();
+  }
+};
+
+function AppView() {
+   this.showView(view);
+
+   if (this.currentView) {
+     this.currentView.close();
+   }
+
+   this.currentView = view;
+   this.currentView.render();
+
+   $("#main").html(this.currentView.el);
+};
+
+var Router = Backbone.Router.extend({
+
+   routes: {
+      '': 'home',
+      'new': 'newItem',
+      'edit/:id': 'edit',
+      'view/:id': 'view',
+      '*notFound': 'notFound'
+   },
+
+   initialize: function(options) {
+
+   },
+
+   home: function() {
+     var homeView = new LibraryView();
+     $('#main').html(homeView.render().el);
+   },
+
+   newItem: function() {
+    var newitemView = new NewItemView();
+    $('#main').html(newitemView.render().el);
+   },
+
+   edit: function() {
+    // var item = items.get(id);
+    // var editItem = new editItemView({model: item});
+    $('#main').html('<h1>Editing Item</h1>');
+   },
+
+   notFound: function() {
+    $('#main').html('<h1>It\'s broken</h1>');
+   }
+
 });
 
 $(function() {
   new LibraryView();
+  new Router();
+  Backbone.history.start();
 });
 
 
