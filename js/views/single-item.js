@@ -1,7 +1,5 @@
-var ItemView = Backbone.View.extend({
-  tagName: 'li',
-  className: 'list-group-item',
-  template: _.template($('#category-items-template').html()),
+var SingleItemView = Backbone.View.extend({
+  template: _.template($('#single-view-template').html()),
 
   events: {
     'click a.delete': 'delete'
@@ -18,6 +16,7 @@ var ItemView = Backbone.View.extend({
     if (window.confirm('Are you sure?')) {
       this.model.destroy();
       this.remove();
+      this.navigate("/", true);
     }
   }
 });

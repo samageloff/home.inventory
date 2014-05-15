@@ -7,8 +7,3 @@ events: (function() {
   return events;
 })()
 */
-
-$(function() {
-  new Router();
-  Backbone.history.start();
-});

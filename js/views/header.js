@@ -1,23 +1,22 @@
-HeaderView = Backbone.View.extend({
-
-  template: _.template($('#headerTemplate').html()),
+var HeaderView = Backbone.View.extend({
+  template: _.template($('#header-template').html()),
 
   initialize: function() {
     this.render();
   },
 
-  events: {
-    'click #new-item': 'newItem'
-  },
-
-  newItem: function(e) {
-    console.log('new item');
-    itemRouter.navigate('item/new', true);
-    return false;
-  },
-
-  render: function() {
-    this.$el.html(this.template());
+  render: function () {
+    $(this.el).html(this.template());
     return this;
+  },
+
+  events: {
+    "click .new" : "newItem"
+  },
+
+  newItem:function (event) {
+    navigate("items/new", true);
+    return false;
   }
+
 });

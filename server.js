@@ -108,7 +108,7 @@ app.put('/api/items/:id', function(request, response) {
 });
 
 //Delete an item
-app.delete('/api/category/:id', function(request, response) {
+app.delete('/api/items/:id', function(request, response) {
   console.log('Deleting item with id: ' + request.params.id);
   return ItemModel.findById(request.params.id, function(err, item) {
     return item.remove(function(err) {
