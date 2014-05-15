@@ -40,7 +40,7 @@
 </script>
 
 <script type="text/template" id="category-items-template">
-  <a href="#/view/<%= _id %>"><%= title %></a> <span class="pull-right">$<%= value %> <a href="#/edit/<%= _id %>">edit</a></span>
+  <a href="#/view/<%= _id %>"><%= title %></a> <span class="pull-right">$<%= value %> <a href="#/edit/<%= _id %>">edit</a> - <a href="#" class="delete">delete</a></span>
 </script>
 
 <script type="text/template" id="new-item-template">
@@ -65,8 +65,8 @@
 
 <script>
 
-/* Category Summary */
-var CategorySummaryModel = Backbone.Model.extend({
+/* Category Index */
+var CategoryIndexModel = Backbone.Model.extend({
   defaults: {
     _id: '',
     slug: '',
@@ -74,11 +74,11 @@ var CategorySummaryModel = Backbone.Model.extend({
   }
 });
 
-var CategorySummaryView = Backbone.View.extend({
+var CategoryIndexView = Backbone.View.extend({
   el: '#summary-list',
 
   initialize: function() {
-    this.collection = new CategorySummaryCollection();
+    this.collection = new CategoryIndexCollection();
     this.collection.fetch({reset: true});
     this.render();
 
@@ -93,7 +93,7 @@ var CategorySummaryView = Backbone.View.extend({
   },
 
   renderCategory: function(item) {
-    var categoryView = new CategorySummaryItemView({ model: item });
+    var categoryView = new CategoryIndexItemView({ model: item });
     this.$el.append(categoryView.render().el);
   },
 
@@ -102,7 +102,7 @@ var CategorySummaryView = Backbone.View.extend({
   }
 });
 
-var CategorySummaryItemView = Backbone.View.extend({
+var CategoryIndexItemView = Backbone.View.extend({
   tagName: 'li',
   className: 'list-group-item',
   template: _.template($('#category-summary-template').html()),
@@ -119,17 +119,21 @@ var CategorySummaryItemView = Backbone.View.extend({
   }
 });
 
-var CategorySummaryCollection = Backbone.Collection.extend({
+var CategoryIndexCollection = Backbone.Collection.extend({
   url: 'api/categories',
-  model: CategorySummaryModel,
+  model: CategoryIndexModel,
 
   initialize : function (options) {
     this.options = options || {};
   }
 });
 
-/* Category List */
-var CategoryListModel = Backbone.Model.extend({
+
+/* Item List */
+var ItemListModel = Backbone.Model.extend({
+
+  urlRoot: '/api/category',
+
   defaults: {
     title: '',
     category: '',
@@ -137,14 +141,26 @@ var CategoryListModel = Backbone.Model.extend({
     image: '',
     value: 0
   },
-  urlRoot: '/api/category/'
+
+  initialize: function() {
+    // console.log('ItemListModel > initialize', this);
+    console.log('attributes', this.attributes)
+  },
+
+  parse: function(response) {
+    console.log('response', response)
+    response.id = response._id;
+    return response;
+  }
 });
 
-var CategoryListView = Backbone.View.extend({
+var ItemListView = Backbone.View.extend({
   el: '#category-list',
 
   initialize: function() {
-    this.collection = new CategoryListCollection();
+    _.bindAll(this, 'render');
+
+    this.collection = new ItemListCollection();
     this.collection.fetch({reset: true});
     this.render();
 
@@ -159,34 +175,55 @@ var CategoryListView = Backbone.View.extend({
   },
 
   renderCategory: function(item) {
-    var categoryListView = new CategoryListItemView({ model: item });
+    var categoryListView = new ItemView({ model: item });
     this.$el.append(categoryListView.render().el);
   },
 
   onClose: function(){
     this.model.unbind('change', this.render);
   }
+
 });
 
-var CategoryListItemView = Backbone.View.extend({
+var ItemView = Backbone.View.extend({
   tagName: 'li',
   className: 'list-group-item',
   template: _.template($('#category-items-template').html()),
 
+  events: {
+    'click a.delete': 'delete'
+  },
+
   render: function() {
     this.$el.html(this.template(this.model.toJSON()));
     return this;
+  },
+
+  delete: function(e) {
+    e.preventDefault();
+    if (window.confirm('Are you sure?')) {
+
+      //Delete model
+      this.model.destroy();
+
+      //Delete view
+      this.remove();
+    }
   }
+
 });
 
-var CategoryListCollection = Backbone.Collection.extend({
-  url: 'api/category/',
-  model: CategoryListModel,
+var ItemListCollection = Backbone.Collection.extend({
+  url: 'api/category/furniture',
+  model: ItemListModel,
 
   initialize : function (options) {
     this.options = options || {};
   }
 });
+
+
+/* Router */
 
 var Router = Backbone.Router.extend({
 
@@ -202,14 +239,14 @@ var Router = Backbone.Router.extend({
   },
 
   home: function() {
-    var categorySummaryView = new CategorySummaryView();
+    var categoryIndexView = new CategoryIndexView();
   },
 
   categoryList: function(id) {
-    var category = new CategoryListModel({id: id});
+    var category = new ItemListModel({id: id});
     category.fetch({
-      success: function() {
-        var categoryListView = new CategoryListView({ model: category });
+      success: function(response) {
+        var categoryListView = new ItemListView({ model: category });
         $('#main').html(categoryListView.render().el);
       }
     });
@@ -224,6 +261,9 @@ var Router = Backbone.Router.extend({
   }
 
 });
+
+
+/* Helper Methods */
 
 Backbone.View.prototype.close = function() {
   this.remove();

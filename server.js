@@ -46,6 +46,7 @@ app.get('/api/items', function(request, response) {
 
 //Get a single item by id
 app.get('/api/items/:id', function(request, response) {
+  console.log('getting itme with id', request.params.id)
   return ItemModel.findById(request.params.id, function(err, item) {
     if(!err) {
         return response.send(item);
@@ -107,7 +108,7 @@ app.put('/api/items/:id', function(request, response) {
 });
 
 //Delete an item
-app.delete('/api/items/:id', function(request, response) {
+app.delete('/api/category/:id', function(request, response) {
   console.log('Deleting item with id: ' + request.params.id);
   return ItemModel.findById(request.params.id, function(err, item) {
     return item.remove(function(err) {
@@ -163,7 +164,6 @@ mongoose.connect('mongodb://localhost/inventory_database');
 
 // Item Schema
 var Item = new mongoose.Schema({
-  _id: String,
   slug: String,
   count: Number,
   date: Date,
