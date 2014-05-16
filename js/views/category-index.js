@@ -1,7 +1,7 @@
 var CategoryIndexView = Backbone.View.extend({
+  className: 'list-group',
   el: '#main',
   tagName: 'ul',
-  className: 'list-group',
 
   initialize: function() {
     this.collection = new CategoryIndexCollection();
@@ -9,6 +9,7 @@ var CategoryIndexView = Backbone.View.extend({
     this.render();
 
     this.listenTo(this.collection, 'reset', this.render)
+
   },
 
   render: function() {
@@ -27,4 +28,5 @@ var CategoryIndexView = Backbone.View.extend({
   onClose: function(){
     this.model.unbind('change', this.render);
   }
+
 });

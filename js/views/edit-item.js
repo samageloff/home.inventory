@@ -1,12 +1,10 @@
 var SingleItemEditView = Backbone.View.extend({
   className: 'view-wrap',
-
-  template: _.template($('#edit-item-template').html()),
-
   events: {
     'change input': 'changed',
     'click .done': 'done'
   },
+  template: _.template($('#edit-item-template').html()),
 
   initialize: function() {
     _.bindAll(this, 'changed');

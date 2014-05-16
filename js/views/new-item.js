@@ -1,12 +1,10 @@
 var NewItemView = Backbone.View.extend({
   className: 'view-wrap slim',
-
-  template: _.template($('#new-item-template').html()),
-
   events: {
     'change input': 'changed',
     'click .done': 'done'
   },
+  template: _.template($('#new-item-template').html()),
 
   initialize: function() {
     _.bindAll(this, 'changed');
@@ -28,6 +26,7 @@ var NewItemView = Backbone.View.extend({
     if (value !== null) {
       $('.done').removeClass('hide');
     }
+
     var obj = {};
     obj[changed.id] = value;
     obj['slug'] = slugVal;

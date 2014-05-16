@@ -1,12 +1,11 @@
 var ItemView = Backbone.View.extend({
-  tagName: 'li',
   className: 'list-group-item',
-  template: _.template($('#category-items-template').html()),
-
   events: {
     'click a.delete': 'delete',
     'click a.edit': 'edit'
   },
+  tagName: 'li',
+  template: _.template($('#category-items-template').html()),
 
   render: function() {
     this.$el.empty();
