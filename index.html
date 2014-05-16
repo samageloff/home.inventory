@@ -44,14 +44,32 @@
   <h2><%= title %></h2>
   <p><%= category %></p>
   <p><%= value %></p>
-  <small><a href="#" class="edit">edit</a> | <a href="#" class="delete">delete</a></small>
+  <small><a href="#/edit/<%= _id %>">Edit</a> | <a href="#" class="delete">delete</a> </small>
+</script>
+
+<script type="text/template" id="edit-item-template">
+  <form id="editItem" action="#" enctype="multipart/form-data">
+    <div class="form-group">
+      <input id="title" class="form-control collect" type="text" value="<%= title %>" />
+    </div>
+    <div class="form-group">
+      <input id="category" class="form-control collect" type="text" value="<%= category %>" />
+    </div>
+    <div class="form-group">
+      <input id="value" class="form-control collect" type="text" value="<%= value %>" />
+    </div>
+    <div class="form-group">
+      <input id="fileInput" class="form-control" capture="camera" accept="image/*" type="file" name="files[]" />
+    </div>
+    <button class="btn">Save</button>
+    <a href="#" class="cancel">Cancel</a>
+  </form>
 </script>
 
 <script type="text/template" id="new-item-template">
   <form id="newItem" action="#" enctype="multipart/form-data">
     <input id="date" class="collect" type="hidden" type="text" value="">
     <div class="form-group">
-      <div class="icon-camera"></div>
       <input id="fileInput" class="form-control" capture="camera" accept="image/*" type="file" name="files[]" />
     <div id="fileDisplayArea"></div>
     </div>
@@ -81,6 +99,7 @@
 <script src="js/views/category-item.js"></script>
 <script src="js/views/category-index.js"></script>
 <script src="js/views/single-item.js"></script>
+<script src="js/views/edit-item.js"></script>
 <script src="js/routes/routes.js"></script>
 <script src="js/lib/helpers.js"></script>
 <script src="js/app.js"></script>

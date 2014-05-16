@@ -138,6 +138,10 @@ html, body {
   padding: 10px;
 }
 
+.view-wrap {
+  padding: 2em 1em;
+}
+
 #form {
   clear: left;
 }

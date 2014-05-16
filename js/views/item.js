@@ -4,7 +4,8 @@ var ItemView = Backbone.View.extend({
   template: _.template($('#category-items-template').html()),
 
   events: {
-    'click a.delete': 'delete'
+    'click a.delete': 'delete',
+    'click a.edit': 'edit'
   },
 
   render: function() {

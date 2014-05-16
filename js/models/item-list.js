@@ -1,10 +1,5 @@
 /* Item List */
 var ItemListModel = Backbone.Model.extend({
-
-  url: function() {
-    return 'api/category/' + this.id;
-  },
-
   defaults: {
     title: '',
     category: '',
@@ -14,8 +9,6 @@ var ItemListModel = Backbone.Model.extend({
   },
 
   initialize: function() {
-    // console.log('ItemListModel > initialize', this);
-    // console.log('attributes', this.attributes)
   },
 
   parse: function(response) {
