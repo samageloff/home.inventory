@@ -1,4 +1,5 @@
 var SingleItemView = Backbone.View.extend({
+  className: 'view-wrap slim',
   template: _.template($('#single-view-template').html()),
 
   events: {
@@ -16,7 +17,7 @@ var SingleItemView = Backbone.View.extend({
     if (window.confirm('Are you sure?')) {
       this.model.destroy();
       this.remove();
-      this.navigate("/", true);
+      router.navigate("/", true);
     }
   }
 });

@@ -8,7 +8,5 @@ events: (function() {
 })()
 */
 
-$(function() {
-  new Router();
-  Backbone.history.start();
-});
+var router = new Router();
+Backbone.history.start();

@@ -142,6 +142,10 @@ html, body {
   padding: 2em 1em;
 }
 
+.view-wrap.slim {
+  padding: 0em 1em;
+}
+
 #form {
   clear: left;
 }

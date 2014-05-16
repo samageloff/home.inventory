@@ -1,9 +1,7 @@
 var CategoryIndexItemView = Backbone.View.extend({
 
   tagName: 'li',
-
   className: 'list-group-item',
-
   template: _.template($('#category-summary-template').html()),
 
   render: function() {

@@ -1,9 +1,16 @@
 var SingleItemEditView = Backbone.View.extend({
+  className: 'view-wrap',
+
   template: _.template($('#edit-item-template').html()),
 
   events: {
-    'click .save': 'save',
-    'click .cancel': 'cancel'
+    'change input': 'changed',
+    'click .close': 'close'
+  },
+
+  initialize: function() {
+    _.bindAll(this, 'changed');
+    console.log(this.model.attributes);
   },
 
   render: function() {
@@ -12,16 +19,26 @@ var SingleItemEditView = Backbone.View.extend({
     return this;
   },
 
-  save: function(e) {
-    console.log('save edit')
-    e.preventDefault();
-    this.model.save();
+  changed: function(e) {
+    var changed = e.currentTarget;
+    var value = $(e.currentTarget).val();
+    var obj = {};
+    obj[changed.id] = value;
+    this.model.save(obj, {
+      success: function() {
+        console.log(obj);
+      }
+    })
   },
 
-  cancel: function(e) {
-    console.log('cancel edit')
+  close: function(e) {
     e.preventDefault();
-    this.model.save();
+    this.onClose();
+    router.navigate('', true);
+  },
+
+  onClose: function(){
+    this.model.unbind('change', this.render);
   }
 
 });
