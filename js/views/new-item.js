@@ -5,7 +5,7 @@ var NewItemView = Backbone.View.extend({
 
   events: {
     'change input': 'changed',
-    'click .close': 'close'
+    'click .done': 'done'
   },
 
   initialize: function() {
@@ -23,6 +23,11 @@ var NewItemView = Backbone.View.extend({
     var changed = e.currentTarget;
     var value = $(e.currentTarget).val();
     var slugVal = convertToSlug($('#category').val());
+
+    // TODO: display/hide button if valid
+    if (value !== null) {
+      $('.done').removeClass('hide');
+    }
     var obj = {};
     obj[changed.id] = value;
     obj['slug'] = slugVal;
@@ -33,10 +38,11 @@ var NewItemView = Backbone.View.extend({
     })
   },
 
-  close: function(e) {
+  done: function(e) {
     e.preventDefault();
     this.onClose();
-    router.navigate('', true);
+    var id = this.model.get('id');
+    router.navigate('view/'+id, true);
   },
 
   onClose: function(){
