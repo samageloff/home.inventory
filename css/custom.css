@@ -146,6 +146,11 @@ html, body {
   padding: 0em 1em;
 }
 
+.list-group-item:first-child,
+.list-group-item:last-child {
+  border-radius: 0;
+}
+
 #form {
   clear: left;
 }

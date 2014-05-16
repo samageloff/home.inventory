@@ -7,6 +7,7 @@ var Router = Backbone.Router.extend({
     'category/:id': 'categoryList',
     'edit/:id': 'edit',
     'view/:id': 'view',
+    'new': 'new',
     '*notFound': 'notFound'
   },
 
@@ -38,6 +39,12 @@ var Router = Backbone.Router.extend({
         $('#main').html(singleItemView.render().el);
       }
     });
+  },
+
+  new: function() {
+    var model = new NewItemModel({});
+    var newItemView = new NewItemView({ model: model });
+    $('#main').html(newItemView.render().el);
   },
 
   notFound: function() {

@@ -47,6 +47,26 @@
   <small><a href="#/edit/<%= _id %>">Edit</a> | <a href="#" class="delete">delete</a> </small>
 </script>
 
+<script type="text/template" id="new-item-template">
+  <h1>New Thang</h1>
+  <form id="newItem" action="#" enctype="multipart/form-data">
+    <input id="slug" type="hidden" value="">
+    <div class="form-group">
+      <input id="title" class="form-control" type="text" placeholder="Title" value="" />
+    </div>
+    <div class="form-group">
+      <input id="category" class="form-control" type="text" placeholder="Category" value="" />
+    </div>
+    <div class="form-group">
+      <input id="value" class="form-control" type="text" placeholder="$ Value" value="" />
+    </div>
+    <div class="form-group">
+      <input id="fileInput" class="form-control" capture="camera" accept="image/*" type="file" name="files[]" />
+    </div>
+    <a href="#" class="close">Cancel</a>
+  </form>
+</script>
+
 <script type="text/template" id="edit-item-template">
   <form id="editItem" action="#" enctype="multipart/form-data">
     <input id="slug" type="hidden" value="<%= slug %>">
@@ -91,6 +111,7 @@
 <script src="js/models/category-index.js"></script>
 <script src="js/models/item-list.js"></script>
 <script src="js/models/single-item.js"></script>
+<script src="js/models/new-item.js"></script>
 <script src="js/collections/category-index.js"></script>
 <script src="js/collections/item-list.js"></script>
 <script src="js/views/header.js"></script>
@@ -99,6 +120,7 @@
 <script src="js/views/category-item.js"></script>
 <script src="js/views/category-index.js"></script>
 <script src="js/views/single-item.js"></script>
+<script src="js/views/new-item.js"></script>
 <script src="js/views/edit-item.js"></script>
 <script src="js/routes/routes.js"></script>
 <script src="js/lib/helpers.js"></script>

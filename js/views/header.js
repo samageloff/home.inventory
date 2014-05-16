@@ -14,9 +14,8 @@ var HeaderView = Backbone.View.extend({
     "click .new" : "newItem"
   },
 
-  newItem:function (event) {
-    navigate("items/new", true);
-    return false;
+  newItem:function () {
+    router.navigate("/new", true);
   }
 
 });
