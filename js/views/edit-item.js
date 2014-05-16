@@ -22,8 +22,10 @@ var SingleItemEditView = Backbone.View.extend({
   changed: function(e) {
     var changed = e.currentTarget;
     var value = $(e.currentTarget).val();
+    var slugVal = convertToSlug($('#category').val());
     var obj = {};
     obj[changed.id] = value;
+    obj['slug'] = slugVal;
     this.model.save(obj, {
       success: function() {
         console.log(obj);

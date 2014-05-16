@@ -8,6 +8,8 @@ var CategoryIndexItemView = Backbone.View.extend({
     this.$el.empty();
     var title = this.model.get('_id');
 
+    console.log(convertToSlug(title));
+    // TODO: configure API response to include slug
     this.model.set({
       slug: convertToSlug(title)
     });

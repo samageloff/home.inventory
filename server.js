@@ -89,7 +89,7 @@ app.put('/api/items/:id', function(request, response) {
   return ItemModel.findById(request.params.id, function(err, item) {
     item.title = request.body.title;
     item.category = request.body.category;
-    item.slug = request.body.category;
+    item.slug = request.body.slug;
     item.date = request.body.date;
     item.itemImage = request.body.itemImage;
     item.value = request.body.value;
