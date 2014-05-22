@@ -43,7 +43,11 @@
     </script>
 
     <script type="text/template" id="category-items-template">
-      <a href="#/view/<%= _id %>"><%= title %></a> <span class="pull-right">$<%= value %> <a href="#/edit/<%= _id %>">edit</a></span>
+      <a href="#/view/<%= _id %>" class="grid-item">
+        <h1><%= title %></h1>
+        <p>Value: <%= value %></p>
+        <a href="#/edit/<%= _id %>">edit</a>
+      </a>
     </script>
 
     <script type="text/template" id="single-view-template">

@@ -1,7 +1,7 @@
 var ItemListView = Backbone.View.extend({
   el: '#main',
-  tagName: 'ul',
-  className: 'list-group',
+  tagName: 'div',
+  className: 'grid-items-lines',
 
   initialize: function() {
     _.bindAll(this, 'render');

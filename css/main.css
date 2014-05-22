@@ -674,3 +674,8 @@ section {
     height: 100%;
     width: 4px;
     background: white; }
+
+
+.grid-items-lines .grid-item {
+  height: auto;
+}

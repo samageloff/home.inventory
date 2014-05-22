@@ -1,4 +1,5 @@
 var ItemView = Backbone.View.extend({
+
   className: 'list-group-item',
   events: {
     'click a.delete': 'delete',

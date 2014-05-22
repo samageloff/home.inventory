@@ -3,12 +3,13 @@ var CategoryIndexView = Backbone.View.extend({
   tagName: 'div',
 
   initialize: function() {
+    _.bindAll(this, 'render');
+
     this.collection = new CategoryIndexCollection();
     this.collection.fetch({reset: true});
     this.render();
 
     this.listenTo(this.collection, 'reset', this.render)
-
   },
 
   render: function() {
