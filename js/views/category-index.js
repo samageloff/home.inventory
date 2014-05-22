@@ -1,7 +1,6 @@
 var CategoryIndexView = Backbone.View.extend({
-  className: 'list-group',
-  el: '#main',
-  tagName: 'ul',
+  el: '.grid-items-lines',
+  tagName: 'div',
 
   initialize: function() {
     this.collection = new CategoryIndexCollection();
@@ -17,7 +16,12 @@ var CategoryIndexView = Backbone.View.extend({
     this.collection.each(function(item) {
       this.renderCategory(item);
     }, this);
+
+    // Handles CSS workaround Bourbon Bitters
+    this.$el.append('<div class="right-cover">');
+    this.$el.append('<div class="bottom-cover">');
     return this;
+
   },
 
   renderCategory: function(item) {
