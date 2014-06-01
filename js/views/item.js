@@ -1,10 +1,9 @@
 var ItemView = Backbone.View.extend({
-  className: 'list-group-item',
+  className: 'grid-item',
   events: {
     'click a.delete': 'delete',
     'click a.edit': 'edit'
   },
-  tagName: 'li',
   template: _.template($('#category-items-template').html()),
 
   render: function() {

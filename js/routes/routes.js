@@ -4,7 +4,9 @@ var Router = Backbone.Router.extend({
 
   routes: {
     '': 'home',
-    'category/:id': 'categoryList',
+    'categories': 'categoryList',
+    'category/:id': 'groupList',
+    'group/:id': 'groupList',
     'edit/:id': 'edit',
     'view/:id': 'view',
     'new': 'new',
@@ -12,10 +14,16 @@ var Router = Backbone.Router.extend({
   },
 
   home: function() {
-    var categoryIndexView = new CategoryIndexView();
+    var homeView = new HomeView();
+    $('#main').html(homeView.render().el);
   },
 
   categoryList: function(id) {
+    var categoryIndexView = new CategoryIndexView();
+    $('#main').html(categoryIndexView.render().el);
+  },
+
+  groupList: function(id) {
     var category = new ItemListModel({ id: id });
     var categoryListView = new ItemListView({ model: category });
     $('#main').html(categoryListView.render().el);

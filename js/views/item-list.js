@@ -1,6 +1,4 @@
 var ItemListView = Backbone.View.extend({
-  el: '#main',
-  tagName: 'ul',
   className: 'list-group',
 
   initialize: function() {

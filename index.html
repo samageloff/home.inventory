@@ -1,132 +1,176 @@
-<html>
-<head>
-  <title>Inventory</title>
-  <meta name="viewport" content="initial-scale=1, minimum-scale=1, width=device-width">
-  <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
-  <link rel="stylesheet" type="text/css" href="css/custom.css">
-</head>
-<body>
+<!doctype html>
+<html class="no-js" lang="">
+  <head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<div class="container-fluid">
+    <link rel="stylesheet" href="css/main.css">
+  </head>
+  <body>
 
-  <div class="main-stats" id="header"></div>
-
-  <div role="main" id="main">
-  </div>
-
-</div>
-
-<script type="text/template" id="header-template">
-  <div class="row stats-row">
-    <div class="stat">
-      <div class="data">
-        <span class="number" id="total-count">0</span>items
+    <header>
+      <div class="header-content">
+        <ul>
+          <li><a href="#" class="icon-home">Home</a></li>
+          <li class="location">Groups</li>
+          <li><a href="#" class="icon-add">Add</a></li>
+        </ul>
       </div>
-    </div>
-    <div class="stat">
-      <div class="data">
-        <span class="number" id="value-wrap">$<b>0</b></span>total value
+    </header>
+
+    <div id="main"></div>
+
+    <script type="text/template" id="home-template">
+      <section class="landing">
+        <h1>ive got [this]</h1>
+        <div class="grid-items-lines">
+          <a class="grid-item">
+            <h2>325</h2>
+            <p>Items</p>
+          </a>
+          <a class="grid-item">
+            <h2>15</h2>
+            <p>Groups</p>
+          </a>
+          <a class="grid-item grid-item-big">
+            <h2>$12,900</h2>
+            <p>Total Value</p>
+          </a>
+          <nav>
+            <a href="#/new" class="grid-item grid-item-big">
+              <span class="icon-add icon-forward-r">Add an item</span>
+            </a>
+            <a href="#/categories" class="grid-item grid-item-big">
+              <span class="icon-tags icon-forward-r">Just browse</span>
+            </a>
+          </nav>
+          <div class="right-cover"></div>
+          <div class="bottom-cover"></div>
+        </div>
+      </section>
+    </script>
+
+    <script type="text/template" id="header-template">
+      <div class="row stats-row">
+        <div class="stat">
+          <div class="data">
+            <span class="number" id="total-count">0</span>items
+          </div>
+        </div>
+        <div class="stat">
+          <div class="data">
+            <span class="number" id="value-wrap">$<b>0</b></span>total value
+          </div>
+        </div>
+        <button class="btn btn-sm btn-primary pull-right icon-plus new"></button>
       </div>
-    </div>
-    <button class="btn btn-sm btn-primary pull-right icon-plus new"></button>
-  </div>
-</script>
+    </script>
 
-<script type="text/template" id="category-summary-template">
-  <a href="#/category/<%= slug %>"><%= _id %></a><span class="badge"><%= count %></span>
-</script>
+    <script type="text/template" id="category-summary-template">
+      <a href="#/category/<%= slug %>" class="grid-item icon-forward-r">
+        <img src="https://raw.github.com/Magnus-G/Random/master/placeholder_logo_1_dark.png" alt="">
+        <h3><%= _id %><span>(<%= count %>)</span></h3>
+        <small>Value: $2550</small>
+        <p>Lorem ipsum dolor sit amet, elit. Rem, illum.</p>
+      </a>
+    </script>
 
-<script type="text/template" id="category-items-template">
-  <a href="#/view/<%= _id %>"><%= title %></a> <span class="pull-right">$<%= value %> <a href="#/edit/<%= _id %>">edit</a></span>
-</script>
+    <script type="text/template" id="category-items-template">
+      <a href="#/view/<%= _id %>"><%= title %></a> <span class="pull-right">$<%= value %> <a href="#/edit/<%= _id %>">edit</a></span>
+    </script>
 
-<script type="text/template" id="single-view-template">
-  <h2><%= title %></h2>
-  <p><%= category %></p>
-  <p><%= value %></p>
-  <small><a href="#/edit/<%= _id %>">Edit</a> | <a href="#" class="delete">delete</a> </small>
-</script>
+    <script type="text/template" id="single-view-template">
+      <h2><%= title %></h2>
+      <p><%= category %></p>
+      <p><%= value %></p>
+      <small><a href="#/edit/<%= _id %>">Edit</a> | <a href="#" class="delete">delete</a> </small>
+    </script>
 
-<script type="text/template" id="new-item-template">
-  <h1>New Thang</h1>
-  <form id="newItem" action="#" enctype="multipart/form-data">
-    <input id="slug" type="hidden" value="">
-    <div class="form-group">
-      <input id="title" class="form-control" type="text" placeholder="Title" value="" />
-    </div>
-    <div class="form-group">
-      <input id="category" class="form-control" type="text" placeholder="Category" value="" />
-    </div>
-    <div class="form-group">
-      <input id="value" class="form-control" type="text" placeholder="$ Value" value="" />
-    </div>
-    <div class="form-group">
-      <input id="fileInput" class="form-control" capture="camera" accept="image/*" type="file" name="files[]" />
-    </div>
-  </form>
-  <a href="#" class="done hide">Done</a>
-</script>
+    <script type="text/template" id="new-item-template">
+      <h1>New Thang</h1>
+      <form id="newItem" action="#" enctype="multipart/form-data">
+        <input id="slug" type="hidden" value="">
+        <div class="form-group">
+          <input id="title" class="form-control" type="text" placeholder="Title" value="" />
+        </div>
+        <div class="form-group">
+          <input id="category" class="form-control" type="text" placeholder="Category" value="" />
+        </div>
+        <div class="form-group">
+          <input id="value" class="form-control" type="text" placeholder="$ Value" value="" />
+        </div>
+        <div class="form-group">
+          <input id="fileInput" class="form-control" capture="camera" accept="image/*" type="file" name="files[]" />
+        </div>
+      </form>
+      <a href="#" class="done hide">Done</a>
+    </script>
 
-<script type="text/template" id="edit-item-template">
-  <form id="editItem" action="#" enctype="multipart/form-data">
-    <input id="slug" type="hidden" value="<%= slug %>">
-    <div class="form-group">
-      <input id="title" class="form-control" type="text" value="<%= title %>" />
-    </div>
-    <div class="form-group">
-      <input id="category" class="form-control" type="text" value="<%= category %>" />
-    </div>
-    <div class="form-group">
-      <input id="value" class="form-control" type="text" value="<%= value %>" />
-    </div>
-    <div class="form-group">
-      <input id="fileInput" class="form-control" capture="camera" accept="image/*" type="file" name="files[]" />
-    </div>
-  </form>
-  <a href="#" class="done">Done</a>
-</script>
+    <script type="text/template" id="edit-item-template">
+      <form id="editItem" action="#" enctype="multipart/form-data">
+        <input id="slug" type="hidden" value="<%= slug %>">
+        <div class="form-group">
+          <input id="title" class="form-control" type="text" value="<%= title %>" />
+        </div>
+        <div class="form-group">
+          <input id="category" class="form-control" type="text" value="<%= category %>" />
+        </div>
+        <div class="form-group">
+          <input id="value" class="form-control" type="text" value="<%= value %>" />
+        </div>
+        <div class="form-group">
+          <input id="fileInput" class="form-control" capture="camera" accept="image/*" type="file" name="files[]" />
+        </div>
+      </form>
+      <a href="#" class="done">Done</a>
+    </script>
 
-<script type="text/template" id="new-item-template">
-  <form id="newItem" action="#" enctype="multipart/form-data">
-    <input id="date" class="" type="hidden" type="text" value="">
-    <div class="form-group">
-      <input id="fileInput" class="form-control" capture="camera" accept="image/*" type="file" name="files[]" />
-    <div id="fileDisplayArea"></div>
-    </div>
-    <div class="form-group">
-      <input id="title" class="form-control" type="text" placeholder="Title" />
-    </div>
-    <div class="form-group">
-      <input id="category" class="form-control" type="text" placeholder="Category" />
-    </div>
-    <div class="form-group">
-      <input id="value" class="form-control" type="text" placeholder="Value" />
-    </div>
-  </form>
-  <a href="#" class="done">Done</a>
-</script>
+    <script type="text/template" id="new-item-template">
+      <form id="newItem" action="#" enctype="multipart/form-data">
+        <input id="date" class="" type="hidden" type="text" value="">
+        <div class="form-group">
+          <input id="fileInput" class="form-control" capture="camera" accept="image/*" type="file" name="files[]" />
+        <div id="fileDisplayArea"></div>
+        </div>
+        <div class="form-group">
+          <input id="title" class="form-control" type="text" placeholder="Title" />
+        </div>
+        <div class="form-group">
+          <input id="category" class="form-control" type="text" placeholder="Category" />
+        </div>
+        <div class="form-group">
+          <input id="value" class="form-control" type="text" placeholder="Value" />
+        </div>
+      </form>
+      <a href="#" class="done">Done</a>
+    </script>
 
-<script src="js/lib/jquery.min.js"></script>
-<script src="js/lib/underscore.min.js"></script>
-<script src="js/lib/backbone.min.js"></script>
-<script src="js/models/category-index.js"></script>
-<script src="js/models/item-list.js"></script>
-<script src="js/models/single-item.js"></script>
-<script src="js/models/new-item.js"></script>
-<script src="js/collections/category-index.js"></script>
-<script src="js/collections/item-list.js"></script>
-<script src="js/views/header.js"></script>
-<script src="js/views/item.js"></script>
-<script src="js/views/item-list.js"></script>
-<script src="js/views/category-item.js"></script>
-<script src="js/views/category-index.js"></script>
-<script src="js/views/single-item.js"></script>
-<script src="js/views/new-item.js"></script>
-<script src="js/views/edit-item.js"></script>
-<script src="js/routes/routes.js"></script>
-<script src="js/lib/helpers.js"></script>
-<script src="js/app.js"></script>
+  <script src="js/lib/jquery.min.js"></script>
+  <script src="js/lib/underscore.min.js"></script>
+  <script src="js/lib/backbone.min.js"></script>
+  <script src="js/models/category-index.js"></script>
+  <script src="js/models/item-list.js"></script>
+  <script src="js/models/single-item.js"></script>
+  <script src="js/models/new-item.js"></script>
+  <script src="js/collections/category-index.js"></script>
+  <script src="js/collections/item-list.js"></script>
+  <script src="js/views/header.js"></script>
+  <script src="js/views/home.js"></script>
+  <script src="js/views/item.js"></script>
+  <script src="js/views/item-list.js"></script>
+  <script src="js/views/category-item.js"></script>
+  <script src="js/views/category-index.js"></script>
+  <script src="js/views/single-item.js"></script>
+  <script src="js/views/new-item.js"></script>
+  <script src="js/views/edit-item.js"></script>
+  <script src="js/routes/routes.js"></script>
+  <script src="js/lib/helpers.js"></script>
+  <script src="js/app.js"></script>
 
-</body>
+  </body>
 </html>
-

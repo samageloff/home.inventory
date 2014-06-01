@@ -1,15 +1,10 @@
 var CategoryIndexView = Backbone.View.extend({
-  className: 'list-group',
-  el: '#main',
-  tagName: 'ul',
 
   initialize: function() {
     this.collection = new CategoryIndexCollection();
     this.collection.fetch({reset: true});
     this.render();
-
     this.listenTo(this.collection, 'reset', this.render)
-
   },
 
   render: function() {

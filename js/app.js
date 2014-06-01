@@ -10,3 +10,10 @@ events: (function() {
 
 var router = new Router();
 Backbone.history.start();
+
+convertToSlug = function(Text) {
+  return Text
+    .toLowerCase()
+    .replace(/[^\w ]+/g,'')
+    .replace(/ +/g,'-');
+};
