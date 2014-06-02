@@ -1,5 +1,5 @@
 var SingleItemView = Backbone.View.extend({
-  className: 'view-wrap slim',
+
   events: {
     'click a.delete': 'delete'
   },

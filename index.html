@@ -23,36 +23,34 @@
       </div>
     </header>
 
-    <div id="main"></div>
+    <div id="main"></section>
 
     <script type="text/template" id="home-template">
-      <section class="landing">
-        <h1>ive got [this]</h1>
-        <div class="grid-items-lines">
-          <a class="grid-item">
-            <h2>325</h2>
-            <p>Items</p>
-          </a>
-          <a class="grid-item">
-            <h2>15</h2>
-            <p>Groups</p>
+      <h1>ive got [this]</h1>
+      <div class="grid-items-lines">
+        <a class="grid-item">
+          <h2>325</h2>
+          <p>Items</p>
+        </a>
+        <a class="grid-item">
+          <h2>15</h2>
+          <p>Groups</p>
+        </a>
+        <a class="grid-item grid-item-big">
+          <h2>$12,900</h2>
+          <p>Total Value</p>
+        </a>
+        <nav>
+          <a class="grid-item grid-item-big">
+            <span class="icon-add icon-forward-r">Add an item</span>
           </a>
           <a class="grid-item grid-item-big">
-            <h2>$12,900</h2>
-            <p>Total Value</p>
+            <span class="icon-tags icon-forward-r">Just browse</span>
           </a>
-          <nav>
-            <a href="#/new" class="grid-item grid-item-big">
-              <span class="icon-add icon-forward-r">Add an item</span>
-            </a>
-            <a href="#/categories" class="grid-item grid-item-big">
-              <span class="icon-tags icon-forward-r">Just browse</span>
-            </a>
-          </nav>
-          <div class="right-cover"></div>
-          <div class="bottom-cover"></div>
-        </div>
-      </section>
+        </nav>
+        <div class="right-cover"></div>
+        <div class="bottom-cover"></div>
+      </div>
     </script>
 
     <script type="text/template" id="header-template">
@@ -75,8 +73,8 @@
       <a href="#/category/<%= slug %>" class="grid-item icon-forward-r">
         <img src="https://raw.github.com/Magnus-G/Random/master/placeholder_logo_1_dark.png" alt="">
         <h3><%= _id %><span>(<%= count %>)</span></h3>
-        <small>Value: $2550</small>
-        <p>Lorem ipsum dolor sit amet, elit. Rem, illum.</p>
+        <small>Value: <%= value %></small>
+        <p><%= description %></p>
       </a>
     </script>
 
@@ -85,10 +83,27 @@
     </script>
 
     <script type="text/template" id="single-view-template">
-      <h2><%= title %></h2>
-      <p><%= category %></p>
-      <p><%= value %></p>
-      <small><a href="#/edit/<%= _id %>">Edit</a> | <a href="#" class="delete">delete</a> </small>
+      <section class="detail">
+        <figure>
+          <img src="images/sam-flax-chair.jpg" alt="">
+          <div class="detail-wrap">
+            <a href="#" class="icon-close"></a>
+            <span class="value-tag"><%= value %></span>
+          </div>
+        </figure>
+
+        <div class="body">
+          <h2>Sam Flax Chair</h2>
+          <h6>Furniture</h6>
+          <a href="#" class="icon-receipt"></a>
+          <p>Nano blocks are a construction product which allows the most intricate of model making with unique tiny-sized blocks. Highly collectable, these miniature building block sets appeal to a wide range of tastes and ages. This line is to give the page a bit of scroll.</p>
+        </div>
+
+        <footer>
+          <button class="icon-edit"></button>
+          <button class="icon-trash pull-right"></button>
+        </footer>
+      </section>
     </script>
 
     <script type="text/template" id="new-item-template">
@@ -112,22 +127,25 @@
     </script>
 
     <script type="text/template" id="edit-item-template">
-      <form id="editItem" action="#" enctype="multipart/form-data">
-        <input id="slug" type="hidden" value="<%= slug %>">
-        <div class="form-group">
-          <input id="title" class="form-control" type="text" value="<%= title %>" />
+      <section class="edit">
+        <div class="body">
+          <form id="editItem" action="#" enctype="multipart/form-data">
+            <button class="file-upload">
+              <span class="icon-plus">Add files</span>
+              <input id="fileInput" capture="camera" accept="image/*" type="file" name="files[]" />>
+            </button>
+            <input id="slug" type="hidden" value="<%= slug %>">
+            <input id="title" type="text" value="<%= title %>" />
+            <input id="category" type="text" value="<%= category %>" />
+            <input id="value" type="text" value="<%= value %>" />
+            <input id="fileInput" capture="camera" accept="image/*" type="file" name="files[]" />
+            <footer>
+              <button>Save</button>
+              <button class="pull-right">Cancel</button>
+            </footer>
+          </form>
         </div>
-        <div class="form-group">
-          <input id="category" class="form-control" type="text" value="<%= category %>" />
-        </div>
-        <div class="form-group">
-          <input id="value" class="form-control" type="text" value="<%= value %>" />
-        </div>
-        <div class="form-group">
-          <input id="fileInput" class="form-control" capture="camera" accept="image/*" type="file" name="files[]" />
-        </div>
-      </form>
-      <a href="#" class="done">Done</a>
+      </section>
     </script>
 
     <script type="text/template" id="new-item-template">

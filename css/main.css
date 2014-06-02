@@ -909,46 +909,50 @@ section {
     margin-right: 1em; }
 
 /* Groups Page */
-.groups .grid-items-lines .grid-item {
+.groups.grid-items-lines .grid-item {
   height: 8em; }
-.groups .grid-items-lines .grid-item img {
+.groups.grid-items-lines .grid-item img {
   float: left;
   margin-right: 1em; }
-.groups .grid-items-lines h3 {
+.groups.grid-items-lines h3 {
   color: black;
   font-size: 1.25em; }
-  .groups .grid-items-lines h3 + small {
+  .groups.grid-items-lines h3 + small {
+    color: #477dca;
     margin-bottom: 0; }
-.groups .grid-item span {
+.groups.grid-items-lines .grid-item span {
   bottom: 2px;
   font-size: .75rem;
   font-weight: normal;
   position: relative; }
-.groups .grid-items-lines p {
+.groups.grid-items-lines p {
   font-size: .75em;
   line-height: 1.75em;
   margin-right: 1em; }
-.groups .icon-forward-r:after {
+.groups.grid-items-lines .icon-forward-r:after {
   top: 52px; }
 
 /* Items Page */
-.items .grid-items-lines .grid-item {
+.items.grid-items-lines .grid-item {
   height: auto;
   padding: 1em; }
-.items .grid-items-lines .grid-item img {
+.items.grid-items-lines .grid-item img {
   float: left;
   margin-right: 1em;
   margin-bottom: auto;
   opacity: .8; }
-.items .grid-items-lines h4 {
+.items.grid-items-lines h4 {
   color: black;
   font-size: 1em;
   margin-top: 10px; }
-.items .grid-item span {
+.items.grid-items-lines .grid-item span {
+  color: #477dca;
   font-size: .75rem;
   position: absolute;
   right: 1em;
   top: 25px; }
+  .items.grid-items-lines .grid-item span:hover {
+    text-decoration: underline; }
 
 /* Detail Page */
 .detail figure {
