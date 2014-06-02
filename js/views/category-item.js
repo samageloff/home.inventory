@@ -4,13 +4,14 @@ var CategoryIndexItemView = Backbone.View.extend({
   render: function() {
     this.$el.empty();
     var title = this.model.get('_id');
+    var markup = this.model.toJSON();
 
     // TODO: configure API response to include slug
     this.model.set({
       slug: convertToSlug(title)
     });
 
-    this.$el.html(this.template(this.model.toJSON()));
+    this.setElement(this.template(markup));
     return this;
   }
 });

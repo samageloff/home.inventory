@@ -1,8 +1,4 @@
 var HeaderView = Backbone.View.extend({
-  events: {
-    "click .new" : "newItem"
-  },
-
   template: _.template($('#header-template').html()),
 
   initialize: function() {
@@ -12,6 +8,10 @@ var HeaderView = Backbone.View.extend({
   render: function () {
     $(this.el).html(this.template());
     return this;
+  },
+
+  events: {
+    "click .new" : "newItem"
   },
 
   newItem:function () {

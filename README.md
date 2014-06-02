@@ -1,10 +1,12 @@
-# home.inventory
-### is a web-based utility
+# I've Got This
 
-it is built with:
-* ---- backbone
-*  --- express
-*     -- mongo
-*       - node
+Built on B E M N.
+         a x o o
+         c p n d
+         k r g e
+         b e o
+         o s
+         n s
+         e
 
-designed to enable the user to document belongings, and retrieve information about them.
+Enabling users to document belongings.

@@ -1,21 +1,57 @@
 <!doctype html>
 <html class="no-js" lang="">
   <head>
+    <title></title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
     <link rel="stylesheet" href="css/main.css">
   </head>
   <body>
 
-    <header class="header" id="header"></header>
+    <header>
+      <div class="header-content">
+        <ul>
+          <li><a href="#" class="icon-home">Home</a></li>
+          <li class="location">Groups</li>
+          <li><a href="#" class="icon-add">Add</a></li>
+        </ul>
+      </div>
+    </header>
 
-    <section role="main" id="main">
-      <div class="grid-items-lines"></div>
-    </section>
+    <div id="main"></section>
+
+    <script type="text/template" id="home-template">
+      <h1>ive got [this]</h1>
+      <div class="grid-items-lines">
+        <a class="grid-item">
+          <h2>325</h2>
+          <p>Items</p>
+        </a>
+        <a class="grid-item">
+          <h2>15</h2>
+          <p>Groups</p>
+        </a>
+        <a class="grid-item grid-item-big">
+          <h2>$12,900</h2>
+          <p>Total Value</p>
+        </a>
+        <nav>
+          <a class="grid-item grid-item-big">
+            <span class="icon-add icon-forward-r">Add an item</span>
+          </a>
+          <a class="grid-item grid-item-big">
+            <span class="icon-tags icon-forward-r">Just browse</span>
+          </a>
+        </nav>
+        <div class="right-cover"></div>
+        <div class="bottom-cover"></div>
+      </div>
+    </script>
 
     <script type="text/template" id="header-template">
       <div class="row stats-row">
@@ -33,28 +69,41 @@
       </div>
     </script>
 
-
     <script type="text/template" id="category-summary-template">
-      <a href="#/category/<%= slug %>" class="grid-item">
-        <img src="https://raw.github.com/Magnus-G/Random/master/placeholder_logo_<%= count %>_dark.png" alt="">
-        <h1><%= _id %></h1>
-        <p>Items: <%= count %></p>
+      <a href="#/category/<%= slug %>" class="grid-item icon-forward-r">
+        <img src="https://raw.github.com/Magnus-G/Random/master/placeholder_logo_1_dark.png" alt="">
+        <h3><%= _id %><span>(<%= count %>)</span></h3>
+        <small>Value: <%= value %></small>
+        <p><%= description %></p>
       </a>
     </script>
 
     <script type="text/template" id="category-items-template">
-      <a href="#/view/<%= _id %>" class="grid-item">
-        <h1><%= title %></h1>
-        <p>Value: <%= value %></p>
-        <a href="#/edit/<%= _id %>">edit</a>
-      </a>
+      <a href="#/view/<%= _id %>"><%= title %></a> <span class="pull-right">$<%= value %> <a href="#/edit/<%= _id %>">edit</a></span>
     </script>
 
     <script type="text/template" id="single-view-template">
-      <h2><%= title %></h2>
-      <p><%= category %></p>
-      <p><%= value %></p>
-      <small><a href="#/edit/<%= _id %>">Edit</a> | <a href="#" class="delete">delete</a> </small>
+      <section class="detail">
+        <figure>
+          <img src="images/sam-flax-chair.jpg" alt="">
+          <div class="detail-wrap">
+            <a href="#" class="icon-close"></a>
+            <span class="value-tag"><%= value %></span>
+          </div>
+        </figure>
+
+        <div class="body">
+          <h2>Sam Flax Chair</h2>
+          <h6>Furniture</h6>
+          <a href="#" class="icon-receipt"></a>
+          <p>Nano blocks are a construction product which allows the most intricate of model making with unique tiny-sized blocks. Highly collectable, these miniature building block sets appeal to a wide range of tastes and ages. This line is to give the page a bit of scroll.</p>
+        </div>
+
+        <footer>
+          <button class="icon-edit"></button>
+          <button class="icon-trash pull-right"></button>
+        </footer>
+      </section>
     </script>
 
     <script type="text/template" id="new-item-template">
@@ -78,22 +127,25 @@
     </script>
 
     <script type="text/template" id="edit-item-template">
-      <form id="editItem" action="#" enctype="multipart/form-data">
-        <input id="slug" type="hidden" value="<%= slug %>">
-        <div class="form-group">
-          <input id="title" class="form-control" type="text" value="<%= title %>" />
+      <section class="edit">
+        <div class="body">
+          <form id="editItem" action="#" enctype="multipart/form-data">
+            <button class="file-upload">
+              <span class="icon-plus">Add files</span>
+              <input id="fileInput" capture="camera" accept="image/*" type="file" name="files[]" />>
+            </button>
+            <input id="slug" type="hidden" value="<%= slug %>">
+            <input id="title" type="text" value="<%= title %>" />
+            <input id="category" type="text" value="<%= category %>" />
+            <input id="value" type="text" value="<%= value %>" />
+            <input id="fileInput" capture="camera" accept="image/*" type="file" name="files[]" />
+            <footer>
+              <button>Save</button>
+              <button class="pull-right">Cancel</button>
+            </footer>
+          </form>
         </div>
-        <div class="form-group">
-          <input id="category" class="form-control" type="text" value="<%= category %>" />
-        </div>
-        <div class="form-group">
-          <input id="value" class="form-control" type="text" value="<%= value %>" />
-        </div>
-        <div class="form-group">
-          <input id="fileInput" class="form-control" capture="camera" accept="image/*" type="file" name="files[]" />
-        </div>
-      </form>
-      <a href="#" class="done">Done</a>
+      </section>
     </script>
 
     <script type="text/template" id="new-item-template">
@@ -116,27 +168,27 @@
       <a href="#" class="done">Done</a>
     </script>
 
-    <script src="js/lib/jquery.min.js"></script>
-    <script src="js/lib/underscore.min.js"></script>
-    <script src="js/lib/backbone.min.js"></script>
-    <script src="js/models/category-index.js"></script>
-    <script src="js/models/item-list.js"></script>
-    <script src="js/models/single-item.js"></script>
-    <script src="js/models/new-item.js"></script>
-    <script src="js/collections/category-index.js"></script>
-    <script src="js/collections/item-list.js"></script>
-    <script src="js/views/header.js"></script>
-    <script src="js/views/item.js"></script>
-    <script src="js/views/item-list.js"></script>
-    <script src="js/views/category-item.js"></script>
-    <script src="js/views/category-index.js"></script>
-    <script src="js/views/single-item.js"></script>
-    <script src="js/views/new-item.js"></script>
-    <script src="js/views/edit-item.js"></script>
-    <script src="js/routes/routes.js"></script>
-    <script src="js/lib/helpers.js"></script>
-    <script src="js/app.js"></script>
+  <script src="js/lib/jquery.min.js"></script>
+  <script src="js/lib/underscore.min.js"></script>
+  <script src="js/lib/backbone.min.js"></script>
+  <script src="js/models/category-index.js"></script>
+  <script src="js/models/item-list.js"></script>
+  <script src="js/models/single-item.js"></script>
+  <script src="js/models/new-item.js"></script>
+  <script src="js/collections/category-index.js"></script>
+  <script src="js/collections/item-list.js"></script>
+  <script src="js/views/header.js"></script>
+  <script src="js/views/home.js"></script>
+  <script src="js/views/item.js"></script>
+  <script src="js/views/item-list.js"></script>
+  <script src="js/views/category-item.js"></script>
+  <script src="js/views/category-index.js"></script>
+  <script src="js/views/single-item.js"></script>
+  <script src="js/views/new-item.js"></script>
+  <script src="js/views/edit-item.js"></script>
+  <script src="js/routes/routes.js"></script>
+  <script src="js/lib/helpers.js"></script>
+  <script src="js/app.js"></script>
 
-</body>
+  </body>
 </html>
-

@@ -1,9 +1,10 @@
 var SingleItemEditView = Backbone.View.extend({
-  className: 'view-wrap',
+
   events: {
     'change input': 'changed',
     'click .done': 'done'
   },
+
   template: _.template($('#edit-item-template').html()),
 
   initialize: function() {
@@ -18,10 +19,10 @@ var SingleItemEditView = Backbone.View.extend({
   },
 
   changed: function(e) {
-    var changed = e.currentTarget;
-    var value = $(e.currentTarget).val();
-    var slugVal = convertToSlug($('#category').val());
-    var obj = {};
+    var changed = e.currentTarget,
+        value = $(e.currentTarget).val(),
+        slugVal = convertToSlug($('#category').val()),
+        obj = {};
     obj[changed.id] = value;
     obj['slug'] = slugVal;
     this.model.save(obj, {
