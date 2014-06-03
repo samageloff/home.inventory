@@ -1,7 +1,8 @@
 App.SingleItemView = Backbone.View.extend({
 
   events: {
-    'click a.delete': 'delete'
+    'click .icon-edit': 'edit',
+    'click .icon-trash': 'trash'
   },
   template: _.template($('#single-view-template').html()),
 
@@ -9,14 +10,18 @@ App.SingleItemView = Backbone.View.extend({
     this.$el.empty();
     this.$el.html(this.template(this.model.toJSON()));
     return this;
+    this.setElement(this.template(markup));
   },
 
-  delete: function(e) {
-    e.preventDefault();
+  edit: function() {
+    App.router.navigate("/edit/" + this.model.id, true);
+  },
+
+  trash: function() {
     if (window.confirm('Are you sure?')) {
       this.model.destroy();
       this.remove();
-      router.navigate("/", true);
+      App.router.navigate("/", true);
     }
   }
 });

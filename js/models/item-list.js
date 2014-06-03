@@ -4,8 +4,10 @@ App.ItemListModel = Backbone.Model.extend({
   defaults: {
     title: '',
     category: '',
+    description: '',
     slug: '',
     image: '',
+    quantity: 0,
     value: 0
   },
 

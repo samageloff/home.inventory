@@ -1,9 +1,11 @@
 App.NewItemView = Backbone.View.extend({
   className: 'view-wrap slim',
+
   events: {
     'change input': 'changed',
-    'click .done': 'done'
+    'click #cancel': 'cancel'
   },
+
   template: _.template($('#new-item-template').html()),
 
   initialize: function() {
@@ -37,7 +39,19 @@ App.NewItemView = Backbone.View.extend({
     })
   },
 
-  done: function(e) {
+  cancel: function(e) {
+    e.preventDefault();
+    App.router.navigate('#/');
+  },
+
+  saved: function() {
+    var btn = $('#save');
+        btn
+          .attr('disabled', 'disabled')
+          .text('Saved');
+  },
+
+  viewer: function(e) {
     e.preventDefault();
     this.onClose();
     var id = this.model.get('id');

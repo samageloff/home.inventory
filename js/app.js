@@ -19,3 +19,7 @@ App.convertToSlug = function(Text) {
     .replace(/[^\w ]+/g,'')
     .replace(/ +/g,'-');
 }
+
+App.convertLargeNum = function(Num) {
+  return Num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}

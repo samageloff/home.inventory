@@ -2,6 +2,10 @@ var App = App || {};
 
 App.SingleItemModel = Backbone.Model.extend({
 
+  events: {
+    'click .icon-edit': 'edit'
+  },
+
   url: function() {
     return 'api/items/' + this.id;
   },
@@ -9,8 +13,10 @@ App.SingleItemModel = Backbone.Model.extend({
   defaults: {
     title: '',
     category: '',
+    description: '',
     slug: '',
     image: '',
+    quantity: 0,
     value: 0
   },
 
@@ -27,6 +33,17 @@ App.SingleItemModel = Backbone.Model.extend({
     this.on('invalid', function(model, error) {
       console.log(error);
     });
+  },
+
+  edit: function(e) {
+    e.preventDefault();
+    this.onClose();
+    var id = this.model.get('id');
+    router.navigate('edit/'+id, true);
+  },
+
+  onClose: function() {
+    this.model.unbind('change', this.render);
   },
 
   parse: function(response) {

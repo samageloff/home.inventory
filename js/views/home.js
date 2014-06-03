@@ -4,28 +4,15 @@ App.HomeView = Backbone.View.extend({
   className: 'landing',
   template: _.template($('#home-template').html()),
 
-  events: {
-    'click #add-item': "addItem",
-    'click #browse-categories': "browseCategories"
-  },
+  render: function() {
+    this.$el.empty();
 
-  initialize: function() {
-    this.render();
-  },
+    // TODO: make this accessible
+    var totalVal = this.model.get('value');
+    this.model.set('value', App.convertLargeNum(totalVal));
 
-  render: function () {
-    $(this.el).html(this.template());
+    this.$el.html(this.template(this.model.toJSON()));
     return this;
-  },
-
-  addItem: function(e) {
-    e.preventDefault();
-    App.router.navigate("#/add");
-  },
-
-  browseCategories: function(e) {
-    e.preventDefault();
-    App.router.navigate("#/categories");
   }
 
 });

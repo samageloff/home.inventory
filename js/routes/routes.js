@@ -12,8 +12,13 @@ App.Router = Backbone.Router.extend({
   },
 
   home: function() {
-    var homeView = new App.HomeView();
-    $('#main').html(homeView.render().el);
+    var model = new App.HomeModel();
+    model.fetch({
+      success: function() {
+        var homeView = new App.HomeView({ model: model });
+        $('#main').html(homeView.render().el);
+      }
+    });
   },
 
   categoryList: function(id) {

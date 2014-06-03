@@ -1,21 +1,22 @@
 App.SingleItemEditView = Backbone.View.extend({
 
   events: {
-    'change input': 'changed',
-    'click .done': 'done'
+    'change input, textarea': 'changed',
+    'click #cancel': 'cancel'
   },
 
   template: _.template($('#edit-item-template').html()),
 
   initialize: function() {
     _.bindAll(this, 'changed');
-    console.log(this.model.attributes);
+    console.log(this);
   },
 
   render: function() {
     this.$el.empty();
     this.$el.html(this.template(this.model.toJSON()));
     return this;
+    this.setElement(this.template(markup));
   },
 
   changed: function(e) {
@@ -32,11 +33,10 @@ App.SingleItemEditView = Backbone.View.extend({
     })
   },
 
-  done: function(e) {
+  cancel: function(e) {
     e.preventDefault();
-    this.onClose();
     var id = this.model.get('id');
-    router.navigate('view/'+id, true);
+    App.router.navigate('view/'+id, true);
   },
 
   onClose: function(){

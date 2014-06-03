@@ -16,42 +16,14 @@
     <header>
       <div class="header-content">
         <ul>
-          <li><a href="#" class="icon-home">Home</a></li>
+          <li><a href="#/" class="icon-home">Home</a></li>
           <li class="location">Groups</li>
-          <li><a href="#" class="icon-add">Add</a></li>
+          <li><a href="#/new" class="icon-add">Add</a></li>
         </ul>
       </div>
     </header>
 
     <div id="main"></section>
-
-    <script type="text/template" id="home-template">
-      <h1>ive got [this]</h1>
-      <div class="grid-items-lines">
-        <a class="grid-item">
-          <h2>325</h2>
-          <p>Items</p>
-        </a>
-        <a class="grid-item">
-          <h2>15</h2>
-          <p>Groups</p>
-        </a>
-        <a class="grid-item grid-item-big">
-          <h2>$12,900</h2>
-          <p>Total Value</p>
-        </a>
-        <nav>
-          <a href="#" class="grid-item grid-item-big" id="add-item">
-            <span class="icon-add icon-forward-r">Add an item</span>
-          </a>
-          <a href="#" class="grid-item grid-item-big" id="browse-categories">
-            <span class="icon-tags icon-forward-r">Just browse</span>
-          </a>
-        </nav>
-        <div class="right-cover"></div>
-        <div class="bottom-cover"></div>
-      </div>
-    </script>
 
     <script type="text/template" id="header-template">
       <div class="row stats-row">
@@ -69,17 +41,49 @@
       </div>
     </script>
 
+    <script type="text/template" id="home-template">
+      <h1>ive got [this]</h1>
+      <div class="grid-items-lines">
+        <a class="grid-item">
+          <h2 id="count-items"><%= count %></h2>
+          <p>Items</p>
+        </a>
+        <a class="grid-item">
+          <h2 id="count-groups"><%= category.length %></h2>
+          <p>Groups</p>
+        </a>
+        <a class="grid-item grid-item-big">
+          <h2 id="count-value">$<%= value %></h2>
+          <p>Total Value</p>
+        </a>
+        <nav>
+          <a href="#/new" class="grid-item grid-item-big" id="add-item">
+            <span class="icon-add icon-forward-r">Add an item</span>
+          </a>
+          <a href="#/categories" class="grid-item grid-item-big" id="browse-categories">
+            <span class="icon-tags icon-forward-r">Just browse</span>
+          </a>
+        </nav>
+        <div class="right-cover"></div>
+        <div class="bottom-cover"></div>
+      </div>
+    </script>
+
     <script type="text/template" id="category-summary-template">
       <a href="#/category/<%= slug %>" class="grid-item icon-forward-r">
         <img src="https://raw.github.com/Magnus-G/Random/master/placeholder_logo_1_dark.png" alt="">
         <h3><%= _id %><span>(<%= count %>)</span></h3>
-        <small>Value: <%= value %></small>
+        <small>Value: $<%= value %></small>
         <p><%= description %></p>
       </a>
     </script>
 
     <script type="text/template" id="category-items-template">
-      <a href="#/view/<%= _id %>"><%= title %></a> <span class="pull-right">$<%= value %> <a href="#/edit/<%= _id %>">edit</a></span>
+      <a href="#/view/<%= _id %>" class="grid-item">
+        <img src="http://placekitten.com/42/42" alt="">
+        <h4><%= title %></h4>
+        <span class="edit">Edit</span>
+      </a>
     </script>
 
     <script type="text/template" id="single-view-template">
@@ -87,16 +91,16 @@
         <figure>
           <img src="images/sam-flax-chair.jpg" alt="">
           <div class="detail-wrap">
-            <a href="#" class="icon-close"></a>
-            <span class="value-tag"><%= value %></span>
+            <a href="#" class="icon-close close"></a>
+            <span class="value-tag">$ <%= value %></span>
           </div>
         </figure>
 
         <div class="body">
-          <h2>Sam Flax Chair</h2>
-          <h6>Furniture</h6>
-          <a href="#" class="icon-receipt"></a>
-          <p>Nano blocks are a construction product which allows the most intricate of model making with unique tiny-sized blocks. Highly collectable, these miniature building block sets appeal to a wide range of tastes and ages. This line is to give the page a bit of scroll.</p>
+          <h2><%= title %></h2>
+          <h6><%= category %></h6>
+          <!--<a href="#" class="icon-receipt"></a>-->
+          <p><%= description %></p>
         </div>
 
         <footer>
@@ -107,23 +111,24 @@
     </script>
 
     <script type="text/template" id="new-item-template">
-      <h1>New Thang</h1>
-      <form id="newItem" action="#" enctype="multipart/form-data">
-        <input id="slug" type="hidden" value="">
-        <div class="form-group">
-          <input id="title" class="form-control" type="text" placeholder="Title" value="" />
+      <section class="edit">
+        <div class="body">
+          <button class="file-upload">
+            <span class="icon-plus">Add files</span>
+            <input type="file" name="files[]" id="fileupload" multiple>
+          </button>
+          <input type="text" id="title" placeholder="Title" value="">
+          <input type="text" id="category" placeholder="Category" value="">
+          <textarea id="description" placeholder="Description" cols="30" rows="10"></textarea>
+          <input type="text" id="value" placeholder="$" value="">
+          <input type="text" id="quantity" placeholder="Quantity" value="">
         </div>
-        <div class="form-group">
-          <input id="category" class="form-control" type="text" placeholder="Category" value="" />
-        </div>
-        <div class="form-group">
-          <input id="value" class="form-control" type="text" placeholder="$ Value" value="" />
-        </div>
-        <div class="form-group">
-          <input id="fileInput" class="form-control" capture="camera" accept="image/*" type="file" name="files[]" />
-        </div>
-      </form>
-      <a href="#" class="done hide">Done</a>
+
+        <footer>
+          <button id="save">Save</button>
+          <button class="pull-right" id="cancel">Cancel</button>
+        </footer>
+      </section>
     </script>
 
     <script type="text/template" id="edit-item-template">
@@ -132,40 +137,21 @@
           <form id="editItem" action="#" enctype="multipart/form-data">
             <button class="file-upload">
               <span class="icon-plus">Add files</span>
-              <input id="fileInput" capture="camera" accept="image/*" type="file" name="files[]" />>
+              <input id="fileInput" capture="camera" accept="image/*" type="file" name="files[]" />
             </button>
             <input id="slug" type="hidden" value="<%= slug %>">
             <input id="title" type="text" value="<%= title %>" />
             <input id="category" type="text" value="<%= category %>" />
+            <textarea id="description" cols="30" rows="10"><%= description %></textarea>
             <input id="value" type="text" value="<%= value %>" />
-            <input id="fileInput" capture="camera" accept="image/*" type="file" name="files[]" />
+            <input type="text" id="quantity" value="<%= quantity %>" value="">
             <footer>
-              <button>Save</button>
-              <button class="pull-right">Cancel</button>
+              <button id="save">Save</button>
+              <button class="pull-right" id="cancel">Cancel</button>
             </footer>
           </form>
         </div>
       </section>
-    </script>
-
-    <script type="text/template" id="new-item-template">
-      <form id="newItem" action="#" enctype="multipart/form-data">
-        <input id="date" class="" type="hidden" type="text" value="">
-        <div class="form-group">
-          <input id="fileInput" class="form-control" capture="camera" accept="image/*" type="file" name="files[]" />
-        <div id="fileDisplayArea"></div>
-        </div>
-        <div class="form-group">
-          <input id="title" class="form-control" type="text" placeholder="Title" />
-        </div>
-        <div class="form-group">
-          <input id="category" class="form-control" type="text" placeholder="Category" />
-        </div>
-        <div class="form-group">
-          <input id="value" class="form-control" type="text" placeholder="Value" />
-        </div>
-      </form>
-      <a href="#" class="done">Done</a>
     </script>
 
   <script src="js/lib/jquery.min.js"></script>
@@ -175,6 +161,7 @@
   <script src="js/models/item-list.js"></script>
   <script src="js/models/single-item.js"></script>
   <script src="js/models/new-item.js"></script>
+  <script src="js/models/home.js"></script>
   <script src="js/collections/category-index.js"></script>
   <script src="js/collections/item-list.js"></script>
   <script src="js/views/header.js"></script>

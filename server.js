@@ -33,6 +33,26 @@ app.get('/api', function(request, response) {
   response.send('Library API is runnings');
 });
 
+// Get the home list
+app.get('/api/home', function(request, response) {
+  return ItemModel.aggregate({
+    $group: {
+      _id: '$items',
+      category: { $addToSet: '$category' },
+      value: { $sum: "$value" },
+      count: { $sum: 1 }
+    }
+  },
+  function(err, items) {
+    if(!err) {
+      return response.send(items);
+    }
+    else {
+      return console.log(err);
+    }
+  });
+});
+
 // Get a list of all items
 app.get('/api/items', function(request, response) {
   return ItemModel.find(function(err, items) {
@@ -49,9 +69,9 @@ app.get('/api/items/:id', function(request, response) {
   console.log('getting itme with id', request.params.id)
   return ItemModel.findById(request.params.id, function(err, item) {
     if(!err) {
-        return response.send(item);
+      return response.send(item);
     } else {
-        return console.log(err);
+      return console.log(err);
     }
   });
 });
@@ -62,6 +82,7 @@ app.post('/api/items', function(request, response) {
       date: request.body.date,
       title: request.body.title,
       category: request.body.category,
+      description: request.body.description,
       slug: function() {
         return request.body.category
           .toLowerCase()
@@ -85,10 +106,11 @@ app.post('/api/items', function(request, response) {
 
 // Update an item
 app.put('/api/items/:id', function(request, response) {
-  console.log('Updating item ' + request.body.title);
+  console.log('Updating item ' + request);
   return ItemModel.findById(request.params.id, function(err, item) {
     item.title = request.body.title;
     item.category = request.body.category;
+    item.description = request.body.description;
     item.slug = request.body.slug;
     item.date = request.body.date;
     item.itemImage = request.body.itemImage;
@@ -139,8 +161,10 @@ app.get('/api/categories', function(request, response) {
   console.log('Get all categories + counts');
   return ItemModel.aggregate({
     $group: {
-      _id: '$category',
-      count: { $sum: 1 }
+       _id: '$category',
+      slug: { $first: '$slug' },
+      value: { $sum: "$value" },
+      count: { $sum: 1 },
     }
   },
   function(err, items) {
@@ -166,6 +190,7 @@ mongoose.connect('mongodb://localhost/inventory_database');
 var Item = new mongoose.Schema({
   slug: String,
   count: Number,
+  description: String,
   date: Date,
   title: String,
   category: String,

@@ -19,10 +19,6 @@ App.ItemListView = Backbone.View.extend({
       this.renderCategory(item);
     }, this);
 
-    // Handles CSS workaround Bourbon Bitters
-    this.$el
-      .append('<div class="right-cover">')
-      .append('<div class="bottom-cover">');
     return this;
   },
 
@@ -34,4 +30,5 @@ App.ItemListView = Backbone.View.extend({
   onClose: function(){
     this.model.unbind('change', this.render);
   }
+
 });
