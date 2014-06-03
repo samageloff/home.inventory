@@ -1,5 +1,6 @@
-/* Item List */
-var ItemListModel = Backbone.Model.extend({
+var App = App || {};
+
+App.ItemListModel = Backbone.Model.extend({
   defaults: {
     title: '',
     category: '',

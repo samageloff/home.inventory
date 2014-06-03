@@ -1,4 +1,4 @@
-var HeaderView = Backbone.View.extend({
+App.HeaderView = Backbone.View.extend({
   template: _.template($('#header-template').html()),
 
   initialize: function() {

@@ -1,10 +1,10 @@
-var CategoryIndexView = Backbone.View.extend({
+App.CategoryIndexView = Backbone.View.extend({
 
   tagName: 'section',
   className: 'groups grid-items-lines',
 
   initialize: function() {
-    this.collection = new CategoryIndexCollection();
+    this.collection = new App.CategoryIndexCollection();
     this.collection.fetch({reset: true});
     this.render();
     this.listenTo(this.collection, 'reset', this.render)
@@ -24,7 +24,7 @@ var CategoryIndexView = Backbone.View.extend({
   },
 
   renderCategory: function(item) {
-    var categoryView = new CategoryIndexItemView({ model: item });
+    var categoryView = new App.CategoryIndexItemView({ model: item });
     this.$el.append(categoryView.render().el);
   },
 

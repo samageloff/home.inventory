@@ -1,4 +1,6 @@
-var CategoryIndexCollection = Backbone.Collection.extend({
+var App = App || {};
+
+App.CategoryIndexCollection = Backbone.Collection.extend({
   url: 'api/categories',
-  model: CategoryIndexModel
+  model: App.CategoryIndexModel
 });

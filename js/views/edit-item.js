@@ -1,4 +1,4 @@
-var SingleItemEditView = Backbone.View.extend({
+App.SingleItemEditView = Backbone.View.extend({
 
   events: {
     'change input': 'changed',

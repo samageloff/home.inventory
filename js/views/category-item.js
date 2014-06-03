@@ -1,4 +1,4 @@
-var CategoryIndexItemView = Backbone.View.extend({
+App.CategoryIndexItemView = Backbone.View.extend({
   template: _.template($('#category-summary-template').html()),
 
   render: function() {

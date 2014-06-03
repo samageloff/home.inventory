@@ -1,4 +1,4 @@
-var SingleItemView = Backbone.View.extend({
+App.SingleItemView = Backbone.View.extend({
 
   events: {
     'click a.delete': 'delete'

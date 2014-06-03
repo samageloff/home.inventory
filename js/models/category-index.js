@@ -1,5 +1,6 @@
-/* Category Index */
-var CategoryIndexModel = Backbone.Model.extend({
+var App = App || {};
+
+App.CategoryIndexModel = Backbone.Model.extend({
   defaults: {
     _id: '',
     description: '',

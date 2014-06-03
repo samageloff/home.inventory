@@ -1,4 +1,4 @@
-var ItemListView = Backbone.View.extend({
+App.ItemListView = Backbone.View.extend({
 
   tagName: 'section',
   className: 'items grid-items-lines',
@@ -6,7 +6,7 @@ var ItemListView = Backbone.View.extend({
   initialize: function() {
     _.bindAll(this, 'render');
 
-    this.collection = new ItemListCollection();
+    this.collection = new App.ItemListCollection();
     this.collection.fetch({reset: true});
     this.render();
 
@@ -27,7 +27,7 @@ var ItemListView = Backbone.View.extend({
   },
 
   renderCategory: function(item) {
-    var categoryListView = new ItemView({ model: item });
+    var categoryListView = new App.ItemView({ model: item });
     this.$el.append(categoryListView.render().el);
   },
 

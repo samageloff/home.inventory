@@ -1,4 +1,4 @@
-var NewItemView = Backbone.View.extend({
+App.NewItemView = Backbone.View.extend({
   className: 'view-wrap slim',
   events: {
     'change input': 'changed',

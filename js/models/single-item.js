@@ -1,5 +1,6 @@
-/* Single Item */
-var SingleItemModel = Backbone.Model.extend({
+var App = App || {};
+
+App.SingleItemModel = Backbone.Model.extend({
 
   url: function() {
     return 'api/items/' + this.id;

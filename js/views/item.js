@@ -1,4 +1,6 @@
-var ItemView = Backbone.View.extend({
+var App = App || {};
+
+App.ItemView = Backbone.View.extend({
   className: 'grid-item',
   events: {
     'click a.delete': 'delete',
