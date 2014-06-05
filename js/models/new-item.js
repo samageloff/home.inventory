@@ -14,10 +14,17 @@ App.NewItemModel = Backbone.Model.extend({
     value: 0
   },
 
-  validate: function(attributes) {
-    if (attributes.title === '') {
-      return 'Item requires a title'
+  validate: function(attrs) {
+    var errors = [];
+
+    if (!attrs.title) {
+      errors.push({name: 'title', message: 'Please give it a title'});
     }
+    if (!attrs.category) {
+      errors.push({name: 'category', message: 'Please give it a category'});
+    }
+
+    return errors.length > 0 ? errors : false;
   },
 
   initialize: function() {

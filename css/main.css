@@ -730,6 +730,9 @@ header {
     content: "";
     display: table;
     clear: both; }
+  header:empty {
+    display: none;
+  }
   header .header-content li {
     display: table-cell;
     vertical-align: middle; }
@@ -746,6 +749,10 @@ header {
 
 header + #main {
   padding-top: 42px;
+}
+
+header:empty + #main {
+  padding-top: 0;
 }
 
 /* Media Block */

@@ -11,6 +11,10 @@ App.Router = Backbone.Router.extend({
     '*notFound': 'notFound'
   },
 
+  initialize: function () {
+    $('#header').html(new App.HeaderView().render().el);
+  },
+
   home: function() {
     var model = new App.HomeModel();
     model.fetch({
@@ -53,17 +57,13 @@ App.Router = Backbone.Router.extend({
   },
 
   new: function() {
-    var model = new App.NewItemModel({});
+    var model = new App.NewItemModel();
     var newItemView = new App.NewItemView({ model: model });
     $('#main').html(newItemView.render().el);
   },
 
   notFound: function() {
     $('#main').html('<h1>It\'s broken</h1>');
-  },
-
-  initialize:function () {
-    $('#header').html(new App.HeaderView().render().el);
   }
 
 });

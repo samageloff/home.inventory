@@ -7,9 +7,12 @@ App.SingleItemView = Backbone.View.extend({
   template: _.template($('#single-view-template').html()),
 
   render: function() {
+    var markup = this.model.toJSON();
+
     this.$el.empty();
     this.$el.html(this.template(this.model.toJSON()));
     return this;
+
     this.setElement(this.template(markup));
   },
 
