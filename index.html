@@ -98,16 +98,30 @@
     <script type="text/template" id="new-item-template">
       <section class="edit">
         <div class="body">
-          <button class="file-upload">
-            <span class="icon-plus">Add files</span>
-            <input type="file" name="files[]" id="fileupload" multiple>
-          </button>
-          <input type="text" id="title" placeholder="Title" value="">
-          <input type="text" id="category" placeholder="Category" value="">
-          <textarea id="description" placeholder="Description" cols="30" rows="10"></textarea>
-          <input type="text" id="value" placeholder="$" value="">
-          <input type="text" id="quantity" placeholder="Quantity" value="">
-        </div>
+          <form id="new-item-form" role="form">
+            <button class="file-upload">
+              <span class="icon-plus">Add files</span>
+              <input type="file" name="files[]" id="fileupload" multiple>
+            </button>
+            <div class="form-group">
+              <input type="text" id="title" name="title" placeholder="Title" value="">
+              <span class="help-block hidden"></span>
+            </div>
+            <div class="form-group">
+              <input type="text" id="category" name="category" placeholder="Category" value="">
+              <span class="help-block hidden"></span>
+            </div>
+            <div class="form-group">
+              <textarea id="description" name="description" placeholder="Description" cols="30" rows="10"></textarea>
+            </div>
+            <div class="form-group">
+              <input type="text" id="value" name="value" placeholder="$" value="">
+            </div>
+            <div class="form-group">
+              <input type="text" id="quantity" name="quantity" placeholder="Quantity" value="">
+            </div>
+          </div>
+        </form>
 
         <footer>
           <button id="save">Save</button>

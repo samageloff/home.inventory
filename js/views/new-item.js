@@ -1,14 +1,14 @@
 App.NewItemView = Backbone.View.extend({
 
   events: {
-    'change input, textarea': 'changed',
+    'click #save': 'save',
     'click #cancel': 'cancel'
   },
 
   template: _.template($('#new-item-template').html()),
 
   initialize: function() {
-    _.bindAll(this, 'changed');
+    Backbone.Validation.bind(this);
   },
 
   render: function() {
@@ -21,25 +21,20 @@ App.NewItemView = Backbone.View.extend({
     return this;
   },
 
-  changed: function(e) {
-    var options = {
-      success: function() {
-        console.log('Thanks for the submission');
-      },
-      error: function(model, error) {
-        console.log(error, 'okay');
-      }
-    };
+  save: function(e) {
+    var data = $('#new-item-form').serializeObject();
+    this.model.set(data);
 
-    var changed = e.currentTarget;
-    var value = $(e.currentTarget).val();
-    var slugVal = convertToSlug($('#category').val());
+    if(this.model.isValid(true)){
+      this.model.save();
+    }
+  },
 
-    var obj = {};
-    obj[changed.id] = value;
-    obj['slug'] = slugVal;
-
-    this.model.save(obj, options);
+  remove: function() {
+    // Remove the validation binding
+    // See: http://thedersen.com/projects/backbone-validation/#using-form-model-validation/unbinding
+    Backbone.Validation.unbind(this);
+    return Backbone.View.prototype.remove.apply(this, arguments);
   },
 
   cancel: function(e) {
