@@ -2,7 +2,8 @@ var App = App || {};
 
 App.ItemView = Backbone.View.extend({
   events: {
-    'click .edit': 'edit'
+    'click .edit': 'edit',
+    'click .delete': 'delete'
   },
   template: _.template($('#category-items-template').html()),
 

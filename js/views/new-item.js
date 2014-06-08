@@ -1,7 +1,7 @@
 App.NewItemView = Backbone.View.extend({
 
   events: {
-    'change input, textarea': 'save',
+    'click #save': 'save',
     'click #cancel': 'cancel'
   },
 
@@ -33,6 +33,7 @@ App.NewItemView = Backbone.View.extend({
 
     if(this.model.isValid(true)){
       this.model.save();
+      App.router.navigate('#/view/' + this.model.id);
     }
   },
 

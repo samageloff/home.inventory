@@ -68,7 +68,10 @@
       <a href="#/view/<%= _id %>" class="grid-item">
         <img src="http://placekitten.com/42/42" alt="">
         <h4><%= title %></h4>
-        <span class="edit">Edit</span>
+        <div class="controls">
+          <span class="edit">Edit</span>
+          <span class="delete icon-close"></span>
+        </div>
       </a>
     </script>
 
@@ -97,8 +100,8 @@
     </script>
 
     <script type="text/template" id="new-item-template">
-      <section class="edit">
-        <div class="body">
+      <section class="form-layout">
+        <div class="bd">
           <form id="new-item-form" role="form" method="post" enctype="multipart/form-data">
             <input id="slug" name="slug" type="hidden" value="">
             <button class="file-upload">
@@ -133,19 +136,19 @@
     </script>
 
     <script type="text/template" id="edit-item-template">
-      <section class="edit">
-        <div class="body">
+      <section class="form-layout">
+        <div class="bd">
           <form id="editItem" action="#" enctype="multipart/form-data">
             <button class="file-upload">
               <span class="icon-plus">Add files</span>
               <input id="fileInput" capture="camera" accept="image/*" type="file" name="files[]" />
             </button>
-            <input id="slug" type="hidden" value="<%= slug %>">
-            <input id="title" type="text" value="<%= title %>" />
-            <input id="category" type="text" value="<%= category %>" />
-            <textarea id="description" cols="30" rows="10"><%= description %></textarea>
-            <input id="value" type="text" value="<%= value %>" />
-            <input type="text" id="quantity" value="<%= quantity %>" value="">
+            <input id="slug" type="hidden" name="slug" value="<%= slug %>">
+            <input id="title" type="text" name="title" placeholder="Title" value="<%= title %>" />
+            <input id="category" type="text" name="category" placeholder="Category" value="<%= category %>" />
+            <textarea id="description" name="description" placeholder="Description" cols="30" rows="10"><%= description %></textarea>
+            <input id="value" type="text" name="value" placeholder="Value" value="<%= value %>" />
+            <input type="text" id="quantity" name="quantity" placeholder="Quantity" value="<%= quantity %>" value="">
             <footer>
               <button id="save">Save</button>
               <button class="pull-right" id="cancel">Cancel</button>

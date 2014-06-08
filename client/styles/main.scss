@@ -362,8 +362,10 @@ section {
 .items.grid-items-lines {
 
   .grid-item {
+    display: table;
     height: auto;
-    padding: 2em;
+    padding: 1em;
+    text-align: left;
   }
 
   .grid-item img {
@@ -381,14 +383,24 @@ section {
 
   .grid-item span {
     color: $blue;
-    font-size: .75rem;
-    position: absolute;
-    right: 1em;
-    top: 20%;
 
     &:hover {
       text-decoration: underline;
     }
+
+    &.icon-close {
+      right: -5px;
+      position: relative;
+      top: 2px;
+    }
+
+  }
+
+  .controls {
+    display: table-cell;
+    font-size: .75rem;
+    text-align: right;
+    vertical-align: middle;
   }
 
 }
@@ -481,10 +493,10 @@ footer {
 
 
 /* Edit Page */
-.edit {
+.form-layout {
   padding: 1em;
 
-  .body {
+  .bd {
     margin-bottom: 4em;
   }
 
