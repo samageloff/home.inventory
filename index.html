@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="no-js" lang="">
   <head>
-    <title></title>
+    <title>I've Got [This]</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="">
@@ -9,6 +9,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
+    <link rel="apple-touch-icon" href="images/iphone-icon.png"/>
     <link rel="stylesheet" href="css/main.css">
   </head>
   <body>
@@ -98,10 +99,11 @@
     <script type="text/template" id="new-item-template">
       <section class="edit">
         <div class="body">
-          <form id="new-item-form" role="form">
+          <form id="new-item-form" role="form" method="post" enctype="multipart/form-data">
+            <input id="slug" name="slug" type="hidden" value="">
             <button class="file-upload">
               <span class="icon-plus">Add files</span>
-              <input type="file" name="files[]" id="fileupload" multiple>
+              <input type="file" name="image" id="image">
             </button>
             <div class="form-group">
               <input type="text" id="title" name="title" placeholder="Title" value="">
@@ -112,7 +114,7 @@
               <span class="help-block hidden"></span>
             </div>
             <div class="form-group">
-              <textarea id="description" name="description" placeholder="Description" cols="30" rows="10"></textarea>
+              <textarea id="description" name="description" placeholder="Description" cols="30" rows="5"></textarea>
             </div>
             <div class="form-group">
               <input type="text" id="value" name="value" placeholder="$" value="">

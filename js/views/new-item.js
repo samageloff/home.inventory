@@ -1,13 +1,14 @@
 App.NewItemView = Backbone.View.extend({
 
   events: {
-    'click #save': 'save',
+    'change input, textarea': 'save',
     'click #cancel': 'cancel'
   },
 
   template: _.template($('#new-item-template').html()),
 
   initialize: function() {
+    _.bindAll(this, 'save');
     Backbone.Validation.bind(this);
   },
 
@@ -23,6 +24,11 @@ App.NewItemView = Backbone.View.extend({
 
   save: function(e) {
     var data = $('#new-item-form').serializeObject();
+    var value = $(e.currentTarget).val();
+    var slugVal = convertToSlug($('#category').val());
+    data['slug'] = slugVal;
+
+    console.log('data', data);
     this.model.set(data);
 
     if(this.model.isValid(true)){
@@ -31,8 +37,6 @@ App.NewItemView = Backbone.View.extend({
   },
 
   remove: function() {
-    // Remove the validation binding
-    // See: http://thedersen.com/projects/backbone-validation/#using-form-model-validation/unbinding
     Backbone.Validation.unbind(this);
     return Backbone.View.prototype.remove.apply(this, arguments);
   },

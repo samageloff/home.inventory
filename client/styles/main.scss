@@ -1,0 +1,492 @@
+@import 'normalize';
+@import 'bourbon';
+@import 'bitters/bitters';
+@import 'neat';
+@import 'fonts';
+
+
+/* Variables */
+$gesso: #FFF;
+$midnight: #000;
+$bgcolor: #F2F2F2;
+$brand: #a4c222;
+$lightest: 100;
+$light: 200;
+$medium: 400;
+$heavy: 600;
+
+
+/* Mixins */
+.hide-text {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.pull-left {
+  float: left;
+}
+
+.pull-right {
+  float: right;
+}
+
+
+body {
+  background-color: $bgcolor;
+}
+
+/* Site-specific */
+h1 {
+  color: $brand;
+  font-weight: $lightest;
+  font-size: 58px;
+  margin: .5em 0;
+  text-align: center;
+}
+
+#main {
+  padding-top: 60px;
+}
+
+header {
+  @include outer-container;
+  background-color: $brand;
+  color: $gesso;
+  opacity: .8;
+  padding: .75em;
+  position: fixed;
+  max-width: auto;
+  z-index: 2;
+
+  .header-content {
+
+    li {
+      display: table-cell;
+      vertical-align: middle;
+
+      a {
+        color: $gesso;
+        display: block;
+        font-size: 2.25em;
+        @extend .hide-text;
+        position: relative;
+        top: 2px;
+        width: 1em;
+      }
+
+      &.location {
+        font-size: 1.15em;
+        font-weight: $heavy;
+        text-align: center;
+        width: 100%;
+      }
+
+    }
+
+  }
+
+}
+
+/* Media Block */
+.media-block {
+  @include clearfix;
+  margin-bottom: 1em;
+  position: relative;
+
+  img {
+    float: left;
+    margin-right: 1em;
+  }
+
+  .media-body {
+    float: left;
+  }
+
+  [class^="icon-"] {
+    color: $medium-gray;
+    font-size: 1em;
+    position: absolute;
+    right: 0;
+    top: 40%;
+  }
+
+}
+
+/* File Upload */
+.file-upload {
+  overflow: hidden;
+  margin-bottom: 1em;
+  position: relative;
+
+  input {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    opacity: 0;
+    -ms-filter: 'alpha(opacity=0)';
+    font-size: 200px;
+    direction: ltr;
+    cursor: pointer;
+  }
+
+  .icon-plus {
+    padding-left: 10px;
+
+    &:before {
+      left: 7px;
+      font-size: 1.25em;
+      position: absolute;
+    }
+
+  }
+
+}
+
+#{$all-text-inputs},
+textarea {
+  font-size: 15px;
+  font-weight: $light;
+}
+
+#{$all-text-inputs-focus},
+textarea:focus {
+  background: $gesso;
+}
+
+.progress-animated .progress-bar,
+.progress-animated .bar {
+  background: url("../img/progressbar.gif") !important;
+  filter: none;
+}
+
+/* Bitters */
+section {
+  @include outer-container;
+  aside { @include span-columns(3); }
+  article { @include span-columns(9); }
+}
+
+
+/* Refills */
+@mixin grid-item-columns($columns) {
+  width: (100% / 12) * $columns;
+}
+
+.grid-items-lines {
+  $grid-items-background: $base-body-color;
+  $grid-item-background: $base-body-color;
+  $grid-item-border: 1px solid transparentize($base-font-color, .8);
+  $grid-item-columns: 4;
+  $grid-item-big-columns: 8;
+  $grid-item-color: $base-font-color;
+  $grid-item-height: auto;
+
+  @include clearfix;
+  position: relative;
+
+  .grid-item {
+    background: $grid-item-background;
+    border-right: $grid-item-border;
+    border-bottom: $grid-item-border;
+    cursor: pointer;
+    float: left;
+    height: $grid-item-height;
+    margin-bottom: 1em;
+    overflow: hidden;
+    padding: 1em;
+    position: relative;
+    text-align: center;
+    width: 100%;
+    @include transition (all 0.2s ease-in-out);
+
+    @include media($large-screen) {
+      @include grid-item-columns($grid-item-columns);
+    }
+
+    &:hover {
+      background: transparentize($grid-item-color, .95);
+    }
+  }
+
+  .grid-item img {
+    display: block;
+    margin-bottom: 1.2em;
+    opacity: .2;
+  }
+
+  .grid-item h1 {
+    color: $grid-item-color;
+    font-size: 1.3em;
+    margin-bottom: .4em;
+  }
+
+  .grid-item p {
+    color: transparentize($grid-item-color, .4);
+    @include media($medium-screen) {
+      max-width: 70%;
+    }
+    overflow: hidden;
+  }
+
+  .grid-item-big {
+    @include media($small-screen) {
+      @include grid-item-columns($grid-item-big-columns);
+    }
+    p {
+      @include media($medium-screen) {
+        max-width: 60%;
+      }
+    }
+  }
+
+  [class^="icon-"]:before,
+  [class^="icon-"]:after {
+    color: transparentize($grid-item-color, .4);
+  }
+
+
+  // this, below, might not be the most beautiful solution but it removes the outer borders by using the background color.
+  .bottom-cover {
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    height: 3px;
+    background: $grid-items-background;
+  }
+
+  .right-cover {
+    position: absolute;
+    right: 0px;
+    height: 100%;
+    width: 4px;
+    background: $grid-items-background;
+  }
+}
+
+
+/* Grid Item Overrides */
+
+/* Landing Page */
+.landing {
+  $grid-item-columns: 6;
+  $grid-item-color: $base-font-color;
+  $grid-item-big-columns: 12;
+
+  .grid-item {
+    padding: 1.25em;
+    text-align: center;
+  }
+
+  .grid-item,
+  .grid-item a {
+    color: $midnight;
+  }
+
+  .grid-item p {
+    margin-bottom: 0;
+    text-transform: uppercase;
+    @include media($large-screen) {
+      max-width: 100%;
+    }
+  }
+
+  .grid-item {
+    @include media($small-screen) {
+      @include grid-item-columns($grid-item-columns);
+    }
+  }
+
+  .grid-item-big {
+    @include media($small-screen) {
+      @include grid-item-columns($grid-item-big-columns);
+    }
+  }
+
+  nav .grid-item {
+    font-size: 1.25em;
+    text-align: left;
+
+    [class^="icon-"]:before {
+      margin-right: 1em;
+    }
+
+  }
+
+}
+
+/* Groups Page */
+.groups.grid-items-lines {
+
+  .grid-item {
+    height: 14em;
+  }
+
+  .grid-item img {
+    margin: 1em auto;
+  }
+
+  h3 {
+    color: $midnight;
+    font-size: 1.25em;
+
+    +small {
+      color: $blue;
+      margin-bottom: 0;
+    }
+
+  }
+
+  .grid-item span {
+    bottom: 3px;
+    font-size: .75rem;
+    font-weight: normal;
+    left: 7px;
+    position: relative;
+  }
+
+  p {
+    font-size: .75em;
+    line-height: 1.75em;
+    margin-right: 1em;
+  }
+
+  .icon-forward-r:after {
+    top: 45%;
+  }
+
+}
+
+
+/* Items Page */
+.items.grid-items-lines {
+
+  .grid-item {
+    height: auto;
+    padding: 2em;
+  }
+
+  .grid-item img {
+    float: left;
+    margin-right: 1em;
+    margin-bottom: auto;
+    opacity: .8;
+  }
+
+  h4 {
+    color: $midnight;
+    font-size: 1em;
+    margin-top: 10px;
+  }
+
+  .grid-item span {
+    color: $blue;
+    font-size: .75rem;
+    position: absolute;
+    right: 1em;
+    top: 20%;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+}
+
+
+/* Detail Page */
+.detail {
+
+  figure {
+    color: $gesso;
+    margin: 0;
+    position: relative;
+
+    img {
+      width: 100%;
+    }
+
+    [class^="icon"] {
+      color: $gesso;
+      font-size: 1.5em;
+      @extend .hide-text;
+      position: absolute;
+      right: 10px;
+      top: 10px;
+    }
+
+    .value-tag {
+      bottom: 1em;
+      font-size: 24px;
+      font-weight: bold;
+      position: absolute;
+      right: .75em;
+    }
+  }
+
+  .body {
+    padding: 1em 1em 4em;
+    position: relative;
+
+    h2 {
+      font-size: 18px;
+    }
+
+    h6 {
+      color: $medium-gray;
+      font-size: 14px;
+      margin: .5em 0;
+    }
+
+    p {
+      font-size: 14px;
+    }
+
+    .icon-receipt {
+      color: $brand;
+      font-size: 2em;
+      position: absolute;
+      right: .35em;
+      top: .5em;
+    }
+
+  }
+
+}
+
+
+/* Footer */
+footer {
+  background: $gesso;
+  border-top: 1px solid #EFEFEF;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: .75em;
+  position: fixed;
+
+  button {
+    @extend .hide-text;
+  }
+
+  [class^="icon"] {
+    padding: 7px 10px;
+  }
+
+  .trash {
+    @extend .pull-right;
+  }
+
+}
+
+
+/* Edit Page */
+.edit {
+  padding: 1em;
+
+  .body {
+    margin-bottom: 4em;
+  }
+
+}
+
