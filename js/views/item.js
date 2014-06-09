@@ -8,17 +8,10 @@ App.ItemView = Backbone.View.extend({
   template: _.template($('#category-items-template').html()),
 
   render: function() {
-    this.$el.empty();
-
-    this.$el.html(this.template(this.model.toJSON()));
     var markup = this.model.toJSON();
-
-    // Handles CSS workaround Bourbon Bitters
-    this.$el
-      .append('<div class="right-cover">')
-      .append('<div class="bottom-cover">');
+    this.$el.empty();
+    this.$el.html(this.template(this.model.toJSON()));
     return this;
-
     this.setElement(this.template(markup));
   },
 
@@ -33,5 +26,6 @@ App.ItemView = Backbone.View.extend({
       this.model.destroy();
       this.remove();
     }
+    App.router.navigate('#/categories');
   }
 });

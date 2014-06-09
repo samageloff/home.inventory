@@ -55,7 +55,7 @@ header {
   opacity: .8;
   padding: .75em;
   position: fixed;
-  max-width: auto;
+  max-width: 100%;
   z-index: 2;
 
   .header-content {
@@ -207,6 +207,7 @@ section {
     &:hover {
       background: transparentize($grid-item-color, .95);
     }
+
   }
 
   .grid-item img {
@@ -448,6 +449,11 @@ section {
       color: $medium-gray;
       font-size: 14px;
       margin: .5em 0;
+
+      a {
+        color: $blue;
+      }
+
     }
 
     p {

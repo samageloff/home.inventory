@@ -725,7 +725,7 @@ header {
   opacity: .8;
   padding: .75em;
   position: fixed;
-  max-width: auto;
+  max-width: 100%;
   z-index: 2; }
   header:after {
     content: "";
@@ -998,6 +998,8 @@ section {
     color: #999999;
     font-size: 14px;
     margin: .5em 0; }
+    .detail .body h6 a {
+      color: #477dca; }
   .detail .body p {
     font-size: 14px; }
   .detail .body .icon-receipt {

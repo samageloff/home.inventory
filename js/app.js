@@ -11,6 +11,7 @@ events: (function() {
 $(function() {
   App.router = new App.Router();
   Backbone.history.start();
+  $("#fileupload").fileupload({ dataType: "json" })
 });
 
 App.convertToSlug = function(Text) {

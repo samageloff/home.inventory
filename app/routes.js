@@ -8,9 +8,11 @@ module.exports.initialize = function(app) {
   app.get('/api/categories', api.categories);
   app.get('/api/category/:name', api.category);
 
-  app.post('/api/items/', api.insert);
+  app.post('/api/items', api.insert);
+  app.post('/api/upload', api.upload);
 
   app.put('/api/items/:id', api.update);
 
   app.delete('/api/items/:id', api.delete);
+  app.delete('/api/category/:name/:id', api.delete);
 };

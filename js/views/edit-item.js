@@ -1,45 +1,65 @@
 App.SingleItemEditView = Backbone.View.extend({
 
   events: {
-    'change input, textarea': 'changed',
+    'click #save': 'save',
     'click #cancel': 'cancel'
   },
 
   template: _.template($('#edit-item-template').html()),
 
   initialize: function() {
-    _.bindAll(this, 'changed');
-    console.log(this);
+    _.bindAll(this, 'save');
+    Backbone.Validation.bind(this);
   },
 
   render: function() {
+    var markup = this.model.toJSON();
+
     this.$el.empty();
     this.$el.html(this.template(this.model.toJSON()));
-    return this;
     this.setElement(this.template(markup));
+
+    return this;
   },
 
-  changed: function(e) {
-    var changed = e.currentTarget,
-        value = $(e.currentTarget).val(),
-        slugVal = convertToSlug($('#category').val()),
-        obj = {};
-    obj[changed.id] = value;
-    obj['slug'] = slugVal;
-    this.model.save(obj, {
-      success: function() {
-        console.log(obj);
-      }
-    })
+  save: function(e) {
+    var data = $('#edit-item-form').serializeObject();
+    var value = $(e.currentTarget).val();
+    var slugVal = convertToSlug($('#category').val());
+    data['slug'] = slugVal;
+
+    console.log('data', data);
+    this.model.set(data);
+
+    if(this.model.isValid(true)){
+      this.model.save(data, {
+        success: function(response, model) {
+          console.log('model', model, response);
+          App.router.navigate('#/view/' + model.id);
+        }
+      });
+    }
+  },
+
+  remove: function() {
+    Backbone.Validation.unbind(this);
+    return Backbone.View.prototype.remove.apply(this, arguments);
   },
 
   cancel: function(e) {
     e.preventDefault();
-    var id = this.model.get('id');
-    App.router.navigate('view/'+id, true);
+    this.onClose();
+    App.router.navigate('#/');
   },
 
-  onClose: function(){
+  saved: function() {
+    var btn = $('#save');
+        btn
+          .attr('disabled', 'disabled')
+          .text('Saved');
+  },
+
+  onClose: function() {
     this.model.unbind('change', this.render);
   }
 

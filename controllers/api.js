@@ -1,7 +1,6 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId,
-    attachments = require('mongoose-attachments-aws2js'),
     models = require('../app/models');
 
 module.exports = {
@@ -92,7 +91,7 @@ module.exports = {
         item.value = request.body.value;
         item.quantity = request.body.quantity;
 
-    console.log('item', item);
+    console.log("FILES", request.files);
 
     // item.attach('image', request.files.image, function(err) {
     //   if(err) return next(err);
@@ -124,6 +123,14 @@ module.exports = {
       item.value = request.body.value;
       item.quantity = request.body.quantity;
 
+      // item.attach('image', request.files.image, function(err) {
+      //   if(err) return next(err);
+      //   item.save(function(err) {
+      //     if(err) return next(err);
+      //     response.send('Post has been saved with file!');
+      //   });
+      // });
+
       return item.save(function(err) {
         if(!err) {
             console.log('app put', item);
@@ -149,6 +156,10 @@ module.exports = {
         }
       });
     });
+  },
+
+  upload: function(request, response) {
+    console.log(JSON.stringify(request.files));
   }
 
 }

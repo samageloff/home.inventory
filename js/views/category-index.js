@@ -15,11 +15,6 @@ App.CategoryIndexView = Backbone.View.extend({
     this.collection.each(function(item) {
       this.renderCategory(item);
     }, this);
-
-    // Handles CSS workaround Bourbon Bitters
-    this.$el
-      .append('<div class="right-cover">')
-      .append('<div class="bottom-cover">');
     return this;
   },
 

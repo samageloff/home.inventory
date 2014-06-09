@@ -32,8 +32,12 @@ App.NewItemView = Backbone.View.extend({
     this.model.set(data);
 
     if(this.model.isValid(true)){
-      this.model.save();
-      App.router.navigate('#/view/' + this.model.id);
+      this.model.save(data, {
+        success: function(response, model) {
+          console.log('model', model, response);
+          App.router.navigate('#/view/' + model.id);
+        }
+      });
     }
   },
 
