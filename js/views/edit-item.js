@@ -28,13 +28,13 @@ App.SingleItemEditView = Backbone.View.extend({
     var slugVal = convertToSlug($('#category').val());
     data['slug'] = slugVal;
 
-    console.log('data', data);
     this.model.set(data);
+
+    console.log('data', data);
 
     if(this.model.isValid(true)){
       this.model.save(data, {
         success: function(response, model) {
-          console.log('model', model, response);
           App.router.navigate('#/view/' + model.id);
         }
       });

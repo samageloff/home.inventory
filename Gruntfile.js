@@ -35,8 +35,8 @@ module.exports = function(grunt) {
       // Recursively bundle up all the required modules
       // browserify: {
       //   vendor: {
-      //     src: ['client/requires/**/*.js'],
-      //     dest: 'build/vendor.js',
+      //     src: ['js/lib/**/*.js'],
+      //     dest: 'js/vendor.js',
       //     options: {
       //       shim: {
       //         jquery: {
@@ -52,15 +52,6 @@ module.exports = function(grunt) {
       //           exports: 'Backbone',
       //           depends: {
       //             underscore: 'underscore'
-      //           }
-      //         },
-      //         'backbone.marionette': {
-      //           path: 'client/requires/backbone.marionette/js/backbone.marionette.js',
-      //           exports: 'Marionette',
-      //           depends: {
-      //             jquery: '$',
-      //             backbone: 'Backbone',
-      //             underscore: '_'
       //           }
       //         }
       //       }
@@ -186,19 +177,42 @@ module.exports = function(grunt) {
         // }
       },
 
-      // for changes to the node code
-      // nodemon: {
-      //   dev: {
-      //     options: {
-      //       file: 'server.js',
-      //       nodeArgs: ['--debug'],
-      //       watchedFolders: ['controllers', 'app'],
-      //       env: {
-      //         PORT: '3001'
-      //       }
-      //     }
-      //   }
-      // },
+      nodemon: {
+        dev: {
+          options: {
+            file: 'server.js',
+            nodeArgs: ['--debug'],
+            watchedFolders: ['controllers', 'app'],
+            env: {
+              PORT: '3001'
+            }
+          }
+        }
+      },
+
+      shell: {
+        mongo: {
+          command: 'mongod',
+          options: {
+            async: true
+          }
+        }
+      },
+
+      concurrent: {
+        dev: {
+          tasks: ['nodemon:dev', 'shell:mongo', 'watch:sass'],
+          options: {
+            logConcurrentOutput: true
+          }
+        },
+        test: {
+          tasks: ['watch:karma'],
+          options: {
+            logConcurrentOutput: true
+          }
+        }
+      },
 
       // Server tests
       // simplemocha: {
@@ -214,33 +228,6 @@ module.exports = function(grunt) {
       //     src: ['spec/spechelper.js', 'spec/**/*.test.js']
       //   }
       // },
-
-      // Mongod server launcher
-      shell: {
-        mongo: {
-          command: 'mongod',
-          options: {
-            async: true
-          }
-        }
-      },
-
-      // https://github.com/sindresorhus/grunt-concurrent#grunt-concurrent-
-      concurrent: {
-        dev: {
-          tasks: ['shell:mongo', 'watch:sass'],
-          // tasks: ['nodemon:dev', 'shell:mongo', 'watch:scripts', 'watch:sass', 'watch:test'],
-          options: {
-            logConcurrentOutput: true
-          }
-        },
-        test: {
-          tasks: ['watch:karma'],
-          options: {
-            logConcurrentOutput: true
-          }
-        }
-      },
 
       // http://karma-runner.github.io/0.10/intro/how-it-works.html
       // karma: {

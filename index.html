@@ -83,11 +83,13 @@
           </div>
         </figure>
 
-        <div class="body">
+        <div class="bd">
           <h2><%= title %></h2>
           <h6><a href="#/category/<%= slug %>"><%= category %></a></h6>
           <!--<a href="#" class="icon-receipt"></a>-->
-          <p><%= description %></p>
+          <ul>
+            <li><%= description %></li>
+            <li><b>Quantity</b>: <%= quantity %></li>
         </div>
 
         <footer>

@@ -5,12 +5,13 @@ var mongoose = require('mongoose'),
 
 // Item Schema
 var Item = new mongoose.Schema({
-  slug: String,
-  count: Number,
-  description: String,
-  date: Date,
-  title: String,
   category: String,
+  count: Number,
+  date: Date,
+  description: String,
+  slug: String,
+  title: String,
+  quantity: Number,
   value: Number
 });
 
