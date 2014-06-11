@@ -49,7 +49,7 @@ App.SingleItemEditView = Backbone.View.extend({
   cancel: function(e) {
     e.preventDefault();
     this.onClose();
-    App.router.navigate('#/');
+    App.router.navigate('#/view/' + this.model.id);
   },
 
   saved: function() {

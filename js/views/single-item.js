@@ -1,6 +1,7 @@
 App.SingleItemView = Backbone.View.extend({
 
   events: {
+    'click .icon-close': 'close',
     'click .icon-edit': 'edit',
     'click .icon-trash': 'trash'
   },
@@ -14,6 +15,11 @@ App.SingleItemView = Backbone.View.extend({
     return this;
 
     this.setElement(this.template(markup));
+  },
+
+  close: function(e) {
+    e.preventDefault();
+    App.router.navigate("#/category/" + this.model.get('slug'), true);
   },
 
   edit: function() {

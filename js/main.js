@@ -269,7 +269,7 @@ App.SingleItemEditView = Backbone.View.extend({
   cancel: function(e) {
     e.preventDefault();
     this.onClose();
-    App.router.navigate('#/');
+    App.router.navigate('#/view/' + this.model.id);
   },
 
   saved: function() {
@@ -457,6 +457,7 @@ App.NewItemView = Backbone.View.extend({
 App.SingleItemView = Backbone.View.extend({
 
   events: {
+    'click .icon-close': 'close',
     'click .icon-edit': 'edit',
     'click .icon-trash': 'trash'
   },
@@ -470,6 +471,11 @@ App.SingleItemView = Backbone.View.extend({
     return this;
 
     this.setElement(this.template(markup));
+  },
+
+  close: function(e) {
+    e.preventDefault();
+    App.router.navigate("#/category/" + this.model.get('slug'), true);
   },
 
   edit: function() {
@@ -498,7 +504,8 @@ App.Router = Backbone.Router.extend({
   },
 
   initialize: function () {
-    $('#header').html(new App.HeaderView().render().el);
+    var headerView = new App.HeaderView();
+    $('#header').html(headerView.render().el);
   },
 
   home: function() {

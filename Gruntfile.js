@@ -178,10 +178,10 @@ module.exports = function(grunt) {
             livereload: true
           },
         },
-        // scripts: {
-        //   files: ['client/templates/*.hbs', 'client/src/**/*.js'],
-        //   tasks: ['clean:dev', 'browserify:app', 'concat', 'copy:dev']
-        // },
+        scripts: {
+          files: ['js/**/*.js'],
+          tasks: ['concat']
+        },
         sass: {
           files: ['client/styles/**/*.scss'],
           tasks: ['sass', 'copy:dev']
@@ -220,7 +220,7 @@ module.exports = function(grunt) {
 
       concurrent: {
         dev: {
-          tasks: ['nodemon:dev', 'shell:mongo', 'watch:sass'],
+          tasks: ['nodemon:dev', 'shell:mongo', 'watch:sass', 'watch:scripts'],
           options: {
             logConcurrentOutput: true
           }
@@ -308,7 +308,8 @@ module.exports = function(grunt) {
 
   grunt.registerTask('server', [
     'build:dev',
-    'concurrent:dev'
+    'concurrent:dev',
+    'watch:scripts'
   ]);
 
   grunt.registerTask('test:server', [

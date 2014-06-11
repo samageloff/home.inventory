@@ -21,7 +21,7 @@
       <div class="header-content">
         <ul>
           <li><a href="#/" class="icon-home">Home</a></li>
-          <li class="location">Groups</li>
+          <li class="location"><%= location %></li>
           <li><a href="#/new" class="icon-add">Add</a></li>
         </ul>
       </div>
@@ -55,7 +55,7 @@
 
     <script type="text/template" id="category-summary-template">
       <a href="#/category/<%= slug %>" class="grid-item icon-forward-r">
-        <img src="https://raw.github.com/Magnus-G/Random/master/placeholder_logo_1_dark.png" alt="">
+        <img src="images/placeholder_logo_1_dark.png" alt="">
         <h3><%= _id %><span>(<%= count %>)</span></h3>
         <small>Value: $<%= value %></small>
         <p><%= description %></p>
