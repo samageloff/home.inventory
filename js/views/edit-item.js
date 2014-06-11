@@ -25,7 +25,7 @@ App.SingleItemEditView = Backbone.View.extend({
   save: function(e) {
     var data = $('#edit-item-form').serializeObject();
     var value = $(e.currentTarget).val();
-    var slugVal = convertToSlug($('#category').val());
+    var slugVal = App.convertToSlug($('#category').val());
     data['slug'] = slugVal;
 
     this.model.set(data);

@@ -84,7 +84,6 @@ module.exports = function(grunt) {
       //   }
       // },
 
-      // https://github.com/sindresorhus/grunt-sass
       sass: {
         dist: {
           options: {
@@ -98,12 +97,32 @@ module.exports = function(grunt) {
         }
       },
 
-      // https://github.com/gruntjs/grunt-contrib-concat#getting-started
-      // concat: {
-      //   'build/main.js': ['build/vendor.js', 'build/app.js']
-      // },
+      concat: {
+        'js/vendor.js': [
+          'js/lib/jquery.min.js',
+          'js/lib/jquery.ui.widget.js',
+          'js/lib/jquery.iframe-transport.js',
+          'js/lib/jquery.fileupload.js',
+          'js/lib/underscore.min.js',
+          'js/lib/backbone.js',
+          'js/lib/backbone.validation.js'
+        ],
+        'js/main.js': [
+          'js/jquery.min.js',
+          'js/jquery.ui.widget.js',
+          'js/jquery.iframe-transport.js',
+          'js/jquery.fileupload.js',
+          'js/underscore.min.js',
+          'js/backbone.js',
+          'js/backbone.validation.js',
+          'js/models/*.js',
+          'js/collections/*.js',
+          'js/views/*.js',
+          'js/routes/*.js',
+          'js/app.js'
+        ]
+      },
 
-      // https://github.com/gruntjs/grunt-contrib-copy#getting-started
       copy: {
         dev: {
           files: [{
@@ -255,9 +274,9 @@ module.exports = function(grunt) {
   grunt.registerTask('default', ['sass']);
 
   grunt.registerTask('init:dev', [
-    'clean',
-    'bower',
-    'browserify:vendor'
+    'clean'
+    // 'bower',
+    // 'browserify:vendor'
   ]);
 
   grunt.registerTask('build:dev', [
@@ -265,8 +284,8 @@ module.exports = function(grunt) {
     // 'browserify:app',
     // 'browserify:test',
     // 'jshint:dev',
-    'sass'
-    // 'concat',
+    'sass',
+    'concat'
     // 'copy:dev'
   ]);
 

@@ -25,7 +25,7 @@ App.NewItemView = Backbone.View.extend({
   save: function(e) {
     var data = $('#new-item-form').serializeObject();
     var value = $(e.currentTarget).val();
-    var slugVal = convertToSlug($('#category').val());
+    var slugVal = App.convertToSlug($('#category').val());
     data['slug'] = slugVal;
 
     console.log('data', data);
