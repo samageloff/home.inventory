@@ -196,6 +196,15 @@ module.exports = function(grunt) {
         // }
       },
 
+      shell: {
+        mongo: {
+          command: 'mongod',
+          options: {
+            async: true
+          }
+        }
+      },
+
       nodemon: {
         dev: {
           options: {
@@ -209,18 +218,9 @@ module.exports = function(grunt) {
         }
       },
 
-      shell: {
-        mongo: {
-          command: 'mongod',
-          options: {
-            async: true
-          }
-        }
-      },
-
       concurrent: {
         dev: {
-          tasks: ['nodemon:dev', 'shell:mongo', 'watch:sass', 'watch:scripts'],
+          tasks: ['shell:mongo', 'nodemon:dev', 'watch:sass', 'watch:scripts'],
           options: {
             logConcurrentOutput: true
           }

@@ -12,7 +12,7 @@ var app = express();
 // configure upload middleware
 upload.configure({
   uploadDir: __dirname + '/public/uploads',
-  uploadUrl: '/api/upload',
+  uploadUrl: '/uploads',
   imageVersions: {
     thumbnail: {
       width: 80,
@@ -26,7 +26,7 @@ app.set('port', process.env.PORT || 3001);
 
 // Configure server
 app.configure(function() {
-  app.use('/api/upload', upload.fileHandler());
+  app.use('/upload', upload.fileHandler());
   app.use(express.methodOverride());
   app.use(express.logger('dev'));
   app.use(express.json());

@@ -156,10 +156,6 @@ module.exports = {
         }
       });
     });
-  },
-
-  upload: function(request, response) {
-    console.log(JSON.stringify(request.files));
   }
 
 }
