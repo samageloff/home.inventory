@@ -3,30 +3,21 @@ var application_root = __dirname,
     express = require('express'),
     path = require('path'),
     routes = require('./app/routes'),
-    mongoose = require('mongoose'),
-    upload = require('jquery-file-upload-middleware');
+    mongoose = require('mongoose');
+    crypto = require('crypto'),
+    mime = require('mime'),
+    uuid = require('node-uuid'),
+    moment = require('moment'),
+    config = require('./app/config');
 
 // Create server
 var app = express();
-
-// configure upload middleware
-upload.configure({
-  uploadDir: __dirname + '/public/uploads',
-  uploadUrl: '/uploads',
-  imageVersions: {
-    thumbnail: {
-      width: 80,
-      height: 80
-    }
-  }
-});
 
 // Start server
 app.set('port', process.env.PORT || 3001);
 
 // Configure server
 app.configure(function() {
-  app.use('/upload', upload.fileHandler());
   app.use(express.methodOverride());
   app.use(express.logger('dev'));
   app.use(express.json());

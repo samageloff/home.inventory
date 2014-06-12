@@ -25,7 +25,7 @@ App.ItemView = Backbone.View.extend({
     if (window.confirm('Are you sure?')) {
       this.model.destroy();
       this.remove();
+      App.router.navigate('#/categories');
     }
-    App.router.navigate('#/categories');
   }
 });

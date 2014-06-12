@@ -1,7 +1,6 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
-    ObjectId = Schema.ObjectId,
-    upload = require('jquery-file-upload-middleware');
+    ObjectId = Schema.ObjectId;
 
 // Item Schema
 var Item = new mongoose.Schema({

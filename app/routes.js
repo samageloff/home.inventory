@@ -1,5 +1,4 @@
-var api = require('../controllers/api'),
-    images = require('../controllers/uploads');
+var api = require('../controllers/api');
 
 module.exports.initialize = function(app) {
 
@@ -10,7 +9,6 @@ module.exports.initialize = function(app) {
   app.get('/api/category/:name', api.category);
 
   app.post('/api/items', api.insert);
-  app.post('/upload', images.upload);
 
   app.put('/api/items/:id', api.update);
 

@@ -102,12 +102,15 @@
     <script type="text/template" id="new-item-template">
       <section class="form-layout">
         <div class="bd">
+          <form action="http://s3.amazonaws.com/home-inventory-items" method="post" enctype="multipart/form-data" id="myform">
+          </form>
           <form id="new-item-form" role="form" method="post" enctype="multipart/form-data">
-            <input id="slug" name="slug" type="hidden" value="">
             <button class="file-upload">
               <span class="icon-plus">Add files</span>
-              <input id="fileupload" capture="camera" type="file" name="files[]" data-url="/upload" multiple>
+              <input capture="camera" type="file" name="upload-file" id="upload-file">
             </button>
+            <input type="hidden" name="policy">
+            <input id="slug" name="slug" type="hidden" value="">
             <div class="form-group">
               <input type="text" id="title" name="title" placeholder="Title" value="">
               <span class="help-block hidden"></span>

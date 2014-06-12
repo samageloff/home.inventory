@@ -384,21 +384,23 @@ App.ItemView = Backbone.View.extend({
     if (window.confirm('Are you sure?')) {
       this.model.destroy();
       this.remove();
+      App.router.navigate('#/categories');
     }
-    App.router.navigate('#/categories');
   }
 });
 App.NewItemView = Backbone.View.extend({
 
   events: {
     'click #save': 'save',
-    'click #cancel': 'cancel'
+    'click #cancel': 'cancel',
+    'change #upload-file': 'upload'
   },
 
   template: _.template($('#new-item-template').html()),
 
   initialize: function() {
-    _.bindAll(this, 'save');
+    _.bindAll(this, 'upload');
+    this.inputContent = this.$('#upload-file');
     Backbone.Validation.bind(this);
   },
 
@@ -429,6 +431,10 @@ App.NewItemView = Backbone.View.extend({
         }
       });
     }
+  },
+
+  upload: function() {
+    App.s3bucketTransfer();
   },
 
   remove: function() {
@@ -574,22 +580,45 @@ events: (function() {
 $(function() {
   App.router = new App.Router();
   Backbone.history.start();
-  $("#fileupload").fileupload({ dataType: "json" })
-  $("#fileupload").on('change', function() {
-    console.log('fileupload change', this);
-  });
 });
+
+App.s3bucketTransfer = function(e) {
+  var _requestBucket;
+  var _file;
+
+  _file = $("#upload-file").val().replace(/.+[\\\/]/, "");
+  console.log('_file', _file);
+
+  $.ajax({
+    url: "/api/upload/" + _file,
+    dataType: "JSONP",
+    success: processResponse,
+    error: function(res, status, error) {
+      //do some error handling here}
+    }
+  });
+
+  function processResponse(res) {
+    console.log('res', res);
+    $("#fld_redirect").val(res.S3Redirect);
+    $("#fld_AWSAccessKeyId").val(res.s3Key);
+    $("#fld_Policy").val(res.s3PolicyBase64);
+    $("#fld_Signature").val(res.s3Signature);
+    $("#myform").submit();
+  }
+
+};
 
 App.convertToSlug = function(Text) {
   return Text
     .toLowerCase()
     .replace(/[^\w ]+/g,'')
     .replace(/ +/g,'-');
-}
+};
 
 App.convertLargeNum = function(Num) {
   return Num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
+};
 
 // Extend the callbacks to work with Bootstrap, as used in this example
 // See: http://thedersen.com/projects/backbone-validation/#configuration/callbacks
