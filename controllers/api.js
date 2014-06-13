@@ -1,9 +1,7 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId,
-    models = require('../app/models'),
-    crypto = require("crypto"),
-    mime = require("mime-magic");
+    models = require('../app/models');
 
 module.exports = {
 

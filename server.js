@@ -1,38 +1,32 @@
 // Module dependencies.
 var application_root = __dirname,
     express = require('express'),
-    path = require('path'),
     routes = require('./app/routes'),
-    mongoose = require('mongoose');
-    crypto = require('crypto'),
-    mime = require('mime'),
-    uuid = require('node-uuid'),
-    moment = require('moment'),
+    http = require('http'),
+    path = require('path'),
+    mongoose = require('mongoose'),
     config = require('./app/config');
 
 // Create server
 var app = express();
 
-// Start server
-app.set('port', process.env.PORT || 3001);
-
 // Configure server
 app.configure(function() {
+  app.set('port', process.env.PORT || config.port);
+  app.set('views', __dirname + '/views');
+  app.set('view engine', 'hjs');
   app.use(express.methodOverride());
   app.use(express.logger('dev'));
-  app.use(express.json());
-  app.use(express.urlencoded());
+  app.use(express.favicon());
+  app.use(express.bodyParser());
   app.use(express.static(__dirname));
   app.use(app.router);
 });
 
 // Development only
-if ('development' == app.get('env')) {
-  app.use(express.errorHandler({
-    dumpExceptions: true,
-    showStack: true
-  }));
-};
+app.configure('development', function() {
+  app.use(express.errorHandler());
+});
 
 // Connect to database
 mongoose.connect('mongodb://localhost/inventory_database');

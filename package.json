@@ -27,6 +27,7 @@
     "chai": "~1.9.0",
     "connect-livereload": "^0.4.0",
     "less-middleware": "*",
+    "hjs": "*",
     "node-uuid": "*",
     "crypto": "*",
     "mime": "*",

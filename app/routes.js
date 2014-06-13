@@ -1,4 +1,10 @@
-var api = require('../controllers/api');
+var api = require('../controllers/api'),
+    uploads = require('../controllers/uploads'),
+    crypto = require('crypto'),
+    mime = require('mime'),
+    uuid = require('node-uuid'),
+    moment = require('moment'),
+    config = require('../app/config');
 
 module.exports.initialize = function(app) {
 
@@ -7,6 +13,7 @@ module.exports.initialize = function(app) {
   app.get('/api/items/:id', api.single);
   app.get('/api/categories', api.categories);
   app.get('/api/category/:name', api.category);
+  app.get('/uploads/config', uploads.config);
 
   app.post('/api/items', api.insert);
 
@@ -14,4 +21,5 @@ module.exports.initialize = function(app) {
 
   app.delete('/api/items/:id', api.delete);
   app.delete('/api/category/:name/:id', api.delete);
+
 };
