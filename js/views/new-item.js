@@ -9,8 +9,7 @@ App.NewItemView = Backbone.View.extend({
   template: _.template($('#new-item-template').html()),
 
   initialize: function() {
-    _.bindAll(this, 'upload');
-    this.inputContent = this.$('#upload-file');
+    _.bindAll(this, 'save');
     Backbone.Validation.bind(this);
   },
 
@@ -41,10 +40,6 @@ App.NewItemView = Backbone.View.extend({
         }
       });
     }
-  },
-
-  upload: function() {
-    App.s3bucketTransfer();
   },
 
   remove: function() {

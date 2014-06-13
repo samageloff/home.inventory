@@ -113,9 +113,14 @@ App.SingleItemModel = Backbone.Model.extend({
     value: 0
   },
 
-  validate: function(attributes) {
-    if (attributes.title === '') {
-      return 'Item requires a title'
+  validation: {
+    title: {
+      required: true,
+      msg: 'Please enter a title'
+    },
+    category: {
+      required: true,
+      msg: 'Please enter a category'
     }
   },
 
@@ -399,8 +404,7 @@ App.NewItemView = Backbone.View.extend({
   template: _.template($('#new-item-template').html()),
 
   initialize: function() {
-    _.bindAll(this, 'upload');
-    this.inputContent = this.$('#upload-file');
+    _.bindAll(this, 'save');
     Backbone.Validation.bind(this);
   },
 
@@ -431,10 +435,6 @@ App.NewItemView = Backbone.View.extend({
         }
       });
     }
-  },
-
-  upload: function() {
-    App.s3bucketTransfer();
   },
 
   remove: function() {
@@ -581,33 +581,6 @@ $(function() {
   App.router = new App.Router();
   Backbone.history.start();
 });
-
-App.s3bucketTransfer = function(e) {
-  var _requestBucket;
-  var _file;
-
-  _file = $("#upload-file").val().replace(/.+[\\\/]/, "");
-  console.log('_file', _file);
-
-  $.ajax({
-    url: "/api/upload/" + _file,
-    dataType: "JSONP",
-    success: processResponse,
-    error: function(res, status, error) {
-      //do some error handling here}
-    }
-  });
-
-  function processResponse(res) {
-    console.log('res', res);
-    $("#fld_redirect").val(res.S3Redirect);
-    $("#fld_AWSAccessKeyId").val(res.s3Key);
-    $("#fld_Policy").val(res.s3PolicyBase64);
-    $("#fld_Signature").val(res.s3Signature);
-    $("#myform").submit();
-  }
-
-};
 
 App.convertToSlug = function(Text) {
   return Text

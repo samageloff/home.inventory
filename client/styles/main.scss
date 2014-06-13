@@ -8,6 +8,7 @@
 /* Variables */
 $gesso: #FFF;
 $midnight: #000;
+$error: #ff0033;
 $bgcolor: #F2F2F2;
 $brand: #a4c222;
 $lightest: 100;
@@ -506,4 +507,23 @@ footer {
   }
 
 }
+
+
+/* Errors */
+.has-error {
+  margin-bottom: .75em;
+
+  input {
+    margin-bottom: 4px;
+  }
+
+  .help-block {
+    color: $error;
+    font-size: .75em;
+    padding-left: 2px;
+  }
+
+}
+
+
 

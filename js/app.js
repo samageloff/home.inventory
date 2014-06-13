@@ -13,33 +13,6 @@ $(function() {
   Backbone.history.start();
 });
 
-App.s3bucketTransfer = function(e) {
-  var _requestBucket;
-  var _file;
-
-  _file = $("#upload-file").val().replace(/.+[\\\/]/, "");
-  console.log('_file', _file);
-
-  $.ajax({
-    url: "/api/upload/" + _file,
-    dataType: "JSONP",
-    success: processResponse,
-    error: function(res, status, error) {
-      //do some error handling here}
-    }
-  });
-
-  function processResponse(res) {
-    console.log('res', res);
-    $("#fld_redirect").val(res.S3Redirect);
-    $("#fld_AWSAccessKeyId").val(res.s3Key);
-    $("#fld_Policy").val(res.s3PolicyBase64);
-    $("#fld_Signature").val(res.s3Signature);
-    $("#myform").submit();
-  }
-
-};
-
 App.convertToSlug = function(Text) {
   return Text
     .toLowerCase()

@@ -20,9 +20,14 @@ App.SingleItemModel = Backbone.Model.extend({
     value: 0
   },
 
-  validate: function(attributes) {
-    if (attributes.title === '') {
-      return 'Item requires a title'
+  validation: {
+    title: {
+      required: true,
+      msg: 'Please enter a title'
+    },
+    category: {
+      required: true,
+      msg: 'Please enter a category'
     }
   },
 

@@ -1026,3 +1026,13 @@ footer {
   padding: 1em; }
   .form-layout .bd {
     margin-bottom: 4em; }
+
+/* Errors */
+.has-error {
+  margin-bottom: .75em; }
+  .has-error input {
+    margin-bottom: 4px; }
+  .has-error .help-block {
+    color: #ff0033;
+    font-size: .75em;
+    padding-left: 2px; }
