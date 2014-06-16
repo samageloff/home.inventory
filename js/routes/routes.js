@@ -59,9 +59,9 @@ App.Router = Backbone.Router.extend({
 
   new: function() {
     var model = new App.NewItemModel();
-    console.log('model', model);
     var newItemView = new App.NewItemView({ model: model });
     $('#main').html(newItemView.render().el);
+    App.configxhr();
   },
 
   notFound: function() {

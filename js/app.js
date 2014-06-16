@@ -24,6 +24,24 @@ App.convertLargeNum = function(Num) {
   return Num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
+App.configxhr = function() {
+  $.getJSON( "/uploads/config", function(data) {
+    var items = [];
+    $.each(data, function(key, val) {
+      items.push('var ' + key + ' = ' + val.toString() + ';');
+    });
+
+    var config = $('<script />', {
+      id: 'config',
+      html: items.join('')
+    });
+
+    console.log(config.html());
+
+  })
+}
+
+
 // Extend the callbacks to work with Bootstrap, as used in this example
 // See: http://thedersen.com/projects/backbone-validation/#configuration/callbacks
 _.extend(Backbone.Validation.callbacks, {

@@ -226,7 +226,7 @@ App.CategoryIndexItemView = Backbone.View.extend({
 App.SingleItemEditView = Backbone.View.extend({
 
   events: {
-    'click #save': 'save',
+    'submit': 'save',
     'click #cancel': 'cancel'
   },
 
@@ -248,6 +248,7 @@ App.SingleItemEditView = Backbone.View.extend({
   },
 
   save: function(e) {
+    e.preventDefault();
     var data = $('#edit-item-form').serializeObject();
     var value = $(e.currentTarget).val();
     var slugVal = App.convertToSlug($('#category').val());
@@ -396,7 +397,7 @@ App.ItemView = Backbone.View.extend({
 App.NewItemView = Backbone.View.extend({
 
   events: {
-    'click #save': 'save',
+    'submit': 'save',
     'click #cancel': 'cancel',
     'change #upload-file': 'upload'
   },
@@ -419,6 +420,7 @@ App.NewItemView = Backbone.View.extend({
   },
 
   save: function(e) {
+    e.preventDefault();
     var data = $('#new-item-form').serializeObject();
     var value = $(e.currentTarget).val();
     var slugVal = App.convertToSlug($('#category').val());
@@ -557,9 +559,9 @@ App.Router = Backbone.Router.extend({
 
   new: function() {
     var model = new App.NewItemModel();
-    console.log('model', model);
     var newItemView = new App.NewItemView({ model: model });
     $('#main').html(newItemView.render().el);
+    App.configxhr();
   },
 
   notFound: function() {
@@ -592,6 +594,24 @@ App.convertToSlug = function(Text) {
 App.convertLargeNum = function(Num) {
   return Num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
+
+App.configxhr = function() {
+  $.getJSON( "/uploads/config", function(data) {
+    var items = [];
+    $.each(data, function(key, val) {
+      items.push('var ' + key + ' = ' + val.toString() + ';');
+    });
+
+    var config = $('<script />', {
+      id: 'config',
+      html: items.join('')
+    });
+
+    console.log(config.html());
+
+  })
+}
+
 
 // Extend the callbacks to work with Bootstrap, as used in this example
 // See: http://thedersen.com/projects/backbone-validation/#configuration/callbacks

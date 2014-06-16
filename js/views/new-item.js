@@ -1,7 +1,7 @@
 App.NewItemView = Backbone.View.extend({
 
   events: {
-    'click #save': 'save',
+    'submit': 'save',
     'click #cancel': 'cancel',
     'change #upload-file': 'upload'
   },
@@ -24,6 +24,7 @@ App.NewItemView = Backbone.View.extend({
   },
 
   save: function(e) {
+    e.preventDefault();
     var data = $('#new-item-form').serializeObject();
     var value = $(e.currentTarget).val();
     var slugVal = App.convertToSlug($('#category').val());
