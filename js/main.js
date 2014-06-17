@@ -1,5 +1,22 @@
 var App = App || {};
 
+App.AwsConfigModel = Backbone.Model.extend({
+
+  urlRoot: 'uploads/config',
+
+  defaults: {
+    aws_bucket: '',
+    host: '',
+    aws_key: ''
+  },
+
+  parse: function(response) {
+    response.id = response._id;
+    return response;
+  }
+});
+var App = App || {};
+
 App.CategoryIndexModel = Backbone.Model.extend({
   defaults: {
     _id: '',
@@ -397,24 +414,29 @@ App.ItemView = Backbone.View.extend({
 App.NewItemView = Backbone.View.extend({
 
   events: {
-    'submit': 'save',
+    'submit #new-item-form': 'save',
+    'click #save': 'save',
     'click #cancel': 'cancel',
     'change #upload-file': 'upload'
   },
 
   template: _.template($('#new-item-template').html()),
 
-  initialize: function() {
+  initialize: function(options) {
     _.bindAll(this, 'save');
+    this.options = options || {};
     Backbone.Validation.bind(this);
+
+    App.dropdot();
   },
 
   render: function() {
-    var markup = this.model.toJSON();
+    var markup = this.model.toJSON(), // un-needed?
+        configs = this.options.config.toJSON();
 
     this.$el.empty();
-    this.$el.html(this.template(this.model.toJSON()));
-    this.setElement(this.template(markup));
+    this.setElement(this.template(configs));
+    this.dropdot();
 
     return this;
   },
@@ -437,6 +459,10 @@ App.NewItemView = Backbone.View.extend({
         }
       });
     }
+  },
+
+  dropdot: function() {
+    App.dropdot();
   },
 
   remove: function() {
@@ -559,9 +585,13 @@ App.Router = Backbone.Router.extend({
 
   new: function() {
     var model = new App.NewItemModel();
-    var newItemView = new App.NewItemView({ model: model });
-    $('#main').html(newItemView.render().el);
-    App.configxhr();
+    var config = new App.AwsConfigModel();
+    config.fetch({
+      success: function() {
+        var newItemView = new App.NewItemView({ model: model, config: config });
+        $('#main').html(newItemView.render().el);
+      }
+    });
   },
 
   notFound: function() {
@@ -597,20 +627,118 @@ App.convertLargeNum = function(Num) {
 
 App.configxhr = function() {
   $.getJSON( "/uploads/config", function(data) {
-    var items = [];
-    $.each(data, function(key, val) {
-      items.push('var ' + key + ' = ' + val.toString() + ';');
-    });
+    var data = 'var aws_config = ' + JSON.stringify(data);
+    var script = $('<script />').html(data);
+    $('#header').prepend(script);
+  });
+};
 
-    var config = $('<script />', {
-      id: 'config',
-      html: items.join('')
-    });
+App.dropdot = function() {
 
-    console.log(config.html());
+  $('.direct-upload').each(function() {
+    /* For each file selected, process and upload */
 
+    var form = $(this)
+
+    console.log('form', form);
+
+    $(this).fileupload({
+      url: form.attr('action'), // Grabs form's action src
+      type: 'POST',
+      autoUpload: true,
+      dataType: 'xml', // S3's XML response
+      add: function (event, data) {
+        $.ajax({
+          url: "/uploads/signed",
+          type: 'GET',
+          dataType: 'json',
+          data: {title: data.files[0].name}, // Send filename to /signed for the signed response
+          async: false,
+          success: function(data) {
+            // Now that we have our data, we update the form so it contains all
+            // the needed data to sign the request
+            form.find('input[name=key]').val(data.key);
+            form.find('input[name=policy]').val(data.policy);
+            form.find('input[name=signature]').val(data.signature);
+            form.find('input[name=Content-Type]').val(data.contentType);
+          }
+        })
+        data.submit();
+      },
+      send: function(e, data) {
+        $('.progress').fadeIn(); // Display widget progress bar
+      },
+      progress: function(e, data){
+        $('#circle').addClass('animate'); // Animate the rotating circle when in progress
+        var percent = Math.round((e.loaded / e.total) * 100)
+        $('.meter').css('width', percent + '%') // Update progress bar percentage
+      },
+      fail: function(e, data) {
+        console.log('fail')
+        $('#circle').removeClass('animate');
+      },
+      success: function(data) {
+        var url = $(data).find('Location').text(); // Find location value from XML response
+        $('.share-url').show(); // Show input
+        $('.share-url').val(url.replace("%2F", "/")); // Update the input with url address
+      },
+      done: function (event, data) {
+        // When upload is done, fade out progress bar and reset to 0
+        $('.progress').fadeOut(300, function() {
+          $('.bar').css('width', 0)
+        })
+
+        // Stop circle animation
+        $('#circle').removeClass('animate');
+      },
+    })
   })
-}
+
+  /* Dragover Events on circle */
+  var dragging = 0; //Get around chrome bug
+  $('#drop').on("dragenter", function(e){
+      dragging++;
+      $('#drop').addClass("gloss");
+      e.preventDefault();
+      return false;
+  });
+
+  $('#drop').on("dragover", function(e){
+      $('#drop').addClass("gloss");
+      e.preventDefault();
+      return false;
+  });
+
+  $('#drop').on("dragleave", function(e){
+      dragging--;
+      if (dragging === 0) {
+        $('#drop').removeClass("gloss");
+      }
+      e.preventDefault();
+      return false;
+  });
+  $('.footer-link').click( function(){
+      $('.footer-text').hide();
+      $($(this).attr('href')).fadeIn('fast');
+  });
+  $(".share-url").focus(function () {
+    // Select all text on #share-url focus
+
+    "use strict";
+    var $this = $(this);
+    $this.select();
+
+    // Work around Chrome's little problem
+    $this.mouseup(function () {
+        // Prevent further mouseup intervention
+        $this.unbind("mouseup");
+        return false;
+    });
+  });
+
+};
+
+
 
 
 // Extend the callbacks to work with Bootstrap, as used in this example

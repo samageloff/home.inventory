@@ -1,24 +1,29 @@
 App.NewItemView = Backbone.View.extend({
 
   events: {
-    'submit': 'save',
+    'submit #new-item-form': 'save',
+    'click #save': 'save',
     'click #cancel': 'cancel',
     'change #upload-file': 'upload'
   },
 
   template: _.template($('#new-item-template').html()),
 
-  initialize: function() {
+  initialize: function(options) {
     _.bindAll(this, 'save');
+    this.options = options || {};
     Backbone.Validation.bind(this);
+
+    App.dropdot();
   },
 
   render: function() {
-    var markup = this.model.toJSON();
+    var markup = this.model.toJSON(), // un-needed?
+        configs = this.options.config.toJSON();
 
     this.$el.empty();
-    this.$el.html(this.template(this.model.toJSON()));
-    this.setElement(this.template(markup));
+    this.setElement(this.template(configs));
+    this.dropdot();
 
     return this;
   },
@@ -41,6 +46,10 @@ App.NewItemView = Backbone.View.extend({
         }
       });
     }
+  },
+
+  dropdot: function() {
+    App.dropdot();
   },
 
   remove: function() {

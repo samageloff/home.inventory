@@ -59,9 +59,13 @@ App.Router = Backbone.Router.extend({
 
   new: function() {
     var model = new App.NewItemModel();
-    var newItemView = new App.NewItemView({ model: model });
-    $('#main').html(newItemView.render().el);
-    App.configxhr();
+    var config = new App.AwsConfigModel();
+    config.fetch({
+      success: function() {
+        var newItemView = new App.NewItemView({ model: model, config: config });
+        $('#main').html(newItemView.render().el);
+      }
+    });
   },
 
   notFound: function() {

@@ -13,7 +13,9 @@ module.exports.initialize = function(app) {
   app.get('/api/items/:id', api.single);
   app.get('/api/categories', api.categories);
   app.get('/api/category/:name', api.category);
+
   app.get('/uploads/config', uploads.config);
+  app.get('/uploads/signed', uploads.signed);
 
   app.post('/api/items', api.insert);
 

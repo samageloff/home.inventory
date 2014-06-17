@@ -102,15 +102,24 @@
     <script type="text/template" id="new-item-template">
       <section class="form-layout">
         <div class="bd">
-          <form action="http://s3.amazonaws.com/home-inventory-items" method="post" enctype="multipart/form-data" id="myform">
-          </form>
-          <form id="new-item-form" role="form" method="post" enctype="multipart/form-data">
+          <form action="http://<%= aws_bucket %>.<%= host %>" role="form" method="post" enctype="multipart/form-data" class="direct-upload">
+            <input type="hidden" name="key">
+            <input type="hidden" name="AWSAccessKeyId" value="<%= aws_key %>">
+            <input type="hidden" name="acl" value="public-read">
+            <input type="hidden" name="policy">
+            <input type="hidden" name="signature">
+            <input type="hidden" name="success_action_status" value="201">
+            <input type="hidden" name="Content-Type">
+            <div class="progress round eight"><span class="meter"></span></div>
+            <input class="share-url" type="text" disabled />
             <button class="file-upload">
               <span class="icon-plus">Add files</span>
-              <input capture="camera" type="file" name="upload-file" id="upload-file" multiple>
+              <input capture="camera" type="file" name="file" id="file" multiple>
             </button>
-            <input type="hidden" name="policy">
-            <input id="slug" name="slug" type="hidden" value="">
+          </form>
+
+          <form id="new-item-form" action="#">
+            <input type="hidden" name="slug" id="slug" value="">
             <div class="form-group">
               <input type="text" id="title" name="title" placeholder="Title" value="">
               <span class="help-block hidden"></span>
@@ -132,7 +141,7 @@
         </form>
 
         <footer>
-          <button id="save">Save</button>
+          <button type="submit" id="save">Save</button>
           <button class="pull-right" id="cancel">Cancel</button>
         </footer>
       </section>

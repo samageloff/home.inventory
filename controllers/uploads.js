@@ -1,7 +1,7 @@
-var mongoose = require('mongoose'),
-    Schema = mongoose.Schema,
-    ObjectId = Schema.ObjectId,
-    models = require('../app/models'),
+var crypto = require('crypto'),
+    mime = require('mime'),
+    uuid = require('node-uuid'),
+    moment = require('moment'),
     config = require('../app/config');
 
 module.exports = {
@@ -33,6 +33,8 @@ module.exports = {
                     ]
                   });
 
+    console.log('policy', policy);
+
     var base64policy = new Buffer(policy).toString('base64'); // Create base64 policy
     var signature = crypto.createHmac('sha1', config.aws_secret).update(base64policy).digest('base64'); // Create signature
     var file_key = uuid.v4(); // Generate uuid for filename
@@ -40,7 +42,7 @@ module.exports = {
     // Return JSON View
     response.json({ policy: base64policy,
                signature: signature,
-               key: config.bucket_dir + file_key + "_" + req.query.title,
+               key: config.bucket_dir + file_key + "_" + request.query.title,
                success_action_redirect: "/",
                contentType: mime_type
     })
