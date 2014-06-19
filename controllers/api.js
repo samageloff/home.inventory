@@ -89,17 +89,8 @@ module.exports = {
         item.description = request.body.description;
         item.slug = request.body.slug;
         item.value = request.body.value;
+        item.image = request.body.image;
         item.quantity = request.body.quantity;
-
-    console.log("FILES", request.files);
-
-    // item.attach('image', request.files.image, function(err) {
-    //   if(err) return next(err);
-    //   item.save(function(err) {
-    //     if(err) return next(err);
-    //     response.send('Post has been saved with file!');
-    //   });
-    // });
 
     item.save(function(err) {
       if(!err) {
@@ -121,15 +112,8 @@ module.exports = {
       item.description = request.body.description;
       item.slug = request.body.slug;
       item.value = request.body.value;
+      item.image = request.body.image;
       item.quantity = request.body.quantity;
-
-      // item.attach('image', request.files.image, function(err) {
-      //   if(err) return next(err);
-      //   item.save(function(err) {
-      //     if(err) return next(err);
-      //     response.send('Post has been saved with file!');
-      //   });
-      // });
 
       return item.save(function(err) {
         if(!err) {

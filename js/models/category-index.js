@@ -6,6 +6,7 @@ App.CategoryIndexModel = Backbone.Model.extend({
     groups: 0,
     description: '',
     slug: '',
+    image: '',
     value: 0,
     count: 0
   }

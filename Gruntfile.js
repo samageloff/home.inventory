@@ -105,6 +105,7 @@ module.exports = function(grunt) {
           'js/lib/jquery.fileupload.js',
           'js/lib/underscore.min.js',
           'js/lib/backbone.js',
+          'js/lib/backbone.marionette.js',
           'js/lib/backbone.validation.js'
         ],
         'js/main.js': [

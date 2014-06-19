@@ -1035,3 +1035,34 @@ footer {
     color: #ff0033;
     font-size: .75em;
     padding-left: 2px; }
+
+/* Progress Bar */
+.progress-bar-indication {
+  background-color: white;
+  border: #a4c222;
+  box-shadow: inset 0 0 3px 0 rgba(115, 115, 115, 0.15);
+  border-radius: 0.1875em;
+  display: none;
+  margin: 0 auto;
+  width: 100%; }
+  .progress-bar-indication > span.meter {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    background-color: #477dca;
+    background-size: 40px 40px;
+    background-repeat: repeat-x;
+    border: 1px solid #c9c9c9;
+    border-radius: 0.125em;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    display: block;
+    height: 100%;
+    padding-left: 7px;
+    width: 0%; }
+  .progress-bar-indication p {
+    margin-bottom: 0;
+    padding: .1em .5em;
+    font-weight: 800;
+    color: white;
+    text-shadow: 0 0 1px black; }

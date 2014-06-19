@@ -23,6 +23,7 @@ App.CategoryIndexModel = Backbone.Model.extend({
     groups: 0,
     description: '',
     slug: '',
+    image: '',
     value: 0,
     count: 0
   }
@@ -249,8 +250,9 @@ App.SingleItemEditView = Backbone.View.extend({
 
   template: _.template($('#edit-item-template').html()),
 
-  initialize: function() {
+  initialize: function(options) {
     _.bindAll(this, 'save');
+    this.options = options || {};
     Backbone.Validation.bind(this);
   },
 
@@ -258,7 +260,6 @@ App.SingleItemEditView = Backbone.View.extend({
     var markup = this.model.toJSON();
 
     this.$el.empty();
-    this.$el.html(this.template(this.model.toJSON()));
     this.setElement(this.template(markup));
 
     return this;
@@ -269,7 +270,9 @@ App.SingleItemEditView = Backbone.View.extend({
     var data = $('#edit-item-form').serializeObject();
     var value = $(e.currentTarget).val();
     var slugVal = App.convertToSlug($('#category').val());
+    var imageUrl = $('.share-url').val();
     data['slug'] = slugVal;
+    data['image'] = imageUrl;
 
     this.model.set(data);
 
@@ -328,22 +331,37 @@ App.HeaderView = Backbone.View.extend({
   }
 
 });
-App.HomeView = Backbone.View.extend({
+App.HomeView = Backbone.Marionette.ItemView.extend({
 
   tagName: 'section',
   className: 'landing',
   template: _.template($('#home-template').html()),
 
   render: function() {
-    this.$el.empty();
-
-    // TODO: make this accessible
     var totalVal = this.model.get('value');
     this.model.set('value', App.convertLargeNum(totalVal));
 
     this.$el.html(this.template(this.model.toJSON()));
     return this;
   }
+
+});
+App.ImageUploadView = Backbone.View.extend({
+
+  template: _.template($('#image-upload-template').html()),
+
+  initialize: function(options) {
+    this.options = options || {};
+  },
+
+  render: function() {
+    var markup = this.model.toJSON();
+
+    this.$el.empty();
+    this.setElement(this.template(markup));
+
+    return this;
+  },
 
 });
 App.ItemListView = Backbone.View.extend({
@@ -416,8 +434,7 @@ App.NewItemView = Backbone.View.extend({
   events: {
     'submit #new-item-form': 'save',
     'click #save': 'save',
-    'click #cancel': 'cancel',
-    'change #upload-file': 'upload'
+    'click #cancel': 'cancel'
   },
 
   template: _.template($('#new-item-template').html()),
@@ -426,17 +443,13 @@ App.NewItemView = Backbone.View.extend({
     _.bindAll(this, 'save');
     this.options = options || {};
     Backbone.Validation.bind(this);
-
-    App.dropdot();
   },
 
   render: function() {
-    var markup = this.model.toJSON(), // un-needed?
-        configs = this.options.config.toJSON();
+    var markup = this.model.toJSON();
 
     this.$el.empty();
-    this.setElement(this.template(configs));
-    this.dropdot();
+    this.setElement(this.template(markup));
 
     return this;
   },
@@ -446,9 +459,10 @@ App.NewItemView = Backbone.View.extend({
     var data = $('#new-item-form').serializeObject();
     var value = $(e.currentTarget).val();
     var slugVal = App.convertToSlug($('#category').val());
+    var imageUrl = $('.share-url').val();
     data['slug'] = slugVal;
+    data['image'] = imageUrl;
 
-    console.log('data', data);
     this.model.set(data);
 
     if(this.model.isValid(true)){
@@ -459,10 +473,6 @@ App.NewItemView = Backbone.View.extend({
         }
       });
     }
-  },
-
-  dropdot: function() {
-    App.dropdot();
   },
 
   remove: function() {
@@ -563,33 +573,44 @@ App.Router = Backbone.Router.extend({
     $('#main').html(categoryListView.render().el);
   },
 
+  new: function() {
+    var model = new App.NewItemModel();
+    var awsconfig = new App.AwsConfigModel();
+    awsconfig.fetch({
+      success: function() {
+        var newItemView = new App.NewItemView({ model: model });
+        var imageUploadView = new App.ImageUploadView({ model: awsconfig });
+        $('#main').html(newItemView.render().el);
+        App.dropdot();
+      }
+    });
+  },
+
   edit: function(id) {
     var model = new App.SingleItemModel({ id: id });
+    var awsconfig = new App.AwsConfigModel();
     model.fetch({
       success: function() {
         var singleItemEditView = new App.SingleItemEditView({ model: model });
         $('#main').html(singleItemEditView.render().el);
       }
     });
-  },
-
-  view: function(id) {
-    var model = new App.SingleItemModel({ id: id });
-    model.fetch({
+    awsconfig.fetch({
       success: function() {
-        var singleItemView = new App.SingleItemView({ model: model });
-        $('#main').html(singleItemView.render().el);
+        var imageUploadView = new App.ImageUploadView({ model: awsconfig });
+        $('#upload').html(imageUploadView.render().el);
+        App.dropdot();
       }
     });
   },
 
-  new: function() {
-    var model = new App.NewItemModel();
-    var config = new App.AwsConfigModel();
-    config.fetch({
+  view: function(id) {
+    var model = new App.SingleItemModel({ id: id });
+    console.log('model', model);
+    model.fetch({
       success: function() {
-        var newItemView = new App.NewItemView({ model: model, config: config });
-        $('#main').html(newItemView.render().el);
+        var singleItemView = new App.SingleItemView({ model: model });
+        $('#main').html(singleItemView.render().el);
       }
     });
   },
@@ -640,8 +661,6 @@ App.dropdot = function() {
 
     var form = $(this)
 
-    console.log('form', form);
-
     $(this).fileupload({
       url: form.attr('action'), // Grabs form's action src
       type: 'POST',
@@ -666,16 +685,15 @@ App.dropdot = function() {
         data.submit();
       },
       send: function(e, data) {
-        $('.progress').fadeIn(); // Display widget progress bar
+        $('.progress-bar-indication').fadeIn(); // Display widget progress bar
       },
-      progress: function(e, data){
-        $('#circle').addClass('animate'); // Animate the rotating circle when in progress
-        var percent = Math.round((e.loaded / e.total) * 100)
-        $('.meter').css('width', percent + '%') // Update progress bar percentage
+      progress: function(e, data) {
+        var percent = Math.round((e.loaded / e.total) * 100);
+        $('.progress-bar-indication .meter').css('width', percent + '%') // Update progress bar percentage
+        $('.progress-bar-indication .meter').text(percent + '%');
       },
       fail: function(e, data) {
         console.log('fail')
-        $('#circle').removeClass('animate');
       },
       success: function(data) {
         var url = $(data).find('Location').text(); // Find location value from XML response
@@ -684,43 +702,13 @@ App.dropdot = function() {
       },
       done: function (event, data) {
         // When upload is done, fade out progress bar and reset to 0
-        $('.progress').fadeOut(300, function() {
-          $('.bar').css('width', 0)
+        $('.progress-bar-indication').fadeOut(300, function() {
+          $('.progress-bar-indication .meter').css('width', 0)
         })
-
-        // Stop circle animation
-        $('#circle').removeClass('animate');
       },
     })
   })
 
-  /* Dragover Events on circle */
-  var dragging = 0; //Get around chrome bug
-  $('#drop').on("dragenter", function(e){
-      dragging++;
-      $('#drop').addClass("gloss");
-      e.preventDefault();
-      return false;
-  });
-
-  $('#drop').on("dragover", function(e){
-      $('#drop').addClass("gloss");
-      e.preventDefault();
-      return false;
-  });
-
-  $('#drop').on("dragleave", function(e){
-      dragging--;
-      if (dragging === 0) {
-        $('#drop').removeClass("gloss");
-      }
-      e.preventDefault();
-      return false;
-  });
-  $('.footer-link').click( function(){
-      $('.footer-text').hide();
-      $($(this).attr('href')).fadeIn('fast');
-  });
   $(".share-url").focus(function () {
     // Select all text on #share-url focus
 
@@ -737,8 +725,6 @@ App.dropdot = function() {
   });
 
 };
-
-
 
 
 // Extend the callbacks to work with Bootstrap, as used in this example
@@ -767,26 +753,4 @@ $.fn.serializeObject = function () {
       "undefined" != typeof d && d !== null ? $.isArray(d) ? d.push(c.value) : a[c.name] = [d, c.value] : a[c.name] = c.value
   };
   return $.each(this.serializeArray(), b), a
-};
-
-/* Helper Methods */
-Backbone.View.prototype.close = function() {
-  this.remove();
-  this.unbind();
-  if (this.onClose) {
-    this.onClose();
-  }
-};
-
-function AppView () {
-  this.showView(view);
-
-  if (this.currentView) {
-   this.currentView.close();
-  }
-
-  this.currentView = view;
-  this.currentView.render();
-
-  $("#main").html(this.currentView.el);
 };

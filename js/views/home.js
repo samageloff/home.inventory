@@ -1,13 +1,10 @@
-App.HomeView = Backbone.View.extend({
+App.HomeView = Backbone.Marionette.ItemView.extend({
 
   tagName: 'section',
   className: 'landing',
   template: _.template($('#home-template').html()),
 
   render: function() {
-    this.$el.empty();
-
-    // TODO: make this accessible
     var totalVal = this.model.get('value');
     this.model.set('value', App.convertLargeNum(totalVal));
 

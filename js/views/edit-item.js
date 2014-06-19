@@ -7,8 +7,9 @@ App.SingleItemEditView = Backbone.View.extend({
 
   template: _.template($('#edit-item-template').html()),
 
-  initialize: function() {
+  initialize: function(options) {
     _.bindAll(this, 'save');
+    this.options = options || {};
     Backbone.Validation.bind(this);
   },
 
@@ -16,7 +17,6 @@ App.SingleItemEditView = Backbone.View.extend({
     var markup = this.model.toJSON();
 
     this.$el.empty();
-    this.$el.html(this.template(this.model.toJSON()));
     this.setElement(this.template(markup));
 
     return this;
@@ -27,7 +27,9 @@ App.SingleItemEditView = Backbone.View.extend({
     var data = $('#edit-item-form').serializeObject();
     var value = $(e.currentTarget).val();
     var slugVal = App.convertToSlug($('#category').val());
+    var imageUrl = $('.share-url').val();
     data['slug'] = slugVal;
+    data['image'] = imageUrl;
 
     this.model.set(data);
 

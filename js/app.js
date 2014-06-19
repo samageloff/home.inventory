@@ -39,8 +39,6 @@ App.dropdot = function() {
 
     var form = $(this)
 
-    console.log('form', form);
-
     $(this).fileupload({
       url: form.attr('action'), // Grabs form's action src
       type: 'POST',
@@ -65,16 +63,15 @@ App.dropdot = function() {
         data.submit();
       },
       send: function(e, data) {
-        $('.progress').fadeIn(); // Display widget progress bar
+        $('.progress-bar-indication').fadeIn(); // Display widget progress bar
       },
-      progress: function(e, data){
-        $('#circle').addClass('animate'); // Animate the rotating circle when in progress
-        var percent = Math.round((e.loaded / e.total) * 100)
-        $('.meter').css('width', percent + '%') // Update progress bar percentage
+      progress: function(e, data) {
+        var percent = Math.round((e.loaded / e.total) * 100);
+        $('.progress-bar-indication .meter').css('width', percent + '%') // Update progress bar percentage
+        $('.progress-bar-indication .meter').text(percent + '%');
       },
       fail: function(e, data) {
         console.log('fail')
-        $('#circle').removeClass('animate');
       },
       success: function(data) {
         var url = $(data).find('Location').text(); // Find location value from XML response
@@ -83,43 +80,13 @@ App.dropdot = function() {
       },
       done: function (event, data) {
         // When upload is done, fade out progress bar and reset to 0
-        $('.progress').fadeOut(300, function() {
-          $('.bar').css('width', 0)
+        $('.progress-bar-indication').fadeOut(300, function() {
+          $('.progress-bar-indication .meter').css('width', 0)
         })
-
-        // Stop circle animation
-        $('#circle').removeClass('animate');
       },
     })
   })
 
-  /* Dragover Events on circle */
-  var dragging = 0; //Get around chrome bug
-  $('#drop').on("dragenter", function(e){
-      dragging++;
-      $('#drop').addClass("gloss");
-      e.preventDefault();
-      return false;
-  });
-
-  $('#drop').on("dragover", function(e){
-      $('#drop').addClass("gloss");
-      e.preventDefault();
-      return false;
-  });
-
-  $('#drop').on("dragleave", function(e){
-      dragging--;
-      if (dragging === 0) {
-        $('#drop').removeClass("gloss");
-      }
-      e.preventDefault();
-      return false;
-  });
-  $('.footer-link').click( function(){
-      $('.footer-text').hide();
-      $($(this).attr('href')).fadeIn('fast');
-  });
   $(".share-url").focus(function () {
     // Select all text on #share-url focus
 
@@ -136,8 +103,6 @@ App.dropdot = function() {
   });
 
 };
-
-
 
 
 // Extend the callbacks to work with Bootstrap, as used in this example
@@ -166,26 +131,4 @@ $.fn.serializeObject = function () {
       "undefined" != typeof d && d !== null ? $.isArray(d) ? d.push(c.value) : a[c.name] = [d, c.value] : a[c.name] = c.value
   };
   return $.each(this.serializeArray(), b), a
-};
-
-/* Helper Methods */
-Backbone.View.prototype.close = function() {
-  this.remove();
-  this.unbind();
-  if (this.onClose) {
-    this.onClose();
-  }
-};
-
-function AppView () {
-  this.showView(view);
-
-  if (this.currentView) {
-   this.currentView.close();
-  }
-
-  this.currentView = view;
-  this.currentView.render();
-
-  $("#main").html(this.currentView.el);
 };

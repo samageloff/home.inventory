@@ -37,33 +37,44 @@ App.Router = Backbone.Router.extend({
     $('#main').html(categoryListView.render().el);
   },
 
+  new: function() {
+    var model = new App.NewItemModel();
+    var awsconfig = new App.AwsConfigModel();
+    awsconfig.fetch({
+      success: function() {
+        var newItemView = new App.NewItemView({ model: model });
+        var imageUploadView = new App.ImageUploadView({ model: awsconfig });
+        $('#main').html(newItemView.render().el);
+        App.dropdot();
+      }
+    });
+  },
+
   edit: function(id) {
     var model = new App.SingleItemModel({ id: id });
+    var awsconfig = new App.AwsConfigModel();
     model.fetch({
       success: function() {
         var singleItemEditView = new App.SingleItemEditView({ model: model });
         $('#main').html(singleItemEditView.render().el);
       }
     });
-  },
-
-  view: function(id) {
-    var model = new App.SingleItemModel({ id: id });
-    model.fetch({
+    awsconfig.fetch({
       success: function() {
-        var singleItemView = new App.SingleItemView({ model: model });
-        $('#main').html(singleItemView.render().el);
+        var imageUploadView = new App.ImageUploadView({ model: awsconfig });
+        $('#upload').html(imageUploadView.render().el);
+        App.dropdot();
       }
     });
   },
 
-  new: function() {
-    var model = new App.NewItemModel();
-    var config = new App.AwsConfigModel();
-    config.fetch({
+  view: function(id) {
+    var model = new App.SingleItemModel({ id: id });
+    console.log('model', model);
+    model.fetch({
       success: function() {
-        var newItemView = new App.NewItemView({ model: model, config: config });
-        $('#main').html(newItemView.render().el);
+        var singleItemView = new App.SingleItemView({ model: model });
+        $('#main').html(singleItemView.render().el);
       }
     });
   },

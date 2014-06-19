@@ -3,8 +3,7 @@ App.NewItemView = Backbone.View.extend({
   events: {
     'submit #new-item-form': 'save',
     'click #save': 'save',
-    'click #cancel': 'cancel',
-    'change #upload-file': 'upload'
+    'click #cancel': 'cancel'
   },
 
   template: _.template($('#new-item-template').html()),
@@ -13,17 +12,13 @@ App.NewItemView = Backbone.View.extend({
     _.bindAll(this, 'save');
     this.options = options || {};
     Backbone.Validation.bind(this);
-
-    App.dropdot();
   },
 
   render: function() {
-    var markup = this.model.toJSON(), // un-needed?
-        configs = this.options.config.toJSON();
+    var markup = this.model.toJSON();
 
     this.$el.empty();
-    this.setElement(this.template(configs));
-    this.dropdot();
+    this.setElement(this.template(markup));
 
     return this;
   },
@@ -33,9 +28,10 @@ App.NewItemView = Backbone.View.extend({
     var data = $('#new-item-form').serializeObject();
     var value = $(e.currentTarget).val();
     var slugVal = App.convertToSlug($('#category').val());
+    var imageUrl = $('.share-url').val();
     data['slug'] = slugVal;
+    data['image'] = imageUrl;
 
-    console.log('data', data);
     this.model.set(data);
 
     if(this.model.isValid(true)){
@@ -46,10 +42,6 @@ App.NewItemView = Backbone.View.extend({
         }
       });
     }
-  },
-
-  dropdot: function() {
-    App.dropdot();
   },
 
   remove: function() {

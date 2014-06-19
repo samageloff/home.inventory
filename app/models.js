@@ -8,6 +8,7 @@ var Item = new mongoose.Schema({
   count: Number,
   date: Date,
   description: String,
+  image: String,
   slug: String,
   title: String,
   quantity: Number,
