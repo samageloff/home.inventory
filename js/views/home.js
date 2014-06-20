@@ -6,7 +6,7 @@ App.HomeView = Backbone.Marionette.ItemView.extend({
 
   render: function() {
     var totalVal = this.model.get('value');
-    this.model.set('value', App.convertLargeNum(totalVal));
+    this.model.set('value', App.Helpers.convertLargeNum(totalVal));
 
     this.$el.html(this.template(this.model.toJSON()));
     return this;

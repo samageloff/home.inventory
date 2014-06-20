@@ -120,7 +120,9 @@ module.exports = function(grunt) {
           'js/collections/*.js',
           'js/views/*.js',
           'js/routes/*.js',
-          'js/app.js'
+          'js/controller.js',
+          'js/app.js',
+          'js/lib/helpers.js'
         ]
       },
 

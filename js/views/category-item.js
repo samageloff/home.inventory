@@ -1,4 +1,5 @@
 App.CategoryIndexItemView = Backbone.View.extend({
+
   template: _.template($('#category-summary-template').html()),
 
   render: function() {
@@ -8,7 +9,7 @@ App.CategoryIndexItemView = Backbone.View.extend({
         markup = this.model.toJSON();
 
     // TODO: configure API response to include slug
-    this.model.set('value', App.convertLargeNum(totalVal));
+    this.model.set('value', App.Helpers.convertLargeNum(totalVal));
 
     this.setElement(this.template(markup));
     return this;

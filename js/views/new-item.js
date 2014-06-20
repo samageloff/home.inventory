@@ -27,7 +27,7 @@ App.NewItemView = Backbone.View.extend({
     e.preventDefault();
     var data = $('#new-item-form').serializeObject();
     var value = $(e.currentTarget).val();
-    var slugVal = App.convertToSlug($('#category').val());
+    var slugVal = App.Helpers.convertToSlug($('#category').val());
     var imageUrl = $('.share-url').val();
     data['slug'] = slugVal;
     data['image'] = imageUrl;
@@ -37,7 +37,6 @@ App.NewItemView = Backbone.View.extend({
     if(this.model.isValid(true)){
       this.model.save(data, {
         success: function(response, model) {
-          console.log('model', model, response);
           App.router.navigate('#/view/' + model.id);
         }
       });
@@ -53,17 +52,6 @@ App.NewItemView = Backbone.View.extend({
     e.preventDefault();
     this.onClose();
     App.router.navigate('#/');
-  },
-
-  saved: function() {
-    var btn = $('#save');
-        btn
-          .attr('disabled', 'disabled')
-          .text('Saved');
-  },
-
-  onClose: function() {
-    this.model.unbind('change', this.render);
   }
 
 });
