@@ -523,7 +523,7 @@ App.SingleItemView = Backbone.View.extend({
     }
   }
 });
-var Router = Backbone.Marionette.AppRouter.extend({
+var Router = Marionette.AppRouter.extend({
 
   appRoutes: {
     '': 'home',
@@ -540,6 +540,7 @@ var Router = Backbone.Marionette.AppRouter.extend({
 var Controller = Marionette.Controller.extend({
 
   initialize: function () {
+    App.vent.trigger('app:log', 'Controller: Initializing');
     var headerView = new App.HeaderView();
     $('#header').html(headerView.render().el);
   },
@@ -609,6 +610,20 @@ var Controller = Marionette.Controller.extend({
 
   notFound: function() {
     $('#main').html('<h1>It\'s broken</h1>');
+  },
+
+  renderView: function(view) {
+    this.destroyCurrentView(view);
+    App.core.vent.trigger('app:log', 'Controller: Rendering new view.');
+    $('#js-boilerplate-app').html(view.render().el);
+  },
+
+  destroyCurrentView: function(view) {
+    if (!_.isUndefined(window.App.views.currentView)) {
+        App.core.vent.trigger('app:log', 'Controller: Destroying existing view.');
+        window.App.views.currentView.close();
+    }
+    window.App.views.currentView = view;
   }
 
 })
@@ -626,7 +641,6 @@ App.on('start', function(options) {
   if (Backbone.history) {
     Backbone.history.start();
   }
-  new Router();
 });
 
 App.start();

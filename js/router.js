@@ -1,4 +1,4 @@
-var Router = Backbone.Marionette.AppRouter.extend({
+var Router = Marionette.AppRouter.extend({
 
   appRoutes: {
     '': 'home',

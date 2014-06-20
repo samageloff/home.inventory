@@ -12,7 +12,6 @@ App.on('start', function(options) {
   if (Backbone.history) {
     Backbone.history.start();
   }
-  new Router();
 });
 
 App.start();
