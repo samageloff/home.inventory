@@ -30,11 +30,11 @@
     <script type="text/template" id="home-template">
       <h1>ive got [this]</h1>
       <div class="grid-items-lines">
-        <a class="grid-item">
+        <a href="#/all" class="grid-item">
           <h2 id="count-items"><%= count %></h2>
           <p>Items</p>
         </a>
-        <a class="grid-item">
+        <a href="#/categories" class="grid-item">
           <h2 id="count-groups"><%= category.length %></h2>
           <p>Groups</p>
         </a>
@@ -47,7 +47,7 @@
             <span class="icon-add icon-forward-r">Add an item</span>
           </a>
           <a href="#/categories" class="grid-item grid-item-big" id="browse-categories">
-            <span class="icon-tags icon-forward-r">Just browse</span>
+            <span class="icon-tags icon-forward-r">Browse</span>
           </a>
         </nav>
       </div>
@@ -90,10 +90,14 @@
 
     <script type="text/template" id="single-view-template">
       <section class="detail">
+        <% if (!image) { %>
+        <figure class="no-image">
+          <img src="images/no-image.png" alt="">
+        <% }
+        else { %>
         <figure>
-          <% if (image) { %>
-            <img src="<%= image %>" alt="">
-          <% } %>
+          <img src="<%= image %>" alt="">
+        <% } %>
           <div class="detail-wrap">
             <a href="#" class="icon-close close"></a>
             <span class="value-tag">$ <%= value %></span>
@@ -103,7 +107,6 @@
         <div class="bd">
           <h2><%= title %></h2>
           <h6><a href="#/category/<%= slug %>"><%= category %></a></h6>
-          <!--<a href="#" class="icon-receipt"></a>-->
           <ul>
             <li><%= description %></li>
             <li><b>Quantity</b>: <%= quantity %></li>
@@ -119,7 +122,7 @@
     <script type="text/template" id="image-upload-template">
       <section class="form-layout">
         <div class="bd trim">
-          <div class="upload-placeholder"></div>
+          <div class="media-block upload-placeholder"></div>
           <form action="http://<%= aws_bucket %>.<%= host %>" role="form" method="post" enctype="multipart/form-data" class="direct-upload">
             <input type="hidden" name="key">
             <input type="hidden" name="AWSAccessKeyId" value="<%= aws_key %>">
@@ -161,6 +164,7 @@
             </div>
             <div class="form-group">
               <input type="text" id="value" name="value" placeholder="$" value="">
+              <span class="help-block hidden"></span>
             </div>
             <div class="form-group">
               <input type="text" id="quantity" name="quantity" placeholder="Quantity" value="">
@@ -179,7 +183,10 @@
       <section class="form-layout">
         <div class="bd">
           <% if (image) { %>
+          <div class="media-block">
             <img src="<%= image %>" alt="">
+            <a href="#" class="icon-close"></a>
+          </div>
           <% } %>
           <form id="edit-item-form" action="#">
             <input id="slug" name="slug" type="hidden" value="<%= slug %>">
@@ -196,6 +203,7 @@
             </div>
             <div class="form-group">
               <input type="text" id="value" name="value" placeholder="$" value="<%= value %>">
+              <span class="help-block hidden"></span>
             </div>
             <div class="form-group">
               <input type="text" id="quantity" name="quantity" placeholder="Quantity" value="<%= quantity %>">

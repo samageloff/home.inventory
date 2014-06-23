@@ -97,6 +97,7 @@ header {
   img {
     float: left;
     margin-right: 1em;
+    max-width: 100px;
   }
 
   .media-body {
@@ -109,6 +110,10 @@ header {
     position: absolute;
     right: 0;
     top: 40%;
+  }
+
+  &:empty {
+    margin: 0;
   }
 
 }
@@ -418,7 +423,7 @@ section {
       width: 100%;
     }
 
-    [class^="icon"] {
+    .icon-close {
       color: $gesso;
       font-size: 1.5em;
       @extend .hide-text;
@@ -434,6 +439,17 @@ section {
       position: absolute;
       right: .75em;
     }
+
+    &.no-image {
+      color: $midnight;
+      min-height: 320px;
+
+      .icon-close {
+        color: $midnight;
+      }
+
+    }
+
   }
 
   .bd {

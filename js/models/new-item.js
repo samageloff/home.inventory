@@ -17,11 +17,15 @@ App.NewItemModel = Backbone.Model.extend({
   validation: {
     title: {
       required: true,
-      msg: 'Please enter a title'
+      msg: 'Please enter a title.'
     },
     category: {
       required: true,
-      msg: 'Please enter a category'
+      msg: 'Please enter a category.'
+    },
+    value: {
+      pattern: 'digits',
+      msg: 'Please. Numbers only.'
     }
   },
 

@@ -12,11 +12,14 @@ App.NewItemView = Backbone.View.extend({
     _.bindAll(this, 'save');
     Backbone.Validation.bind(this);
 
+    // Fetch AWS Config model
+    this.uploader();
+
+    // Listen for image upload and pass to current model
     Backbone.pubSub.on('image-upload-complete', function() {
-      this.getImage();
+      this.setImagePath();
     }, this);
 
-    this.uploader();
   },
 
   render: function() {
@@ -31,6 +34,9 @@ App.NewItemView = Backbone.View.extend({
   uploader: function() {
     var config = new App.AwsConfigModel();
     config.fetch({
+      // Create new ImageUploadView
+      // Prepend it to NewItemView
+      // Initialize Dropdot method
       success: function() {
         var imageUploadView = new App.ImageUploadView({ model: config });
         $('#main').prepend(imageUploadView.render().el);
@@ -39,7 +45,7 @@ App.NewItemView = Backbone.View.extend({
     });
   },
 
-  getImage: function() {
+  setImagePath: function() {
     this.model.set('image', App.dropdot.image_store);
   },
 
@@ -61,22 +67,10 @@ App.NewItemView = Backbone.View.extend({
     }
   },
 
-  remove: function() {
-    Backbone.Validation.unbind(this);
-    return Backbone.View.prototype.remove.apply(this, arguments);
-  },
-
   cancel: function(e) {
     e.preventDefault();
     this.onClose();
     App.router.navigate('#/');
-  },
-
-  saved: function() {
-    var btn = $('#save');
-        btn
-          .attr('disabled', 'disabled')
-          .text('Saved');
   },
 
   onClose: function() {

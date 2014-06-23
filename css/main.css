@@ -364,8 +364,8 @@ input[type="submit"] {
   font-size: inherit;
   font-weight: bold;
   background-color: #efefef;
-  background-image: -webkit-linear-gradient(#efefef, lightgray);
-  background-image: linear-gradient(#efefef, lightgray);
+  background-image: -webkit-linear-gradient(#efefef, lightgrey);
+  background-image: linear-gradient(#efefef, lightgrey);
   padding: 7px 18px;
   text-decoration: none;
   text-shadow: 0 1px 0 #f9f9f9;
@@ -627,6 +627,7 @@ dl {
   src: url("../fonts/icons.eot?#iefix") format("embedded-opentype"), url("../fonts/icons.woff") format("woff"), url("../fonts/icons.ttf") format("truetype"), url("../fonts/icons.svg#icons") format("svg");
   font-weight: normal;
   font-style: normal; }
+
 [data-icon]:before {
   font-family: "icons" !important;
   content: attr(data-icon);
@@ -690,9 +691,12 @@ dl {
 .icon-plus:before {
   content: "j"; }
 
+.icon-camera:before {
+  content: "k"; }
+
 /* Variables */
 /* Mixins */
-.hide-text, header .header-content li a, .detail figure [class^="icon"], footer button {
+.hide-text, header .header-content li a, .detail figure .icon-close, footer button {
   white-space: nowrap;
   overflow: hidden; }
 
@@ -757,7 +761,8 @@ header {
     clear: both; }
   .media-block img {
     float: left;
-    margin-right: 1em; }
+    margin-right: 1em;
+    max-width: 100px; }
   .media-block .media-body {
     float: left; }
   .media-block [class^="icon-"] {
@@ -766,6 +771,8 @@ header {
     position: absolute;
     right: 0;
     top: 40%; }
+  .media-block:empty {
+    margin: 0; }
 
 /* File Upload */
 .file-upload {
@@ -975,7 +982,7 @@ section {
   position: relative; }
   .detail figure img {
     width: 100%; }
-  .detail figure [class^="icon"] {
+  .detail figure .icon-close {
     color: white;
     font-size: 1.5em;
     position: absolute;
@@ -987,6 +994,11 @@ section {
     font-weight: bold;
     position: absolute;
     right: .75em; }
+  .detail figure.no-image {
+    color: black;
+    min-height: 320px; }
+    .detail figure.no-image .icon-close {
+      color: black; }
 .detail .bd {
   padding: 1em 1em 4em;
   position: relative; }

@@ -3,7 +3,8 @@ App.SingleItemEditView = Backbone.View.extend({
   events: {
     'submit #edit-item-form': 'save',
     'click #save': 'save',
-    'click #cancel': 'cancel'
+    'click #cancel': 'cancel',
+    'click .icon-close': 'removeImage'
   },
 
   template: _.template($('#edit-item-template').html()),
@@ -17,6 +18,8 @@ App.SingleItemEditView = Backbone.View.extend({
     }, this);
 
     this.uploader();
+
+    console.log(this);
   },
 
   render: function() {
@@ -40,7 +43,18 @@ App.SingleItemEditView = Backbone.View.extend({
   },
 
   getImage: function() {
-    this.model.set('image', App.dropdot.image_store);
+    this.model.save('image', App.dropdot.image_store);
+  },
+
+  removeImage: function(e) {
+    e.preventDefault();
+    this.model.unset('image');
+    this.model.save();
+
+    // TODO: render models independently?
+    // kludgy because views are nested
+    $('.icon-close')
+      .closest('.media-block').remove();
   },
 
   save: function(e) {
@@ -51,6 +65,7 @@ App.SingleItemEditView = Backbone.View.extend({
     data['slug'] = slugVal;
 
     this.model.set(data);
+    console.log('data', data);
 
     if(this.model.isValid(true)){
       this.model.save(data, {

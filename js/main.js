@@ -86,11 +86,15 @@ App.NewItemModel = Backbone.Model.extend({
   validation: {
     title: {
       required: true,
-      msg: 'Please enter a title'
+      msg: 'Please enter a title.'
     },
     category: {
       required: true,
-      msg: 'Please enter a category'
+      msg: 'Please enter a category.'
+    },
+    value: {
+      pattern: 'digits',
+      msg: 'Please. Numbers only.'
     }
   },
 
@@ -245,7 +249,8 @@ App.SingleItemEditView = Backbone.View.extend({
   events: {
     'submit #edit-item-form': 'save',
     'click #save': 'save',
-    'click #cancel': 'cancel'
+    'click #cancel': 'cancel',
+    'click .icon-close': 'removeImage'
   },
 
   template: _.template($('#edit-item-template').html()),
@@ -259,6 +264,8 @@ App.SingleItemEditView = Backbone.View.extend({
     }, this);
 
     this.uploader();
+
+    console.log(this);
   },
 
   render: function() {
@@ -282,7 +289,18 @@ App.SingleItemEditView = Backbone.View.extend({
   },
 
   getImage: function() {
-    this.model.set('image', App.dropdot.image_store);
+    this.model.save('image', App.dropdot.image_store);
+  },
+
+  removeImage: function(e) {
+    e.preventDefault();
+    this.model.unset('image');
+    this.model.save();
+
+    // TODO: render models independently?
+    // kludgy because views are nested
+    $('.icon-close')
+      .closest('.media-block').remove();
   },
 
   save: function(e) {
@@ -293,6 +311,7 @@ App.SingleItemEditView = Backbone.View.extend({
     data['slug'] = slugVal;
 
     this.model.set(data);
+    console.log('data', data);
 
     if(this.model.isValid(true)){
       this.model.save(data, {
@@ -378,11 +397,9 @@ App.ImageUploadView = Backbone.View.extend({
   template: _.template($('#image-upload-template').html()),
 
   initialize: function(options) {
-
     Backbone.pubSub.on('image-upload-complete', function() {
       this.updatePlaceholder();
     }, this);
-
   },
 
   render: function() {
@@ -396,11 +413,27 @@ App.ImageUploadView = Backbone.View.extend({
 
   updatePlaceholder: function() {
     var placeholder = $('.upload-placeholder');
+
+    // clear placeholder
+    // TODO: this may eventually be an array
+    // handle it
     placeholder.empty();
-    placeholder.append('<img />')
+
+    // add image + close button
+    placeholder
+      .append('<img />')
+      .append('<a />')
+
+    // find image + add image src
     placeholder
       .find('img')
       .attr('src', App.dropdot.image_store);
+
+    // find close button add icon + href
+    placeholder
+      .find('a')
+      .addClass('icon-close')
+      .attr('href', '#')
   }
 
 });
@@ -483,11 +516,14 @@ App.NewItemView = Backbone.View.extend({
     _.bindAll(this, 'save');
     Backbone.Validation.bind(this);
 
+    // Fetch AWS Config model
+    this.uploader();
+
+    // Listen for image upload and pass to current model
     Backbone.pubSub.on('image-upload-complete', function() {
-      this.getImage();
+      this.setImagePath();
     }, this);
 
-    this.uploader();
   },
 
   render: function() {
@@ -502,6 +538,9 @@ App.NewItemView = Backbone.View.extend({
   uploader: function() {
     var config = new App.AwsConfigModel();
     config.fetch({
+      // Create new ImageUploadView
+      // Prepend it to NewItemView
+      // Initialize Dropdot method
       success: function() {
         var imageUploadView = new App.ImageUploadView({ model: config });
         $('#main').prepend(imageUploadView.render().el);
@@ -510,7 +549,7 @@ App.NewItemView = Backbone.View.extend({
     });
   },
 
-  getImage: function() {
+  setImagePath: function() {
     this.model.set('image', App.dropdot.image_store);
   },
 
@@ -532,22 +571,10 @@ App.NewItemView = Backbone.View.extend({
     }
   },
 
-  remove: function() {
-    Backbone.Validation.unbind(this);
-    return Backbone.View.prototype.remove.apply(this, arguments);
-  },
-
   cancel: function(e) {
     e.preventDefault();
     this.onClose();
     App.router.navigate('#/');
-  },
-
-  saved: function() {
-    var btn = $('#save');
-        btn
-          .attr('disabled', 'disabled')
-          .text('Saved');
   },
 
   onClose: function() {
@@ -698,6 +725,33 @@ App.configxhr = function() {
     var script = $('<script />').html(data);
     $('#header').prepend(script);
   });
+};
+
+App.getBase64Image = function(url) {
+  // Get image from page
+  var img = new Image();
+  img.src = url;
+
+  img.onload = function() {
+
+    // Create an empty canvas element
+    var canvas = document.createElement("canvas");
+    canvas.width = img.width;
+    canvas.height = img.height;
+
+    // Copy the image contents to the canvas
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0);
+
+    // Get the data-URL formatted image
+    // Firefox supports PNG and JPEG. You could check img.src to
+    // guess the original format, but be aware the using "image/jpg"
+    // will re-encode the image.
+    var dataURL = canvas.toDataURL("image/png");
+
+    return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+  }
+
 };
 
 App.dropdot = function() {
