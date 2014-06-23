@@ -770,7 +770,6 @@ header {
 /* File Upload */
 .file-upload {
   overflow: hidden;
-  margin-bottom: 1em;
   position: relative; }
   .file-upload input {
     position: absolute;
@@ -779,7 +778,7 @@ header {
     margin: 0;
     opacity: 0;
     -ms-filter: 'alpha(opacity=0)';
-    font-size: 200px;
+    font-size: 50px;
     direction: ltr;
     cursor: pointer; }
   .file-upload .icon-plus {
@@ -1025,6 +1024,8 @@ footer {
   padding: 1em; }
   .form-layout .bd {
     margin-bottom: 4em; }
+    .form-layout .bd.trim {
+      margin-bottom: 0; }
 
 /* Errors */
 .has-error {
@@ -1035,3 +1036,35 @@ footer {
     color: #ff0033;
     font-size: .75em;
     padding-left: 2px; }
+
+/* Progress Bar */
+.progress-bar-indication {
+  background-color: #f2f2f2;
+  border: 1px solid #dddddd;
+  box-shadow: inset 0 0 3px 0 rgba(115, 115, 115, 0.15);
+  border-radius: 0.1875em;
+  display: none;
+  margin: 0 auto;
+  width: 100%; }
+  .progress-bar-indication > span.meter {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    background-color: #477dca;
+    background-size: 40px 40px;
+    background-repeat: repeat-x;
+    border: 1px solid #c9c9c9;
+    border-radius: 0.125em;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    color: white;
+    display: block;
+    height: 100%;
+    padding: 3px 7px;
+    width: 0%; }
+  .progress-bar-indication p {
+    margin-bottom: 0;
+    padding: .1em .5em;
+    font-weight: 800;
+    color: white;
+    text-shadow: 0 0 1px black; }

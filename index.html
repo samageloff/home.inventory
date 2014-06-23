@@ -21,7 +21,7 @@
       <div class="header-content">
         <ul>
           <li><a href="#/" class="icon-home">Home</a></li>
-          <li class="location"><%= 'location' %></li>
+          <li class="location"></li>
           <li><a href="#/new" class="icon-add">Add</a></li>
         </ul>
       </div>
@@ -53,6 +53,21 @@
       </div>
     </script>
 
+    <script type="text/template" id="get-started-template">
+      <h1>ive got [this]</h1>
+      <div class="grid-items-lines">
+        <span class="grid-item grid-item-big">
+          <h3>Your inventory is empty!</h3>
+          <p>Lets start by adding an item.</p>
+        </span>
+        <nav>
+          <a href="#/new" class="grid-item grid-item-big" id="add-item">
+            <span class="icon-add icon-forward-r">Add an item</span>
+          </a>
+        </nav>
+      </div>
+    </script>
+
     <script type="text/template" id="category-summary-template">
       <a href="#/category/<%= slug %>" class="grid-item icon-forward-r">
         <img src="images/placeholder_logo_1_dark.png" alt="">
@@ -76,7 +91,9 @@
     <script type="text/template" id="single-view-template">
       <section class="detail">
         <figure>
-          <img src="images/sam-flax-chair.jpg" alt="">
+          <% if (image) { %>
+            <img src="<%= image %>" alt="">
+          <% } %>
           <div class="detail-wrap">
             <a href="#" class="icon-close close"></a>
             <span class="value-tag">$ <%= value %></span>
@@ -99,9 +116,10 @@
       </section>
     </script>
 
-    <script type="text/template" id="new-item-template">
+    <script type="text/template" id="image-upload-template">
       <section class="form-layout">
-        <div class="bd">
+        <div class="bd trim">
+          <div class="upload-placeholder"></div>
           <form action="http://<%= aws_bucket %>.<%= host %>" role="form" method="post" enctype="multipart/form-data" class="direct-upload">
             <input type="hidden" name="key">
             <input type="hidden" name="AWSAccessKeyId" value="<%= aws_key %>">
@@ -110,14 +128,24 @@
             <input type="hidden" name="signature">
             <input type="hidden" name="success_action_status" value="201">
             <input type="hidden" name="Content-Type">
-            <div class="progress round eight"><span class="meter"></span></div>
-            <input class="share-url" type="text" disabled />
+            <div class="progress-bar-indication">
+              <span class="meter">
+                <p></p>
+              </span>
+            </div>
+            <input class="share-url" type="hidden" />
             <button class="file-upload">
-              <span class="icon-plus">Add files</span>
-              <input capture="camera" type="file" name="file" id="file" multiple>
+              <span class="icon-plus">Image</span>
+              <input capture="camera" type="file" name="file" id="file">
             </button>
           </form>
+        </div>
+      </section>
+    </script>
 
+    <script type="text/template" id="new-item-template">
+      <section class="form-layout">
+        <div class="bd">
           <form id="new-item-form" action="#">
             <input type="hidden" name="slug" id="slug" value="">
             <div class="form-group">
@@ -150,12 +178,11 @@
     <script type="text/template" id="edit-item-template">
       <section class="form-layout">
         <div class="bd">
-          <form id="edit-item-form" action="#" enctype="multipart/form-data">
+          <% if (image) { %>
+            <img src="<%= image %>" alt="">
+          <% } %>
+          <form id="edit-item-form" action="#">
             <input id="slug" name="slug" type="hidden" value="<%= slug %>">
-            <button class="file-upload">
-              <span class="icon-plus">Add files</span>
-              <input id="fileupload" capture="camera" type="file" name="files[]" data-url="/upload" multiple>
-            </button>
             <div class="form-group">
               <input type="text" id="title" name="title" placeholder="Title" value="<%= title %>">
               <span class="help-block hidden"></span>

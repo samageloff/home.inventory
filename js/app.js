@@ -39,13 +39,30 @@ App.dropdot = function() {
 
     var form = $(this)
 
-    console.log('form', form);
-
     $(this).fileupload({
       url: form.attr('action'), // Grabs form's action src
       type: 'POST',
       autoUpload: true,
       dataType: 'xml', // S3's XML response
+      disableImageResize: /Android(?!.*Chrome)|Opera/
+        .test(window.navigator && navigator.userAgent),
+      process:[
+        {
+            action: 'load',
+            fileTypes: /^image\/(gif|jpeg|png)$/,
+            maxFileSize: 20000000 // 20MB
+        },
+        {
+            action: 'resize',
+            maxWidth: 800,
+            maxHeight: 800,
+            minWidth: 800,
+            minHeight: 600
+        },
+        {
+            action: 'save'
+        }
+      ],
       add: function (event, data) {
         $.ajax({
           url: "/uploads/signed",
@@ -65,80 +82,32 @@ App.dropdot = function() {
         data.submit();
       },
       send: function(e, data) {
-        $('.progress').fadeIn(); // Display widget progress bar
+        $('.progress-bar-indication').fadeIn(); // Display widget progress bar
       },
       progress: function(e, data){
-        $('#circle').addClass('animate'); // Animate the rotating circle when in progress
         var percent = Math.round((e.loaded / e.total) * 100)
-        $('.meter').css('width', percent + '%') // Update progress bar percentage
+        console.log('percent', percent);
+        $('.progress-bar-indication .meter').css('width', percent + '%') // Update progress bar percentage
+        $('.progress-bar-indication .meter').text(percent + '%');
       },
       fail: function(e, data) {
         console.log('fail')
-        $('#circle').removeClass('animate');
       },
       success: function(data) {
         var url = $(data).find('Location').text(); // Find location value from XML response
-        $('.share-url').show(); // Show input
-        $('.share-url').val(url.replace("%2F", "/")); // Update the input with url address
+        App.dropdot.image_store = url;
+        Backbone.pubSub.trigger('image-upload-complete', App.dropdot.image_store);
       },
       done: function (event, data) {
         // When upload is done, fade out progress bar and reset to 0
-        $('.progress').fadeOut(300, function() {
+        $('.progress-bar-indication').fadeOut(300, function() {
           $('.bar').css('width', 0)
         })
-
-        // Stop circle animation
-        $('#circle').removeClass('animate');
       },
     })
   })
 
-  /* Dragover Events on circle */
-  var dragging = 0; //Get around chrome bug
-  $('#drop').on("dragenter", function(e){
-      dragging++;
-      $('#drop').addClass("gloss");
-      e.preventDefault();
-      return false;
-  });
-
-  $('#drop').on("dragover", function(e){
-      $('#drop').addClass("gloss");
-      e.preventDefault();
-      return false;
-  });
-
-  $('#drop').on("dragleave", function(e){
-      dragging--;
-      if (dragging === 0) {
-        $('#drop').removeClass("gloss");
-      }
-      e.preventDefault();
-      return false;
-  });
-  $('.footer-link').click( function(){
-      $('.footer-text').hide();
-      $($(this).attr('href')).fadeIn('fast');
-  });
-  $(".share-url").focus(function () {
-    // Select all text on #share-url focus
-
-    "use strict";
-    var $this = $(this);
-    $this.select();
-
-    // Work around Chrome's little problem
-    $this.mouseup(function () {
-        // Prevent further mouseup intervention
-        $this.unbind("mouseup");
-        return false;
-    });
-  });
-
 };
-
-
-
 
 // Extend the callbacks to work with Bootstrap, as used in this example
 // See: http://thedersen.com/projects/backbone-validation/#configuration/callbacks
@@ -167,6 +136,9 @@ $.fn.serializeObject = function () {
   };
   return $.each(this.serializeArray(), b), a
 };
+
+/* Barebones Pub/Sub */
+Backbone.pubSub = _.extend({}, Backbone.Events);
 
 /* Helper Methods */
 Backbone.View.prototype.close = function() {

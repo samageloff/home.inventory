@@ -243,7 +243,8 @@ App.CategoryIndexItemView = Backbone.View.extend({
 App.SingleItemEditView = Backbone.View.extend({
 
   events: {
-    'submit': 'save',
+    'submit #edit-item-form': 'save',
+    'click #save': 'save',
     'click #cancel': 'cancel'
   },
 
@@ -252,16 +253,36 @@ App.SingleItemEditView = Backbone.View.extend({
   initialize: function() {
     _.bindAll(this, 'save');
     Backbone.Validation.bind(this);
+
+    Backbone.pubSub.on('image-upload-complete', function() {
+      this.getImage();
+    }, this);
+
+    this.uploader();
   },
 
   render: function() {
     var markup = this.model.toJSON();
 
     this.$el.empty();
-    this.$el.html(this.template(this.model.toJSON()));
     this.setElement(this.template(markup));
 
     return this;
+  },
+
+  uploader: function() {
+    var config = new App.AwsConfigModel();
+    config.fetch({
+      success: function() {
+        var imageUploadView = new App.ImageUploadView({ model: config });
+        $('#main').prepend(imageUploadView.render().el);
+        App.dropdot();
+      }
+    });
+  },
+
+  getImage: function() {
+    this.model.set('image', App.dropdot.image_store);
   },
 
   save: function(e) {
@@ -272,8 +293,6 @@ App.SingleItemEditView = Backbone.View.extend({
     data['slug'] = slugVal;
 
     this.model.set(data);
-
-    console.log('data', data);
 
     if(this.model.isValid(true)){
       this.model.save(data, {
@@ -333,16 +352,55 @@ App.HomeView = Backbone.View.extend({
   tagName: 'section',
   className: 'landing',
   template: _.template($('#home-template').html()),
+  getStarted: _.template($('#get-started-template').html()),
 
   render: function() {
     this.$el.empty();
+    var count = this.model.get('count');
 
-    // TODO: make this accessible
-    var totalVal = this.model.get('value');
-    this.model.set('value', App.convertLargeNum(totalVal));
+    if (count) {
+      // TODO: make this accessible
+      var totalVal = this.model.get('value');
+      this.model.set('value', App.convertLargeNum(totalVal));
 
-    this.$el.html(this.template(this.model.toJSON()));
+      this.$el.html(this.template(this.model.toJSON()));
+    }
+    else {
+      this.$el.html(this.getStarted());
+    }
+
     return this;
+  }
+
+});
+App.ImageUploadView = Backbone.View.extend({
+
+  template: _.template($('#image-upload-template').html()),
+
+  initialize: function(options) {
+
+    Backbone.pubSub.on('image-upload-complete', function() {
+      this.updatePlaceholder();
+    }, this);
+
+  },
+
+  render: function() {
+    var markup = this.model.toJSON();
+
+    this.$el.empty();
+    this.setElement(this.template(markup));
+
+    return this;
+  },
+
+  updatePlaceholder: function() {
+    var placeholder = $('.upload-placeholder');
+    placeholder.empty();
+    placeholder.append('<img />')
+    placeholder
+      .find('img')
+      .attr('src', App.dropdot.image_store);
   }
 
 });
@@ -416,29 +474,44 @@ App.NewItemView = Backbone.View.extend({
   events: {
     'submit #new-item-form': 'save',
     'click #save': 'save',
-    'click #cancel': 'cancel',
-    'change #upload-file': 'upload'
+    'click #cancel': 'cancel'
   },
 
   template: _.template($('#new-item-template').html()),
 
-  initialize: function(options) {
+  initialize: function() {
     _.bindAll(this, 'save');
-    this.options = options || {};
     Backbone.Validation.bind(this);
 
-    App.dropdot();
+    Backbone.pubSub.on('image-upload-complete', function() {
+      this.getImage();
+    }, this);
+
+    this.uploader();
   },
 
   render: function() {
-    var markup = this.model.toJSON(), // un-needed?
-        configs = this.options.config.toJSON();
+    var markup = this.model.toJSON();
 
     this.$el.empty();
-    this.setElement(this.template(configs));
-    this.dropdot();
+    this.setElement(this.template(markup));
 
     return this;
+  },
+
+  uploader: function() {
+    var config = new App.AwsConfigModel();
+    config.fetch({
+      success: function() {
+        var imageUploadView = new App.ImageUploadView({ model: config });
+        $('#main').prepend(imageUploadView.render().el);
+        App.dropdot();
+      }
+    });
+  },
+
+  getImage: function() {
+    this.model.set('image', App.dropdot.image_store);
   },
 
   save: function(e) {
@@ -448,21 +521,15 @@ App.NewItemView = Backbone.View.extend({
     var slugVal = App.convertToSlug($('#category').val());
     data['slug'] = slugVal;
 
-    console.log('data', data);
     this.model.set(data);
 
     if(this.model.isValid(true)){
       this.model.save(data, {
         success: function(response, model) {
-          console.log('model', model, response);
           App.router.navigate('#/view/' + model.id);
         }
       });
     }
-  },
-
-  dropdot: function() {
-    App.dropdot();
   },
 
   remove: function() {
@@ -585,10 +652,10 @@ App.Router = Backbone.Router.extend({
 
   new: function() {
     var model = new App.NewItemModel();
-    var config = new App.AwsConfigModel();
-    config.fetch({
+
+    model.fetch({
       success: function() {
-        var newItemView = new App.NewItemView({ model: model, config: config });
+        var newItemView = new App.NewItemView({ model: model });
         $('#main').html(newItemView.render().el);
       }
     });
@@ -640,13 +707,30 @@ App.dropdot = function() {
 
     var form = $(this)
 
-    console.log('form', form);
-
     $(this).fileupload({
       url: form.attr('action'), // Grabs form's action src
       type: 'POST',
       autoUpload: true,
       dataType: 'xml', // S3's XML response
+      disableImageResize: /Android(?!.*Chrome)|Opera/
+        .test(window.navigator && navigator.userAgent),
+      process:[
+        {
+            action: 'load',
+            fileTypes: /^image\/(gif|jpeg|png)$/,
+            maxFileSize: 20000000 // 20MB
+        },
+        {
+            action: 'resize',
+            maxWidth: 800,
+            maxHeight: 800,
+            minWidth: 800,
+            minHeight: 600
+        },
+        {
+            action: 'save'
+        }
+      ],
       add: function (event, data) {
         $.ajax({
           url: "/uploads/signed",
@@ -666,80 +750,32 @@ App.dropdot = function() {
         data.submit();
       },
       send: function(e, data) {
-        $('.progress').fadeIn(); // Display widget progress bar
+        $('.progress-bar-indication').fadeIn(); // Display widget progress bar
       },
       progress: function(e, data){
-        $('#circle').addClass('animate'); // Animate the rotating circle when in progress
         var percent = Math.round((e.loaded / e.total) * 100)
-        $('.meter').css('width', percent + '%') // Update progress bar percentage
+        console.log('percent', percent);
+        $('.progress-bar-indication .meter').css('width', percent + '%') // Update progress bar percentage
+        $('.progress-bar-indication .meter').text(percent + '%');
       },
       fail: function(e, data) {
         console.log('fail')
-        $('#circle').removeClass('animate');
       },
       success: function(data) {
         var url = $(data).find('Location').text(); // Find location value from XML response
-        $('.share-url').show(); // Show input
-        $('.share-url').val(url.replace("%2F", "/")); // Update the input with url address
+        App.dropdot.image_store = url;
+        Backbone.pubSub.trigger('image-upload-complete', App.dropdot.image_store);
       },
       done: function (event, data) {
         // When upload is done, fade out progress bar and reset to 0
-        $('.progress').fadeOut(300, function() {
+        $('.progress-bar-indication').fadeOut(300, function() {
           $('.bar').css('width', 0)
         })
-
-        // Stop circle animation
-        $('#circle').removeClass('animate');
       },
     })
   })
 
-  /* Dragover Events on circle */
-  var dragging = 0; //Get around chrome bug
-  $('#drop').on("dragenter", function(e){
-      dragging++;
-      $('#drop').addClass("gloss");
-      e.preventDefault();
-      return false;
-  });
-
-  $('#drop').on("dragover", function(e){
-      $('#drop').addClass("gloss");
-      e.preventDefault();
-      return false;
-  });
-
-  $('#drop').on("dragleave", function(e){
-      dragging--;
-      if (dragging === 0) {
-        $('#drop').removeClass("gloss");
-      }
-      e.preventDefault();
-      return false;
-  });
-  $('.footer-link').click( function(){
-      $('.footer-text').hide();
-      $($(this).attr('href')).fadeIn('fast');
-  });
-  $(".share-url").focus(function () {
-    // Select all text on #share-url focus
-
-    "use strict";
-    var $this = $(this);
-    $this.select();
-
-    // Work around Chrome's little problem
-    $this.mouseup(function () {
-        // Prevent further mouseup intervention
-        $this.unbind("mouseup");
-        return false;
-    });
-  });
-
 };
-
-
-
 
 // Extend the callbacks to work with Bootstrap, as used in this example
 // See: http://thedersen.com/projects/backbone-validation/#configuration/callbacks
@@ -768,6 +804,9 @@ $.fn.serializeObject = function () {
   };
   return $.each(this.serializeArray(), b), a
 };
+
+/* Barebones Pub/Sub */
+Backbone.pubSub = _.extend({}, Backbone.Events);
 
 /* Helper Methods */
 Backbone.View.prototype.close = function() {

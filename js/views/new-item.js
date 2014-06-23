@@ -3,29 +3,44 @@ App.NewItemView = Backbone.View.extend({
   events: {
     'submit #new-item-form': 'save',
     'click #save': 'save',
-    'click #cancel': 'cancel',
-    'change #upload-file': 'upload'
+    'click #cancel': 'cancel'
   },
 
   template: _.template($('#new-item-template').html()),
 
-  initialize: function(options) {
+  initialize: function() {
     _.bindAll(this, 'save');
-    this.options = options || {};
     Backbone.Validation.bind(this);
 
-    App.dropdot();
+    Backbone.pubSub.on('image-upload-complete', function() {
+      this.getImage();
+    }, this);
+
+    this.uploader();
   },
 
   render: function() {
-    var markup = this.model.toJSON(), // un-needed?
-        configs = this.options.config.toJSON();
+    var markup = this.model.toJSON();
 
     this.$el.empty();
-    this.setElement(this.template(configs));
-    this.dropdot();
+    this.setElement(this.template(markup));
 
     return this;
+  },
+
+  uploader: function() {
+    var config = new App.AwsConfigModel();
+    config.fetch({
+      success: function() {
+        var imageUploadView = new App.ImageUploadView({ model: config });
+        $('#main').prepend(imageUploadView.render().el);
+        App.dropdot();
+      }
+    });
+  },
+
+  getImage: function() {
+    this.model.set('image', App.dropdot.image_store);
   },
 
   save: function(e) {
@@ -35,21 +50,15 @@ App.NewItemView = Backbone.View.extend({
     var slugVal = App.convertToSlug($('#category').val());
     data['slug'] = slugVal;
 
-    console.log('data', data);
     this.model.set(data);
 
     if(this.model.isValid(true)){
       this.model.save(data, {
         success: function(response, model) {
-          console.log('model', model, response);
           App.router.navigate('#/view/' + model.id);
         }
       });
     }
-  },
-
-  dropdot: function() {
-    App.dropdot();
   },
 
   remove: function() {

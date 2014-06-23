@@ -1,7 +1,8 @@
 App.SingleItemEditView = Backbone.View.extend({
 
   events: {
-    'submit': 'save',
+    'submit #edit-item-form': 'save',
+    'click #save': 'save',
     'click #cancel': 'cancel'
   },
 
@@ -10,16 +11,36 @@ App.SingleItemEditView = Backbone.View.extend({
   initialize: function() {
     _.bindAll(this, 'save');
     Backbone.Validation.bind(this);
+
+    Backbone.pubSub.on('image-upload-complete', function() {
+      this.getImage();
+    }, this);
+
+    this.uploader();
   },
 
   render: function() {
     var markup = this.model.toJSON();
 
     this.$el.empty();
-    this.$el.html(this.template(this.model.toJSON()));
     this.setElement(this.template(markup));
 
     return this;
+  },
+
+  uploader: function() {
+    var config = new App.AwsConfigModel();
+    config.fetch({
+      success: function() {
+        var imageUploadView = new App.ImageUploadView({ model: config });
+        $('#main').prepend(imageUploadView.render().el);
+        App.dropdot();
+      }
+    });
+  },
+
+  getImage: function() {
+    this.model.set('image', App.dropdot.image_store);
   },
 
   save: function(e) {
@@ -30,8 +51,6 @@ App.SingleItemEditView = Backbone.View.extend({
     data['slug'] = slugVal;
 
     this.model.set(data);
-
-    console.log('data', data);
 
     if(this.model.isValid(true)){
       this.model.save(data, {

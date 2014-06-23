@@ -2,6 +2,7 @@ var crypto = require('crypto'),
     mime = require('mime'),
     uuid = require('node-uuid'),
     moment = require('moment'),
+    gm = require('gm'),
     config = require('../app/config');
 
 module.exports = {
@@ -32,8 +33,6 @@ module.exports = {
                       ["content-length-range", 0, config.max_filesize]
                     ]
                   });
-
-    console.log('policy', policy);
 
     var base64policy = new Buffer(policy).toString('base64'); // Create base64 policy
     var signature = crypto.createHmac('sha1', config.aws_secret).update(base64policy).digest('base64'); // Create signature
