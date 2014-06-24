@@ -146,6 +146,7 @@
             // Accepts the options fileTypes (regular expression)
             // and maxFileSize (integer) to limit the files to load:
             loadImage: function (data, options) {
+                console.log('data', data, options);
                 if (options.disabled) {
                     return data;
                 }

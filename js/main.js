@@ -754,6 +754,13 @@ App.getBase64Image = function(url) {
 
 };
 
+$.blueimp.fileupload.prototype.processActions.duplicateImage = function (data, options) {
+  if (data.canvas) {
+      data.files.push(data.files[data.index]);
+  }
+  return data;
+};
+
 App.dropdot = function() {
 
   $('.direct-upload').each(function() {
@@ -764,26 +771,29 @@ App.dropdot = function() {
     $(this).fileupload({
       url: form.attr('action'), // Grabs form's action src
       type: 'POST',
-      autoUpload: true,
+      autoUpload: false,
       dataType: 'xml', // S3's XML response
-      disableImageResize: /Android(?!.*Chrome)|Opera/
-        .test(window.navigator && navigator.userAgent),
-      process:[
+      disableImageResize: false,
+      imageMaxWidth: 800,
+      imageMaxHeight: 800,
+      imageCrop: false,
+      processQueue: [
         {
-            action: 'load',
-            fileTypes: /^image\/(gif|jpeg|png)$/,
-            maxFileSize: 20000000 // 20MB
+          action: 'loadImage',
+          fileTypes: /^image\/(gif|jpeg|png)$/,
+          maxFileSize: 20000000 // 20MB
         },
         {
-            action: 'resize',
-            maxWidth: 800,
-            maxHeight: 800,
-            minWidth: 800,
-            minHeight: 600
+          action: 'resizeImage',
+          maxWidth: 800
         },
+        {action: 'saveImage'},
+        {action: 'duplicateImage'},
         {
-            action: 'save'
-        }
+          action: 'resizeImage',
+          maxWidth: 80,
+        },
+        {action: 'saveImage'}
       ],
       add: function (event, data) {
         $.ajax({
