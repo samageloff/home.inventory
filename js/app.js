@@ -32,36 +32,9 @@ App.configxhr = function() {
   });
 };
 
-App.getBase64Image = function(url) {
-  // Get image from page
-  var img = new Image();
-  img.src = url;
-
-  img.onload = function() {
-
-    // Create an empty canvas element
-    var canvas = document.createElement("canvas");
-    canvas.width = img.width;
-    canvas.height = img.height;
-
-    // Copy the image contents to the canvas
-    var ctx = canvas.getContext("2d");
-    ctx.drawImage(img, 0, 0);
-
-    // Get the data-URL formatted image
-    // Firefox supports PNG and JPEG. You could check img.src to
-    // guess the original format, but be aware the using "image/jpg"
-    // will re-encode the image.
-    var dataURL = canvas.toDataURL("image/png");
-
-    return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
-  }
-
-};
-
 $.blueimp.fileupload.prototype.processActions.duplicateImage = function (data, options) {
   if (data.canvas) {
-      data.files.push(data.files[data.index]);
+    data.files.push(data.files[data.index]);
   }
   return data;
 };
@@ -71,14 +44,14 @@ App.dropdot = function() {
   $('.direct-upload').each(function() {
     /* For each file selected, process and upload */
 
-    var form = $(this)
+    var form = $(this);
 
     $(this).fileupload({
       url: form.attr('action'), // Grabs form's action src
       type: 'POST',
-      autoUpload: false,
       dataType: 'xml', // S3's XML response
-      disableImageResize: false,
+      disableImageResize: /Android(?!.*Chrome)|Opera/
+        .test(window.navigator && navigator.userAgent),
       imageMaxWidth: 800,
       imageMaxHeight: 800,
       imageCrop: false,
@@ -100,23 +73,8 @@ App.dropdot = function() {
         },
         {action: 'saveImage'}
       ],
-      add: function (event, data) {
-        $.ajax({
-          url: "/uploads/signed",
-          type: 'GET',
-          dataType: 'json',
-          data: {title: data.files[0].name}, // Send filename to /signed for the signed response
-          async: false,
-          success: function(data) {
-            // Now that we have our data, we update the form so it contains all
-            // the needed data to sign the request
-            form.find('input[name=key]').val(data.key);
-            form.find('input[name=policy]').val(data.policy);
-            form.find('input[name=signature]').val(data.signature);
-            form.find('input[name=Content-Type]').val(data.contentType);
-          }
-        })
-        data.submit();
+      add: function(e, data) {
+        console.log('add fired');
       },
       send: function(e, data) {
         $('.progress-bar-indication').fadeIn(); // Display widget progress bar
@@ -136,13 +94,36 @@ App.dropdot = function() {
         Backbone.pubSub.trigger('image-upload-complete', App.dropdot.image_store);
       },
       done: function (event, data) {
-        // When upload is done, fade out progress bar and reset to 0
         $('.progress-bar-indication').fadeOut(300, function() {
           $('.bar').css('width', 0)
         })
-      },
+      }
+    }).bind('fileuploadadd', getSigned)
+  });
+
+  function getSigned(event, data) {
+    var form = $(this);
+    var file = data.files[0];
+
+    console.log('file', file);
+
+    $.ajax({
+      url: "/uploads/signed",
+      type: 'GET',
+      dataType: 'json',
+      data: {title: data.files[0].name}, // Send filename to /signed for the signed response
+      async: false,
+      success: function(data) {
+        // Now that we have our data, we update the form so it contains all
+        // the needed data to sign the request
+        form.find('input[name=key]').val(data.key);
+        form.find('input[name=policy]').val(data.policy);
+        form.find('input[name=signature]').val(data.signature);
+        form.find('input[name=Content-Type]').val(data.contentType);
+      }
     })
-  })
+    data.submit();
+  }
 
 };
 

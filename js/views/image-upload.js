@@ -24,6 +24,7 @@ App.ImageUploadView = Backbone.View.extend({
     // TODO: this may eventually be an array
     // handle it
     placeholder.empty();
+    $('#upload-placeholder').empty();
 
     // add image + close button
     placeholder
