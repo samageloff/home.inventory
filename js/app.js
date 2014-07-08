@@ -32,93 +32,32 @@ App.configxhr = function() {
   });
 };
 
-$.blueimp.fileupload.prototype.processActions.duplicateImage = function (data, options) {
-  if (data.canvas) {
-    data.files.push(data.files[data.index]);
-  }
-  return data;
-};
+App.imager = function() {
+  var url = 'api/upload';
+  $('#fileupload').fileupload({
+    url: url,
+    dataType: 'json',
+    done: function (e, data) {
+      $.each(data.files, function (index, file) {
+        var uri = data.result.cdnUri,
+            path = data.result.uploaded[0];
 
-App.dropdot = function() {
-
-  $('.direct-upload').each(function() {
-    /* For each file selected, process and upload */
-
-    var form = $(this);
-
-    $(this).fileupload({
-      url: form.attr('action'), // Grabs form's action src
-      type: 'POST',
-      dataType: 'xml', // S3's XML response
-      autoUpload: false,
-      disableImageResize: /Android(?!.*Chrome)|Opera/
-        .test(window.navigator && navigator.userAgent),
-      imageMaxWidth: 800,
-      imageMaxHeight: 800,
-      imageCrop: false,
-      processQueue: [
-        {
-          action: 'loadImage',
-          fileTypes: /^image\/(gif|jpeg|png)$/,
-          maxFileSize: 20000000 // 20MB
-        },
-        {
-          action: 'resizeImage',
-          maxWidth: 800
-        },
-        {action: 'saveImage'},
-        {action: 'duplicateImage'},
-        {
-          action: 'resizeImage',
-          maxWidth: 80,
-        },
-        {action: 'saveImage'}
-      ],
-      add: function(e, data) {
-        var form = $(this);
-
-        $.ajax({
-          url: "/uploads/signed",
-          type: 'GET',
-          dataType: 'json',
-          data: {title: data.files[0].name}, // Send filename to /signed for the signed response
-          async: false,
-          success: function(data) {
-            // Now that we have our data, we update the form so it contains all
-            // the needed data to sign the request
-            form.find('input[name=key]').val(data.key);
-            form.find('input[name=policy]').val(data.policy);
-            form.find('input[name=signature]').val(data.signature);
-            form.find('input[name=Content-Type]').val(data.contentType);
-          }
-        })
-        data.submit();
-      },
-      send: function(e, data) {
-        $('.progress-bar-indication').fadeIn(); // Display widget progress bar
-      },
-      progress: function(e, data){
-        var percent = Math.round((e.loaded / e.total) * 100)
-        console.log('percent', percent);
-        $('.progress-bar-indication .meter').css('width', percent + '%') // Update progress bar percentage
-        $('.progress-bar-indication .meter').text(percent + '%');
-      },
-      fail: function(e, data) {
-        console.log('fail')
-      },
-      success: function(data) {
-        var url = $(data).find('Location').text(); // Find location value from XML response
-        App.dropdot.image_store = url;
-        Backbone.pubSub.trigger('image-upload-complete', App.dropdot.image_store);
-      },
-      done: function (event, data) {
-        $('.progress-bar-indication').fadeOut(300, function() {
-          $('.bar').css('width', 0)
-        })
-      }
-    })
-  });
-
+        App.imager.image_store = [
+          uri + '/thumb_' + path,
+          uri + '/gallery_' + path,
+          uri + '/large_' + path,
+          path];
+        Backbone.pubSub.trigger('image-upload-complete', App.imager.image_store);
+      });
+    },
+    progressall: function (e, data) {
+      var progress = parseInt(data.loaded / data.total * 100, 10);
+      console.log('progress', progress);
+      $('#progress .progress-bar').css(
+        'width',
+        progress + '%'
+    )}
+  })
 };
 
 // Extend the callbacks to work with Bootstrap, as used in this example
@@ -151,25 +90,3 @@ $.fn.serializeObject = function () {
 
 /* Barebones Pub/Sub */
 Backbone.pubSub = _.extend({}, Backbone.Events);
-
-/* Helper Methods */
-Backbone.View.prototype.close = function() {
-  this.remove();
-  this.unbind();
-  if (this.onClose) {
-    this.onClose();
-  }
-};
-
-function AppView () {
-  this.showView(view);
-
-  if (this.currentView) {
-   this.currentView.close();
-  }
-
-  this.currentView = view;
-  this.currentView.render();
-
-  $("#main").html(this.currentView.el);
-};

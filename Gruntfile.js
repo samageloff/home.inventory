@@ -101,12 +101,7 @@ module.exports = function(grunt) {
         'js/vendor.js': [
           'js/lib/jquery.min.js',
           'js/lib/jquery.ui.widget.js',
-          'js/lib/jquery.loadimage.js',
-          'js/lib/jquery.canvas-to-blob.min.js',
-          'js/lib/jquery.iframe-transport.js',
           'js/lib/jquery.fileupload.js',
-          'js/lib/jquery.fileupload-process.js',
-          'js/lib/jquery.fileupload-image.js',
           'js/lib/underscore.min.js',
           'js/lib/backbone.js',
           'js/lib/backbone.validation.js'

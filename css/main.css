@@ -950,17 +950,21 @@ section {
 .items.grid-items-lines .grid-item {
   display: table;
   height: auto;
-  padding: 1em;
+  padding: .75em;
   text-align: left; }
 .items.grid-items-lines .grid-item img {
   float: left;
   margin-right: 1em;
   margin-bottom: auto;
-  opacity: .8; }
+  opacity: .8;
+  width: 80px; }
 .items.grid-items-lines h4 {
   color: black;
+  display: table-cell;
   font-size: 1em;
-  margin-top: 10px; }
+  width: 167px;
+  text-align: left;
+  vertical-align: middle; }
 .items.grid-items-lines .grid-item span {
   color: #477dca; }
   .items.grid-items-lines .grid-item span:hover {
@@ -972,6 +976,7 @@ section {
 .items.grid-items-lines .controls {
   display: table-cell;
   font-size: .75rem;
+  width: 40px;
   text-align: right;
   vertical-align: middle; }
 

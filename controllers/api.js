@@ -1,7 +1,9 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId,
-    models = require('../app/models');
+    models = require('../app/models'),
+    config = require('../app/imager'),
+    Imager = require('../js/lib/imager');
 
 module.exports = {
 
@@ -87,10 +89,23 @@ module.exports = {
         item.title = request.body.title;
         item.category = request.body.category;
         item.description = request.body.description;
-        item.image = request.body.image;
         item.slug = request.body.slug;
         item.value = request.body.value;
         item.quantity = request.body.quantity;
+        item.image = request.body.image;
+
+        // // handle image array
+        // item.image = [];
+        // for (var i in request.body.image) {
+        //   var image = request.body.image[i];
+        //   console.log('IMAGE', image);
+        //   var imageObj = {
+        //     thumb: image['thumb'],
+        //     gallery: image['gallery'],
+        //     large: image['large']
+        //   };
+        //   item.image.push(imageObj);
+        // }
 
     console.log("item", request);
 
@@ -142,6 +157,28 @@ module.exports = {
         }
       });
     });
+  },
+
+  upload: function(request, response) {
+    var imager = new Imager(config, 'S3') // 'Rackspace' or 'S3'
+    imager.upload([request.files.image], function (err, cdnUri, uploaded) {
+      if (err) return response.send(err.toString())
+      response.send(JSON.stringify({
+        cdnUri: cdnUri,
+        uploaded: uploaded
+      }))
+    }, 'items')
+  },
+
+  remove: function(request, response) {
+    var imager = new Imager(config, 'S3'); // 'Rackspace' or 'S3';
+    var files = request.params.id;
+
+    console.log('getting item with id', request.params.id);
+
+    imager.remove(files, function (err) {
+      response.send(files)
+    }, 'items')
   }
 
 }

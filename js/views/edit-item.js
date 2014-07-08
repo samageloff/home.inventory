@@ -17,9 +17,10 @@ App.SingleItemEditView = Backbone.View.extend({
       this.getImage();
     }, this);
 
-    this.uploader();
+    Backbone.pubSub.on('image-remove', function() {
+      this.unsetImage();
+    }, this);
 
-    console.log(this);
   },
 
   render: function() {
@@ -31,30 +32,35 @@ App.SingleItemEditView = Backbone.View.extend({
     return this;
   },
 
-  uploader: function() {
-    var config = new App.AwsConfigModel();
-    config.fetch({
-      success: function() {
-        var imageUploadView = new App.ImageUploadView({ model: config });
-        $('#main').prepend(imageUploadView.render().el);
-        App.dropdot();
-      }
-    });
-  },
-
   getImage: function() {
-    this.model.save('image', App.dropdot.image_store);
+    this.model.save('image', App.imager.image_store);
   },
 
   removeImage: function(e) {
     e.preventDefault();
+
+    $('.icon-close').on('click', function() {
+      var $self = $(this),
+          image_id = $(this).data('id');
+
+      console.log('image_id', image_id);
+
+      $.get('api/remove/' + image_id, function(data) {
+        console.log('completed image removal');
+        $self.closest('.media-block').remove();
+        Backbone.pubSub.trigger('image-remove', this);
+      })
+      .fail(function() {
+        alert( "error" );
+      })
+    });
+
+  },
+
+  unsetImage: function() {
+    console.log('unset image');
     this.model.unset('image');
     this.model.save();
-
-    // TODO: render models independently?
-    // kludgy because views are nested
-    $('.icon-close')
-      .closest('.media-block').remove();
   },
 
   save: function(e) {

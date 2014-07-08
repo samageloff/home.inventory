@@ -369,7 +369,7 @@ section {
   .grid-item {
     display: table;
     height: auto;
-    padding: 1em;
+    padding: .75em;
     text-align: left;
   }
 
@@ -378,12 +378,16 @@ section {
     margin-right: 1em;
     margin-bottom: auto;
     opacity: .8;
+    width: 80px;
   }
 
   h4 {
     color: $midnight;
+    display: table-cell;
     font-size: 1em;
-    margin-top: 10px;
+    width: 167px;
+    text-align: left;
+    vertical-align: middle;
   }
 
   .grid-item span {
@@ -404,6 +408,7 @@ section {
   .controls {
     display: table-cell;
     font-size: .75rem;
+    width: 40px;
     text-align: right;
     vertical-align: middle;
   }

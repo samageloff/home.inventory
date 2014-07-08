@@ -12,14 +12,10 @@ App.NewItemView = Backbone.View.extend({
     _.bindAll(this, 'save');
     Backbone.Validation.bind(this);
 
-    // Fetch AWS Config model
-    this.uploader();
-
     // Listen for image upload and pass to current model
     Backbone.pubSub.on('image-upload-complete', function() {
       this.setImagePath();
     }, this);
-
   },
 
   render: function() {
@@ -31,22 +27,8 @@ App.NewItemView = Backbone.View.extend({
     return this;
   },
 
-  uploader: function() {
-    var config = new App.AwsConfigModel();
-    config.fetch({
-      // Create new ImageUploadView
-      // Prepend it to NewItemView
-      // Initialize Dropdot method
-      success: function() {
-        var imageUploadView = new App.ImageUploadView({ model: config });
-        $('#main').prepend(imageUploadView.render().el);
-        App.dropdot();
-      }
-    });
-  },
-
   setImagePath: function() {
-    this.model.set('image', App.dropdot.image_store);
+    this.model.set('image', App.imager.image_store);
   },
 
   save: function(e) {
