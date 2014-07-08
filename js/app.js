@@ -50,6 +50,7 @@ App.dropdot = function() {
       url: form.attr('action'), // Grabs form's action src
       type: 'POST',
       dataType: 'xml', // S3's XML response
+      autoUpload: false,
       disableImageResize: /Android(?!.*Chrome)|Opera/
         .test(window.navigator && navigator.userAgent),
       imageMaxWidth: 800,
@@ -74,7 +75,24 @@ App.dropdot = function() {
         {action: 'saveImage'}
       ],
       add: function(e, data) {
-        console.log('add fired');
+        var form = $(this);
+
+        $.ajax({
+          url: "/uploads/signed",
+          type: 'GET',
+          dataType: 'json',
+          data: {title: data.files[0].name}, // Send filename to /signed for the signed response
+          async: false,
+          success: function(data) {
+            // Now that we have our data, we update the form so it contains all
+            // the needed data to sign the request
+            form.find('input[name=key]').val(data.key);
+            form.find('input[name=policy]').val(data.policy);
+            form.find('input[name=signature]').val(data.signature);
+            form.find('input[name=Content-Type]').val(data.contentType);
+          }
+        })
+        data.submit();
       },
       send: function(e, data) {
         $('.progress-bar-indication').fadeIn(); // Display widget progress bar
@@ -98,32 +116,8 @@ App.dropdot = function() {
           $('.bar').css('width', 0)
         })
       }
-    }).bind('fileuploadadd', getSigned)
-  });
-
-  function getSigned(event, data) {
-    var form = $(this);
-    var file = data.files[0];
-
-    console.log('file', file);
-
-    $.ajax({
-      url: "/uploads/signed",
-      type: 'GET',
-      dataType: 'json',
-      data: {title: data.files[0].name}, // Send filename to /signed for the signed response
-      async: false,
-      success: function(data) {
-        // Now that we have our data, we update the form so it contains all
-        // the needed data to sign the request
-        form.find('input[name=key]').val(data.key);
-        form.find('input[name=policy]').val(data.policy);
-        form.find('input[name=signature]').val(data.signature);
-        form.find('input[name=Content-Type]').val(data.contentType);
-      }
     })
-    data.submit();
-  }
+  });
 
 };
 

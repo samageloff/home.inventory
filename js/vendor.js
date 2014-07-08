@@ -1963,6 +1963,7 @@ $.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
                 */
             ],
             add: function (e, data) {
+                console.log('this doesnt get touched');
                 var $this = $(this);
                 data.process(function () {
                     return $this.fileupload('process', data);

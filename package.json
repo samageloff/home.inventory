@@ -15,6 +15,12 @@
     "test": "grunt test"
   },
   "dependencies": {
+    "gm": "1.13.x",
+    "pkgcloud": "0.8.x",
+    "knox": "0.8.x",
+    "mime": "1.2.x",
+    "async": "0.2.x",
+    "lodash": "2.4.1",
     "express": "~3.4.2",
     "mongoose": "~3.8.3",
     "handlebars-runtime": "~1.0.12",
@@ -26,6 +32,7 @@
     "browserify": "2.36.1",
     "chai": "~1.9.0",
     "connect-livereload": "^0.4.0",
+    "blueimp-file-upload-expressjs": "0.2.9",
     "less-middleware": "*",
     "hjs": "*",
     "node-uuid": "*",
@@ -33,6 +40,7 @@
     "mime": "*",
     "moment": "*",
     "gm": "1.9.0",
+    "should": "2.1.x",
     "mongoose-attachments": "0.1.0",
     "mongoose-attachments-localfs": "0.1.1",
     "mongoose-attachments-aws2js": "1.0.0",
@@ -76,6 +84,7 @@
     "proxyquire": "~0.5.2",
     "sinon": "~1.8.1",
     "sinon-chai": "~2.5.0",
+    "superagent": "0.15.x",
     "time-grunt": "~0.2.3"
   }
 }
