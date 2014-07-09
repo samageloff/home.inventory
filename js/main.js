@@ -1,22 +1,5 @@
 var App = App || {};
 
-App.AwsConfigModel = Backbone.Model.extend({
-
-  urlRoot: 'uploads/config',
-
-  defaults: {
-    aws_bucket: '',
-    host: '',
-    aws_key: ''
-  },
-
-  parse: function(response) {
-    response.id = response._id;
-    return response;
-  }
-});
-var App = App || {};
-
 App.CategoryIndexModel = Backbone.Model.extend({
   defaults: {
     _id: '',
@@ -78,7 +61,7 @@ App.NewItemModel = Backbone.Model.extend({
     category: '',
     description: '',
     slug: '',
-    image: '',
+    image: [],
     quantity: 0,
     value: 0
   },
@@ -263,9 +246,10 @@ App.SingleItemEditView = Backbone.View.extend({
       this.getImage();
     }, this);
 
-    this.uploader();
+    Backbone.pubSub.on('image-remove', function() {
+      this.unsetImage();
+    }, this);
 
-    console.log(this);
   },
 
   render: function() {
@@ -277,30 +261,36 @@ App.SingleItemEditView = Backbone.View.extend({
     return this;
   },
 
-  uploader: function() {
-    var config = new App.AwsConfigModel();
-    config.fetch({
-      success: function() {
-        var imageUploadView = new App.ImageUploadView({ model: config });
-        $('#main').prepend(imageUploadView.render().el);
-        App.dropdot();
-      }
-    });
-  },
-
   getImage: function() {
-    this.model.save('image', App.dropdot.image_store);
+    this.model.save('image', App.imager.image_store);
   },
 
   removeImage: function(e) {
     e.preventDefault();
+
+    var $self = $(e.target),
+        image_id = $self.data('id');
+
+    if (image_id) {
+      $.get('api/remove/' + image_id, function(data) {
+        $self.closest('.media-block').fadeOut('250');
+        Backbone.pubSub.trigger('image-remove', this);
+      })
+      .fail(function() {
+        console.log('Failed to remove the image.');
+      })
+    }
+    else {
+      $self.closest('.media-block').fadeOut('250');
+      Backbone.pubSub.trigger('image-remove', this);
+    }
+
+  },
+
+  unsetImage: function() {
+    console.log('unset image');
     this.model.unset('image');
     this.model.save();
-
-    // TODO: render models independently?
-    // kludgy because views are nested
-    $('.icon-close')
-      .closest('.media-block').remove();
   },
 
   save: function(e) {
@@ -322,22 +312,10 @@ App.SingleItemEditView = Backbone.View.extend({
     }
   },
 
-  remove: function() {
-    Backbone.Validation.unbind(this);
-    return Backbone.View.prototype.remove.apply(this, arguments);
-  },
-
   cancel: function(e) {
     e.preventDefault();
     this.onClose();
     App.router.navigate('#/view/' + this.model.id);
-  },
-
-  saved: function() {
-    var btn = $('#save');
-        btn
-          .attr('disabled', 'disabled')
-          .text('Saved');
   },
 
   onClose: function() {
@@ -403,11 +381,7 @@ App.ImageUploadView = Backbone.View.extend({
   },
 
   render: function() {
-    var markup = this.model.toJSON();
-
-    this.$el.empty();
-    this.setElement(this.template(markup));
-
+    this.setElement(this.template());
     return this;
   },
 
@@ -428,7 +402,8 @@ App.ImageUploadView = Backbone.View.extend({
     // find image + add image src
     placeholder
       .find('img')
-      .attr('src', App.dropdot.image_store);
+      // apply thumb
+      .attr('src', App.imager.image_store[0]);
 
     // find close button add icon + href
     placeholder
@@ -517,14 +492,10 @@ App.NewItemView = Backbone.View.extend({
     _.bindAll(this, 'save');
     Backbone.Validation.bind(this);
 
-    // Fetch AWS Config model
-    this.uploader();
-
     // Listen for image upload and pass to current model
     Backbone.pubSub.on('image-upload-complete', function() {
       this.setImagePath();
     }, this);
-
   },
 
   render: function() {
@@ -536,22 +507,8 @@ App.NewItemView = Backbone.View.extend({
     return this;
   },
 
-  uploader: function() {
-    var config = new App.AwsConfigModel();
-    config.fetch({
-      // Create new ImageUploadView
-      // Prepend it to NewItemView
-      // Initialize Dropdot method
-      success: function() {
-        var imageUploadView = new App.ImageUploadView({ model: config });
-        $('#main').prepend(imageUploadView.render().el);
-        App.dropdot();
-      }
-    });
-  },
-
   setImagePath: function() {
-    this.model.set('image', App.dropdot.image_store);
+    this.model.set('image', App.imager.image_store);
   },
 
   save: function(e) {
@@ -659,11 +616,15 @@ App.Router = Backbone.Router.extend({
   },
 
   edit: function(id) {
-    var model = new App.SingleItemModel({ id: id });
+    var model = new App.SingleItemModel({ id: id }),
+        imageUploadView = new App.ImageUploadView();
     model.fetch({
       success: function() {
         var singleItemEditView = new App.SingleItemEditView({ model: model });
-        $('#main').html(singleItemEditView.render().el);
+        $('#main')
+          .html(singleItemEditView.render().el)
+          .prepend(imageUploadView.render().el);
+        App.imager();
       }
     });
   },
@@ -680,11 +641,14 @@ App.Router = Backbone.Router.extend({
 
   new: function() {
     var model = new App.NewItemModel();
-
     model.fetch({
       success: function() {
-        var newItemView = new App.NewItemView({ model: model });
-        $('#main').html(newItemView.render().el);
+        var newItemView = new App.NewItemView({ model: model }),
+            imageUploadView = new App.ImageUploadView();
+        $('#main')
+          .html(newItemView.render().el)
+          .prepend(imageUploadView.render().el);
+        App.imager();
       }
     });
   },
@@ -728,93 +692,33 @@ App.configxhr = function() {
   });
 };
 
-$.blueimp.fileupload.prototype.processActions.duplicateImage = function (data, options) {
-  if (data.canvas) {
-    data.files.push(data.files[data.index]);
-  }
-  return data;
-};
+App.imager = function() {
+  var url = 'api/upload',
+      $loading = $('.progress-bar-indication');
 
-App.dropdot = function() {
+  $('#fileupload').fileupload({
+    url: url,
+    dataType: 'json',
 
-  $('.direct-upload').each(function() {
-    /* For each file selected, process and upload */
+    add: function (e, data) {
+      $loading.addClass('active');
+      data.submit();
+    },
 
-    var form = $(this);
-
-    $(this).fileupload({
-      url: form.attr('action'), // Grabs form's action src
-      type: 'POST',
-      dataType: 'xml', // S3's XML response
-      autoUpload: false,
-      disableImageResize: /Android(?!.*Chrome)|Opera/
-        .test(window.navigator && navigator.userAgent),
-      imageMaxWidth: 800,
-      imageMaxHeight: 800,
-      imageCrop: false,
-      processQueue: [
-        {
-          action: 'loadImage',
-          fileTypes: /^image\/(gif|jpeg|png)$/,
-          maxFileSize: 20000000 // 20MB
-        },
-        {
-          action: 'resizeImage',
-          maxWidth: 800
-        },
-        {action: 'saveImage'},
-        {action: 'duplicateImage'},
-        {
-          action: 'resizeImage',
-          maxWidth: 80,
-        },
-        {action: 'saveImage'}
-      ],
-      add: function(e, data) {
-        var form = $(this);
-
-        $.ajax({
-          url: "/uploads/signed",
-          type: 'GET',
-          dataType: 'json',
-          data: {title: data.files[0].name}, // Send filename to /signed for the signed response
-          async: false,
-          success: function(data) {
-            // Now that we have our data, we update the form so it contains all
-            // the needed data to sign the request
-            form.find('input[name=key]').val(data.key);
-            form.find('input[name=policy]').val(data.policy);
-            form.find('input[name=signature]').val(data.signature);
-            form.find('input[name=Content-Type]').val(data.contentType);
-          }
-        })
-        data.submit();
-      },
-      send: function(e, data) {
-        $('.progress-bar-indication').fadeIn(); // Display widget progress bar
-      },
-      progress: function(e, data){
-        var percent = Math.round((e.loaded / e.total) * 100)
-        console.log('percent', percent);
-        $('.progress-bar-indication .meter').css('width', percent + '%') // Update progress bar percentage
-        $('.progress-bar-indication .meter').text(percent + '%');
-      },
-      fail: function(e, data) {
-        console.log('fail')
-      },
-      success: function(data) {
-        var url = $(data).find('Location').text(); // Find location value from XML response
-        App.dropdot.image_store = url;
-        Backbone.pubSub.trigger('image-upload-complete', App.dropdot.image_store);
-      },
-      done: function (event, data) {
-        $('.progress-bar-indication').fadeOut(300, function() {
-          $('.bar').css('width', 0)
-        })
-      }
-    })
-  });
-
+    done: function (e, data) {
+      $loading.removeClass('active');
+      $.each(data.files, function (index, file) {
+        var uri = data.result.cdnUri,
+            path = data.result.uploaded[0];
+        App.imager.image_store = [
+          uri + '/thumb_' + path,
+          uri + '/gallery_' + path,
+          uri + '/large_' + path,
+          path];
+        Backbone.pubSub.trigger('image-upload-complete', App.imager.image_store);
+      });
+    }
+  })
 };
 
 // Extend the callbacks to work with Bootstrap, as used in this example
@@ -847,25 +751,3 @@ $.fn.serializeObject = function () {
 
 /* Barebones Pub/Sub */
 Backbone.pubSub = _.extend({}, Backbone.Events);
-
-/* Helper Methods */
-Backbone.View.prototype.close = function() {
-  this.remove();
-  this.unbind();
-  if (this.onClose) {
-    this.onClose();
-  }
-};
-
-function AppView () {
-  this.showView(view);
-
-  if (this.currentView) {
-   this.currentView.close();
-  }
-
-  this.currentView = view;
-  this.currentView.render();
-
-  $("#main").html(this.currentView.el);
-};

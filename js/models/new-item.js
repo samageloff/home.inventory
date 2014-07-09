@@ -9,7 +9,7 @@ App.NewItemModel = Backbone.Model.extend({
     category: '',
     description: '',
     slug: '',
-    image: '',
+    image: [],
     quantity: 0,
     value: 0
   },

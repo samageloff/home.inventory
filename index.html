@@ -79,7 +79,7 @@
 
     <script type="text/template" id="category-items-template">
       <a href="#/view/<%= _id %>" class="grid-item">
-        <img src="http://placekitten.com/42/42" alt="">
+        <img src="<%= image[0] %>" alt="">
         <h4><%= title %></h4>
         <div class="controls">
           <span class="edit">Edit</span>
@@ -90,13 +90,13 @@
 
     <script type="text/template" id="single-view-template">
       <section class="detail">
-        <% if (!image) { %>
+        <% if (!image[1]) { %>
         <figure class="no-image">
           <img src="images/no-image.png" alt="">
         <% }
         else { %>
         <figure>
-          <img src="<%= image %>" alt="">
+          <img src="<%= image[1] %>" alt="">
         <% } %>
           <div class="detail-wrap">
             <a href="#" class="icon-close close"></a>
@@ -122,24 +122,13 @@
     <script type="text/template" id="image-upload-template">
       <section class="form-layout">
         <div class="bd trim">
-          <div class="media-block upload-placeholder"></div>
-          <form action="http://<%= aws_bucket %>.<%= host %>" role="form" method="post" enctype="multipart/form-data" class="direct-upload">
-            <input type="hidden" name="key">
-            <input type="hidden" name="AWSAccessKeyId" value="<%= aws_key %>">
-            <input type="hidden" name="acl" value="public-read">
-            <input type="hidden" name="policy">
-            <input type="hidden" name="signature">
-            <input type="hidden" name="success_action_status" value="201">
-            <input type="hidden" name="Content-Type">
-            <div class="progress-bar-indication">
-              <span class="meter">
-                <p></p>
-              </span>
-            </div>
-            <input class="share-url" type="hidden" />
+          <div class="media-block upload-placeholder">
+            <div class="progress-bar-indication"></div>
+          </div>
+          <form action="/api/upload" role="form" method="post" enctype="multipart/form-data" class="direct-upload">
             <button class="file-upload">
               <span class="icon-plus">Image</span>
-              <input capture="camera" type="file" name="file" id="file">
+              <input capture="camera" type="file" name="image" id="fileupload">
             </button>
           </form>
         </div>
@@ -182,10 +171,10 @@
     <script type="text/template" id="edit-item-template">
       <section class="form-layout">
         <div class="bd">
-          <% if (image) { %>
+          <% if (image[0]) { %>
           <div class="media-block" id="upload-placeholder">
-            <img src="<%= image %>" alt="">
-            <a href="#" class="icon-close"></a>
+            <img src="<%= image[0] %>" alt="">
+            <a href="#" class="icon-close" data-id="<%= image[3] %>"></a>
           </div>
           <% } %>
           <form id="edit-item-form" action="#">

@@ -38,11 +38,15 @@ App.Router = Backbone.Router.extend({
   },
 
   edit: function(id) {
-    var model = new App.SingleItemModel({ id: id });
+    var model = new App.SingleItemModel({ id: id }),
+        imageUploadView = new App.ImageUploadView();
     model.fetch({
       success: function() {
         var singleItemEditView = new App.SingleItemEditView({ model: model });
-        $('#main').html(singleItemEditView.render().el);
+        $('#main')
+          .html(singleItemEditView.render().el)
+          .prepend(imageUploadView.render().el);
+        App.imager();
       }
     });
   },
@@ -59,11 +63,14 @@ App.Router = Backbone.Router.extend({
 
   new: function() {
     var model = new App.NewItemModel();
-
     model.fetch({
       success: function() {
-        var newItemView = new App.NewItemView({ model: model });
-        $('#main').html(newItemView.render().el);
+        var newItemView = new App.NewItemView({ model: model }),
+            imageUploadView = new App.ImageUploadView();
+        $('#main')
+          .html(newItemView.render().el)
+          .prepend(imageUploadView.render().el);
+        App.imager();
       }
     });
   },

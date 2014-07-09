@@ -9,11 +9,7 @@ App.ImageUploadView = Backbone.View.extend({
   },
 
   render: function() {
-    var markup = this.model.toJSON();
-
-    this.$el.empty();
-    this.setElement(this.template(markup));
-
+    this.setElement(this.template());
     return this;
   },
 
@@ -34,7 +30,8 @@ App.ImageUploadView = Backbone.View.extend({
     // find image + add image src
     placeholder
       .find('img')
-      .attr('src', App.dropdot.image_store);
+      // apply thumb
+      .attr('src', App.imager.image_store[0]);
 
     // find close button add icon + href
     placeholder

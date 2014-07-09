@@ -4,8 +4,8 @@ var application_root = __dirname,
     routes = require('./app/routes'),
     http = require('http'),
     path = require('path'),
-    mongoose = require('mongoose'),
-    config = require('./app/config');
+    config = require('./app/imager'),
+    mongoose = require('mongoose');
 
 // Create server
 var app = express();

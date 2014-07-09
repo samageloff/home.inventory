@@ -1,10 +1,4 @@
-var api = require('../controllers/api'),
-    uploads = require('../controllers/uploads'),
-    crypto = require('crypto'),
-    mime = require('mime'),
-    uuid = require('node-uuid'),
-    moment = require('moment'),
-    config = require('../app/config');
+var api = require('../controllers/api');
 
 module.exports.initialize = function(app) {
 
@@ -14,10 +8,11 @@ module.exports.initialize = function(app) {
   app.get('/api/categories', api.categories);
   app.get('/api/category/:name', api.category);
 
-  app.get('/uploads/config', uploads.config);
-  app.get('/uploads/signed', uploads.signed);
-
   app.post('/api/items', api.insert);
+
+  // images
+  app.post('/api/upload', api.upload);
+  app.get('/api/remove/:id', api.remove);
 
   app.put('/api/items/:id', api.update);
 

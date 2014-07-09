@@ -17,9 +17,10 @@ App.SingleItemEditView = Backbone.View.extend({
       this.getImage();
     }, this);
 
-    this.uploader();
+    Backbone.pubSub.on('image-remove', function() {
+      this.unsetImage();
+    }, this);
 
-    console.log(this);
   },
 
   render: function() {
@@ -31,30 +32,36 @@ App.SingleItemEditView = Backbone.View.extend({
     return this;
   },
 
-  uploader: function() {
-    var config = new App.AwsConfigModel();
-    config.fetch({
-      success: function() {
-        var imageUploadView = new App.ImageUploadView({ model: config });
-        $('#main').prepend(imageUploadView.render().el);
-        App.dropdot();
-      }
-    });
-  },
-
   getImage: function() {
-    this.model.save('image', App.dropdot.image_store);
+    this.model.save('image', App.imager.image_store);
   },
 
   removeImage: function(e) {
     e.preventDefault();
+
+    var $self = $(e.target),
+        image_id = $self.data('id');
+
+    if (image_id) {
+      $.get('api/remove/' + image_id, function(data) {
+        $self.closest('.media-block').fadeOut('250');
+        Backbone.pubSub.trigger('image-remove', this);
+      })
+      .fail(function() {
+        console.log('Failed to remove the image.');
+      })
+    }
+    else {
+      $self.closest('.media-block').fadeOut('250');
+      Backbone.pubSub.trigger('image-remove', this);
+    }
+
+  },
+
+  unsetImage: function() {
+    console.log('unset image');
     this.model.unset('image');
     this.model.save();
-
-    // TODO: render models independently?
-    // kludgy because views are nested
-    $('.icon-close')
-      .closest('.media-block').remove();
   },
 
   save: function(e) {
@@ -76,22 +83,10 @@ App.SingleItemEditView = Backbone.View.extend({
     }
   },
 
-  remove: function() {
-    Backbone.Validation.unbind(this);
-    return Backbone.View.prototype.remove.apply(this, arguments);
-  },
-
   cancel: function(e) {
     e.preventDefault();
     this.onClose();
     App.router.navigate('#/view/' + this.model.id);
-  },
-
-  saved: function() {
-    var btn = $('#save');
-        btn
-          .attr('disabled', 'disabled')
-          .text('Saved');
   },
 
   onClose: function() {

@@ -803,11 +803,6 @@ input[type="email"]:focus, input[type="number"]:focus, input[type="password"]:fo
 textarea:focus {
   background: white; }
 
-.progress-animated .progress-bar,
-.progress-animated .bar {
-  background: url("../img/progressbar.gif") !important;
-  filter: none; }
-
 /* Bitters */
 section {
   max-width: 68em;
@@ -950,17 +945,21 @@ section {
 .items.grid-items-lines .grid-item {
   display: table;
   height: auto;
-  padding: 1em;
+  padding: .75em;
   text-align: left; }
 .items.grid-items-lines .grid-item img {
   float: left;
   margin-right: 1em;
   margin-bottom: auto;
-  opacity: .8; }
+  opacity: .8;
+  width: 80px; }
 .items.grid-items-lines h4 {
   color: black;
+  display: table-cell;
   font-size: 1em;
-  margin-top: 10px; }
+  width: 167px;
+  text-align: left;
+  vertical-align: middle; }
 .items.grid-items-lines .grid-item span {
   color: #477dca; }
   .items.grid-items-lines .grid-item span:hover {
@@ -972,6 +971,7 @@ section {
 .items.grid-items-lines .controls {
   display: table-cell;
   font-size: .75rem;
+  width: 40px;
   text-align: right;
   vertical-align: middle; }
 
@@ -1051,32 +1051,10 @@ footer {
 
 /* Progress Bar */
 .progress-bar-indication {
-  background-color: #f2f2f2;
-  border: 1px solid #dddddd;
-  box-shadow: inset 0 0 3px 0 rgba(115, 115, 115, 0.15);
-  border-radius: 0.1875em;
-  display: none;
-  margin: 0 auto;
-  width: 100%; }
-  .progress-bar-indication > span.meter {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    background-color: #477dca;
-    background-size: 40px 40px;
-    background-repeat: repeat-x;
-    border: 1px solid #c9c9c9;
-    border-radius: 0.125em;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    color: white;
-    display: block;
-    height: 100%;
-    padding: 3px 7px;
-    width: 0%; }
-  .progress-bar-indication p {
-    margin-bottom: 0;
-    padding: .1em .5em;
-    font-weight: 800;
-    color: white;
-    text-shadow: 0 0 1px black; }
+  -webkit-transition: height 0.5s ease-out;
+  -moz-transition: height 0.5s ease-out;
+  transition: height 0.5s ease-out;
+  background: url("../images/ajax-loader.gif") no-repeat center;
+  height: 0; }
+  .progress-bar-indication.active {
+    height: 60px; }
