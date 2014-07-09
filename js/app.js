@@ -33,15 +33,23 @@ App.configxhr = function() {
 };
 
 App.imager = function() {
-  var url = 'api/upload';
+  var url = 'api/upload',
+      $loading = $('.progress-bar-indication');
+
   $('#fileupload').fileupload({
     url: url,
     dataType: 'json',
+
+    add: function (e, data) {
+      $loading.addClass('active');
+      data.submit();
+    },
+
     done: function (e, data) {
+      $loading.removeClass('active');
       $.each(data.files, function (index, file) {
         var uri = data.result.cdnUri,
             path = data.result.uploaded[0];
-
         App.imager.image_store = [
           uri + '/thumb_' + path,
           uri + '/gallery_' + path,
@@ -49,14 +57,7 @@ App.imager = function() {
           path];
         Backbone.pubSub.trigger('image-upload-complete', App.imager.image_store);
       });
-    },
-    progressall: function (e, data) {
-      var progress = parseInt(data.loaded / data.total * 100, 10);
-      console.log('progress', progress);
-      $('#progress .progress-bar').css(
-        'width',
-        progress + '%'
-    )}
+    }
   })
 };
 

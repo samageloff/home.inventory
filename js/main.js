@@ -268,21 +268,22 @@ App.SingleItemEditView = Backbone.View.extend({
   removeImage: function(e) {
     e.preventDefault();
 
-    $('.icon-close').on('click', function() {
-      var $self = $(this),
-          image_id = $(this).data('id');
+    var $self = $(e.target),
+        image_id = $self.data('id');
 
-      console.log('image_id', image_id);
-
+    if (image_id) {
       $.get('api/remove/' + image_id, function(data) {
-        console.log('completed image removal');
-        $self.closest('.media-block').remove();
+        $self.closest('.media-block').fadeOut('250');
         Backbone.pubSub.trigger('image-remove', this);
       })
       .fail(function() {
-        alert( "error" );
+        console.log('Failed to remove the image.');
       })
-    });
+    }
+    else {
+      $self.closest('.media-block').fadeOut('250');
+      Backbone.pubSub.trigger('image-remove', this);
+    }
 
   },
 
@@ -311,22 +312,10 @@ App.SingleItemEditView = Backbone.View.extend({
     }
   },
 
-  remove: function() {
-    Backbone.Validation.unbind(this);
-    return Backbone.View.prototype.remove.apply(this, arguments);
-  },
-
   cancel: function(e) {
     e.preventDefault();
     this.onClose();
     App.router.navigate('#/view/' + this.model.id);
-  },
-
-  saved: function() {
-    var btn = $('#save');
-        btn
-          .attr('disabled', 'disabled')
-          .text('Saved');
   },
 
   onClose: function() {
@@ -704,15 +693,23 @@ App.configxhr = function() {
 };
 
 App.imager = function() {
-  var url = 'api/upload';
+  var url = 'api/upload',
+      $loading = $('.progress-bar-indication');
+
   $('#fileupload').fileupload({
     url: url,
     dataType: 'json',
+
+    add: function (e, data) {
+      $loading.addClass('active');
+      data.submit();
+    },
+
     done: function (e, data) {
+      $loading.removeClass('active');
       $.each(data.files, function (index, file) {
         var uri = data.result.cdnUri,
             path = data.result.uploaded[0];
-
         App.imager.image_store = [
           uri + '/thumb_' + path,
           uri + '/gallery_' + path,
@@ -720,14 +717,7 @@ App.imager = function() {
           path];
         Backbone.pubSub.trigger('image-upload-complete', App.imager.image_store);
       });
-    },
-    progressall: function (e, data) {
-      var progress = parseInt(data.loaded / data.total * 100, 10);
-      console.log('progress', progress);
-      $('#progress .progress-bar').css(
-        'width',
-        progress + '%'
-    )}
+    }
   })
 };
 

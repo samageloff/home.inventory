@@ -90,7 +90,7 @@
 
     <script type="text/template" id="single-view-template">
       <section class="detail">
-        <% if (!image) { %>
+        <% if (!image[1]) { %>
         <figure class="no-image">
           <img src="images/no-image.png" alt="">
         <% }
@@ -122,9 +122,10 @@
     <script type="text/template" id="image-upload-template">
       <section class="form-layout">
         <div class="bd trim">
-          <div class="media-block upload-placeholder"></div>
-          <form action="/api/upload" role="form" method="post" enctype="multipart/form-data" class="direct-upload">
+          <div class="media-block upload-placeholder">
             <div class="progress-bar-indication"></div>
+          </div>
+          <form action="/api/upload" role="form" method="post" enctype="multipart/form-data" class="direct-upload">
             <button class="file-upload">
               <span class="icon-plus">Image</span>
               <input capture="camera" type="file" name="image" id="fileupload">
@@ -170,7 +171,7 @@
     <script type="text/template" id="edit-item-template">
       <section class="form-layout">
         <div class="bd">
-          <% if (image) { %>
+          <% if (image[0]) { %>
           <div class="media-block" id="upload-placeholder">
             <img src="<%= image[0] %>" alt="">
             <a href="#" class="icon-close" data-id="<%= image[3] %>"></a>

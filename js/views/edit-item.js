@@ -39,21 +39,22 @@ App.SingleItemEditView = Backbone.View.extend({
   removeImage: function(e) {
     e.preventDefault();
 
-    $('.icon-close').on('click', function() {
-      var $self = $(this),
-          image_id = $(this).data('id');
+    var $self = $(e.target),
+        image_id = $self.data('id');
 
-      console.log('image_id', image_id);
-
+    if (image_id) {
       $.get('api/remove/' + image_id, function(data) {
-        console.log('completed image removal');
-        $self.closest('.media-block').remove();
+        $self.closest('.media-block').fadeOut('250');
         Backbone.pubSub.trigger('image-remove', this);
       })
       .fail(function() {
-        alert( "error" );
+        console.log('Failed to remove the image.');
       })
-    });
+    }
+    else {
+      $self.closest('.media-block').fadeOut('250');
+      Backbone.pubSub.trigger('image-remove', this);
+    }
 
   },
 
@@ -82,22 +83,10 @@ App.SingleItemEditView = Backbone.View.extend({
     }
   },
 
-  remove: function() {
-    Backbone.Validation.unbind(this);
-    return Backbone.View.prototype.remove.apply(this, arguments);
-  },
-
   cancel: function(e) {
     e.preventDefault();
     this.onClose();
     App.router.navigate('#/view/' + this.model.id);
-  },
-
-  saved: function() {
-    var btn = $('#save');
-        btn
-          .attr('disabled', 'disabled')
-          .text('Saved');
   },
 
   onClose: function() {
