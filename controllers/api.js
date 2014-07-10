@@ -85,6 +85,7 @@ module.exports = {
 
   // Insert an item
   insert: function(request, response) {
+    console.log('INSERTING item ' + request);
     var item = new models.ItemModel;
         item.title = request.body.title;
         item.category = request.body.category;

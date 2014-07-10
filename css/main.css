@@ -717,8 +717,11 @@ h1 {
   margin: .5em 0;
   text-align: center; }
 
-#main {
+#header + #main {
   padding-top: 60px; }
+
+#header.hide + #main {
+  padding-top: 0; }
 
 header {
   max-width: 68em;
@@ -735,6 +738,8 @@ header {
     content: "";
     display: table;
     clear: both; }
+  header.hide {
+    top: -60px; }
   header .header-content li {
     display: table-cell;
     vertical-align: middle; }
@@ -749,6 +754,7 @@ header {
       font-size: 1.15em;
       font-weight: 600;
       text-align: center;
+      text-transform: capitalize;
       width: 100%; }
 
 /* Media Block */
@@ -947,19 +953,21 @@ section {
   height: auto;
   padding: .75em;
   text-align: left; }
-.items.grid-items-lines .grid-item img {
-  float: left;
-  margin-right: 1em;
-  margin-bottom: auto;
-  opacity: .8;
-  width: 80px; }
-.items.grid-items-lines h4 {
-  color: black;
-  display: table-cell;
-  font-size: 1em;
-  width: 167px;
-  text-align: left;
-  vertical-align: middle; }
+  .items.grid-items-lines .grid-item .media-group {
+    display: table; }
+    .items.grid-items-lines .grid-item .media-group img {
+      float: left;
+      margin-right: 1em;
+      margin-bottom: auto;
+      opacity: 1;
+      min-width: 80px; }
+    .items.grid-items-lines .grid-item .media-group h4 {
+      display: table-cell;
+      color: black;
+      font-size: 1em;
+      padding-right: 1em;
+      text-align: left;
+      vertical-align: middle; }
 .items.grid-items-lines .grid-item span {
   color: #477dca; }
   .items.grid-items-lines .grid-item span:hover {
@@ -967,12 +975,13 @@ section {
   .items.grid-items-lines .grid-item span.icon-close {
     font-size: 1.35em;
     right: -5px;
+    padding: 10px;
     position: relative;
     top: 4px; }
 .items.grid-items-lines .controls {
   display: table-cell;
   font-size: .85rem;
-  width: 50px;
+  width: 66px;
   text-align: right;
   vertical-align: middle; }
 
@@ -986,9 +995,10 @@ section {
   .detail figure .icon-close {
     color: white;
     font-size: 1.5em;
+    padding: 10px;
     position: absolute;
-    right: 10px;
-    top: 10px; }
+    right: 0;
+    top: 2px; }
   .detail figure .value-tag {
     bottom: 1em;
     font-size: 24px;

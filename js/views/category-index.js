@@ -8,6 +8,7 @@ App.CategoryIndexView = Backbone.View.extend({
     this.collection.fetch({reset: true});
     this.render();
     this.listenTo(this.collection, 'reset', this.render)
+    Backbone.pubSub.trigger('header-default', this);
   },
 
   render: function() {

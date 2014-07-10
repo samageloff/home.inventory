@@ -20,7 +20,11 @@ App.ItemView = Backbone.View.extend({
   },
 
   delete: function(e) {
+    var collection_length = this.model.collection.length,
+        category = this.model.get('slug');
+
     e.preventDefault();
+
     if (window.confirm('Are you sure?')) {
 
       var $self = $(e.target),
@@ -37,7 +41,14 @@ App.ItemView = Backbone.View.extend({
 
       this.model.destroy();
       this.remove();
-      App.router.navigate('#/categories');
+
+      if (collection_length > 1) {
+        App.router.navigate('#/category/' + category);
+      }
+      else {
+        App.router.navigate('#/categories');
+      }
+
     }
   }
 });

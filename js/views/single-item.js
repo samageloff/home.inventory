@@ -7,6 +7,10 @@ App.SingleItemView = Backbone.View.extend({
   },
   template: _.template($('#single-view-template').html()),
 
+  initialize: function() {
+    Backbone.pubSub.trigger('header-hide', this);
+  },
+
   render: function() {
     var markup = this.model.toJSON();
 

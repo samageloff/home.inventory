@@ -5,6 +5,11 @@ App.HomeView = Backbone.View.extend({
   template: _.template($('#home-template').html()),
   getStarted: _.template($('#get-started-template').html()),
 
+  initialize: function() {
+    Backbone.pubSub.trigger('header-show', this);
+    Backbone.pubSub.trigger('header-home', this);
+  },
+
   render: function() {
     this.$el.empty();
     var count = this.model.get('count');

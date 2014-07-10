@@ -20,7 +20,7 @@
     <script type="text/template" id="header-template">
       <div class="header-content">
         <ul>
-          <li><a href="#/" class="icon-home">Home</a></li>
+          <li class="navigation"><a href="#" class="icon-home">Home</a></li>
           <li class="location"></li>
           <li><a href="#/new" class="icon-add">Add</a></li>
         </ul>
@@ -79,10 +79,11 @@
 
     <script type="text/template" id="category-items-template">
       <a href="#/view/<%= _id %>" class="grid-item">
-        <img src="<%= image[0] %>" alt="">
-        <h4><%= title %></h4>
+        <div class="media-group">
+          <img src="<%= image[0] %>" alt="">
+          <h4><%= title %></h4>
+        </div>
         <div class="controls">
-          <span class="edit">Edit</span>
           <span class="delete icon-close" data-id="<%= image[3] %>"></span>
         </div>
       </a>

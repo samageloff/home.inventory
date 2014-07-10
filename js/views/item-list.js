@@ -10,7 +10,9 @@ App.ItemListView = Backbone.View.extend({
     this.collection.fetch({reset: true});
     this.render();
 
-    this.listenTo(this.collection, 'reset', this.render)
+    this.listenTo(this.collection, 'reset', this.render);
+    Backbone.pubSub.trigger('header-show', this);
+    Backbone.pubSub.trigger('item-list', this);
   },
 
   render: function() {
