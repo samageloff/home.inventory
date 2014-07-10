@@ -965,13 +965,14 @@ section {
   .items.grid-items-lines .grid-item span:hover {
     text-decoration: underline; }
   .items.grid-items-lines .grid-item span.icon-close {
+    font-size: 1.35em;
     right: -5px;
     position: relative;
-    top: 2px; }
+    top: 4px; }
 .items.grid-items-lines .controls {
   display: table-cell;
-  font-size: .75rem;
-  width: 40px;
+  font-size: .85rem;
+  width: 50px;
   text-align: right;
   vertical-align: middle; }
 

@@ -10,9 +10,8 @@ App.ItemView = Backbone.View.extend({
   render: function() {
     var markup = this.model.toJSON();
     this.$el.empty();
-    this.$el.html(this.template(this.model.toJSON()));
-    return this;
     this.setElement(this.template(markup));
+    return this;
   },
 
   edit: function(e) {
@@ -23,6 +22,19 @@ App.ItemView = Backbone.View.extend({
   delete: function(e) {
     e.preventDefault();
     if (window.confirm('Are you sure?')) {
+
+      var $self = $(e.target),
+          image_id = $self.data('id');
+
+      if (image_id) {
+        $.get('api/remove/' + image_id, function(data) {
+          Backbone.pubSub.trigger('image-remove', this);
+        })
+        .fail(function() {
+          console.log('Failed to remove the image.');
+        })
+      }
+
       this.model.destroy();
       this.remove();
       App.router.navigate('#/categories');

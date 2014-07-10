@@ -392,17 +392,18 @@ section {
     }
 
     &.icon-close {
+      font-size: 1.35em;
       right: -5px;
       position: relative;
-      top: 2px;
+      top: 4px;
     }
 
   }
 
   .controls {
     display: table-cell;
-    font-size: .75rem;
-    width: 40px;
+    font-size: .85rem;
+    width: 50px;
     text-align: right;
     vertical-align: middle;
   }
