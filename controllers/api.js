@@ -95,21 +95,6 @@ module.exports = {
         item.quantity = request.body.quantity;
         item.image = request.body.image;
 
-        // // handle image array
-        // item.image = [];
-        // for (var i in request.body.image) {
-        //   var image = request.body.image[i];
-        //   console.log('IMAGE', image);
-        //   var imageObj = {
-        //     thumb: image['thumb'],
-        //     gallery: image['gallery'],
-        //     large: image['large']
-        //   };
-        //   item.image.push(imageObj);
-        // }
-
-    console.log("item", request);
-
     item.save(function(err) {
       if(!err) {
           console.log('app post', item);
@@ -180,6 +165,23 @@ module.exports = {
     imager.remove(files, function (err) {
       response.send(files)
     }, 'items')
+  },
+
+  autocomplete: function(request, response) {
+    return models.ItemModel.aggregate({
+      $group: {
+        _id: '$items',
+        suggestions: { $addToSet: '$category' }
+      }
+    },
+    function(err, items) {
+      if(!err) {
+        return response.send(items[0]);
+      }
+      else {
+        return console.log(err);
+      }
+    });
   }
 
 }

@@ -61,6 +61,23 @@ App.imager = function() {
   })
 };
 
+App.categoryService = function() {
+  $('#category').autocomplete({
+    serviceUrl: '/api/autocomplete',
+    transformResult: function(response) {
+      console.log(response);
+      return {
+        suggestions: $.map(response, function(dataItem) {
+          return { value: dataItem.valueField, data: dataItem.dataField };
+        })
+      };
+    },
+    onSelect: function (suggestion) {
+      alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
+    }
+  });
+};
+
 // Extend the callbacks to work with Bootstrap, as used in this example
 // See: http://thedersen.com/projects/backbone-validation/#configuration/callbacks
 _.extend(Backbone.Validation.callbacks, {

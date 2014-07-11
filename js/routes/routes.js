@@ -71,6 +71,7 @@ App.Router = Backbone.Router.extend({
           .html(newItemView.render().el)
           .prepend(imageUploadView.render().el);
         App.imager();
+        App.categoryService();
       }
     });
   },
