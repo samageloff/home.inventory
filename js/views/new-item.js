@@ -12,7 +12,6 @@ App.NewItemView = Backbone.View.extend({
     _.bindAll(this, 'save');
     Backbone.Validation.bind(this);
 
-    Backbone.pubSub.trigger('header-default', this);
     Backbone.pubSub.trigger('header-hide', this);
 
     // Listen for image upload and pass to current model
@@ -23,10 +22,7 @@ App.NewItemView = Backbone.View.extend({
 
   render: function() {
     var markup = this.model.toJSON();
-
-    this.$el.empty();
     this.setElement(this.template(markup));
-
     return this;
   },
 

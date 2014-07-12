@@ -13,7 +13,7 @@ App.SingleItemEditView = Backbone.View.extend({
     _.bindAll(this, 'save');
     Backbone.Validation.bind(this);
 
-    Backbone.pubSub.trigger('header-default', this);
+    Backbone.pubSub.trigger('header-hide', this);
 
     Backbone.pubSub.on('image-upload-complete', function() {
       this.getImage();

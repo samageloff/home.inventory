@@ -116,9 +116,15 @@ header {
   [class^="icon-"] {
     color: $medium-gray;
     font-size: 1em;
+    padding: 10px;
     position: absolute;
     right: 0;
-    top: 40%;
+    top: 22%;
+
+    &:hover {
+      color: $midnight;
+    }
+
   }
 
   &:empty {

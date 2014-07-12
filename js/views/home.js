@@ -15,17 +15,16 @@ App.HomeView = Backbone.View.extend({
     var count = this.model.get('count');
 
     if (count) {
-      // TODO: make this accessible
       var totalVal = this.model.get('value');
       this.model.set('value', App.convertLargeNum(totalVal));
-
       this.$el.html(this.template(this.model.toJSON()));
     }
     else {
       this.$el.html(this.getStarted());
     }
-
     return this;
-  }
+  },
+
+
 
 });

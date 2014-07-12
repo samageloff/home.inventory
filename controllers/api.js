@@ -85,7 +85,7 @@ module.exports = {
 
   // Insert an item
   insert: function(request, response) {
-    console.log('INSERTING item ' + request);
+    console.log('Insert item ' + request);
     var item = new models.ItemModel;
         item.title = request.body.title;
         item.category = request.body.category;
@@ -94,21 +94,6 @@ module.exports = {
         item.value = request.body.value;
         item.quantity = request.body.quantity;
         item.image = request.body.image;
-
-        // // handle image array
-        // item.image = [];
-        // for (var i in request.body.image) {
-        //   var image = request.body.image[i];
-        //   console.log('IMAGE', image);
-        //   var imageObj = {
-        //     thumb: image['thumb'],
-        //     gallery: image['gallery'],
-        //     large: image['large']
-        //   };
-        //   item.image.push(imageObj);
-        // }
-
-    console.log("item", request);
 
     item.save(function(err) {
       if(!err) {
