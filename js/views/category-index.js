@@ -7,7 +7,7 @@ App.CategoryIndexView = Backbone.View.extend({
     this.collection = new App.CategoryIndexCollection();
     this.collection.fetch({reset: true});
     this.render();
-    this.listenTo(this.collection, 'reset', this.render)
+    this.listenTo(this.collection, 'reset', this.render);
     Backbone.pubSub.trigger('header-default', this);
   },
 
@@ -24,7 +24,8 @@ App.CategoryIndexView = Backbone.View.extend({
     this.$el.append(categoryView.render().el);
   },
 
-  onClose: function(){
+  onClose: function() {
+    console.log('on close fired');
     this.model.unbind('change', this.render);
   }
 

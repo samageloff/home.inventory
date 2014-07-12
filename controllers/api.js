@@ -165,6 +165,23 @@ module.exports = {
     imager.remove(files, function (err) {
       response.send(files)
     }, 'items')
+  },
+
+  autocomplete: function(request, response) {
+    return models.ItemModel.aggregate({
+      $group: {
+        _id: '$items',
+        suggestions: { $addToSet: '$category' }
+      }
+    },
+    function(err, items) {
+      if(!err) {
+        return response.send(items[0]);
+      }
+      else {
+        return console.log(err);
+      }
+    });
   }
 
 }

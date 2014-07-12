@@ -196,7 +196,7 @@ App.CategoryIndexView = Backbone.View.extend({
     this.collection = new App.CategoryIndexCollection();
     this.collection.fetch({reset: true});
     this.render();
-    this.listenTo(this.collection, 'reset', this.render)
+    this.listenTo(this.collection, 'reset', this.render);
     Backbone.pubSub.trigger('header-default', this);
   },
 
@@ -213,7 +213,8 @@ App.CategoryIndexView = Backbone.View.extend({
     this.$el.append(categoryView.render().el);
   },
 
-  onClose: function(){
+  onClose: function() {
+    console.log('on close fired');
     this.model.unbind('change', this.render);
   }
 
@@ -762,6 +763,7 @@ App.Router = Backbone.Router.extend({
           .html(newItemView.render().el)
           .prepend(imageUploadView.render().el);
         App.imager();
+        App.categoryService();
       }
     });
   },
@@ -832,6 +834,23 @@ App.imager = function() {
       });
     }
   })
+};
+
+App.categoryService = function() {
+  $('#category').autocomplete({
+    serviceUrl: '/api/autocomplete',
+    transformResult: function(response) {
+      console.log(response);
+      return {
+        suggestions: $.map(response, function(dataItem) {
+          return { value: dataItem.valueField, data: dataItem.dataField };
+        })
+      };
+    },
+    onSelect: function (suggestion) {
+      alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
+    }
+  });
 };
 
 // Extend the callbacks to work with Bootstrap, as used in this example

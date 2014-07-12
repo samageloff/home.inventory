@@ -7,6 +7,7 @@ module.exports.initialize = function(app) {
   app.get('/api/items/:id', api.single);
   app.get('/api/categories', api.categories);
   app.get('/api/category/:name', api.category);
+  app.get('/api/autocomplete', api.autocomplete);
 
   app.post('/api/items', api.insert);
 
