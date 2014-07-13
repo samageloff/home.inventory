@@ -602,7 +602,6 @@ App.NewItemView = Backbone.View.extend({
   initialize: function() {
     _.bindAll(this, 'save');
     Backbone.Validation.bind(this);
-
     Backbone.pubSub.trigger('header-hide', this);
 
     // Listen for image upload and pass to current model
@@ -667,10 +666,8 @@ App.SingleItemView = Backbone.View.extend({
     var markup = this.model.toJSON();
 
     this.$el.empty();
-    this.$el.html(this.template(this.model.toJSON()));
-    return this;
-
     this.setElement(this.template(markup));
+    return this;
   },
 
   close: function(e) {
@@ -729,20 +726,6 @@ App.Router = Backbone.Router.extend({
     $('#main').html(categoryListView.render().el);
   },
 
-  edit: function(id) {
-    var model = new App.SingleItemModel({ id: id }),
-        imageUploadView = new App.ImageUploadView();
-    model.fetch({
-      success: function() {
-        var singleItemEditView = new App.SingleItemEditView({ model: model });
-        $('#main')
-          .html(singleItemEditView.render().el)
-          .prepend(imageUploadView.render().el);
-        App.imager();
-      }
-    });
-  },
-
   view: function(id) {
     var model = new App.SingleItemModel({ id: id });
     model.fetch({
@@ -764,6 +747,22 @@ App.Router = Backbone.Router.extend({
           .prepend(imageUploadView.render().el);
         App.imager();
         App.categoryService();
+        App.displayToggle();
+      }
+    });
+  },
+
+  edit: function(id) {
+    var model = new App.SingleItemModel({ id: id }),
+        imageUploadView = new App.ImageUploadView();
+    model.fetch({
+      success: function() {
+        var singleItemEditView = new App.SingleItemEditView({ model: model });
+        $('#main')
+          .html(singleItemEditView.render().el)
+          .prepend(imageUploadView.render().el);
+        App.imager();
+        App.displayToggle();
       }
     });
   },
@@ -839,18 +838,21 @@ App.imager = function() {
 App.categoryService = function() {
   $('#category').autocomplete({
     serviceUrl: '/api/autocomplete',
-    transformResult: function(response) {
-      console.log(response);
-      return {
-        suggestions: $.map(response, function(dataItem) {
-          return { value: dataItem.valueField, data: dataItem.dataField };
-        })
-      };
-    },
-    onSelect: function (suggestion) {
-      alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
-    }
+    preventBadQueries: true
   });
+};
+
+/* Helper method */
+App.displayToggle = function() {
+  var $trigger = $('.display-toggle').find('.trigger'),
+      $siblings = $trigger.siblings();
+
+      $trigger.on('click', function(e) {
+        e.preventDefault();
+        $(this).hide();
+        $siblings.show();
+      });
+
 };
 
 // Extend the callbacks to work with Bootstrap, as used in this example

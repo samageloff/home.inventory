@@ -37,20 +37,6 @@ App.Router = Backbone.Router.extend({
     $('#main').html(categoryListView.render().el);
   },
 
-  edit: function(id) {
-    var model = new App.SingleItemModel({ id: id }),
-        imageUploadView = new App.ImageUploadView();
-    model.fetch({
-      success: function() {
-        var singleItemEditView = new App.SingleItemEditView({ model: model });
-        $('#main')
-          .html(singleItemEditView.render().el)
-          .prepend(imageUploadView.render().el);
-        App.imager();
-      }
-    });
-  },
-
   view: function(id) {
     var model = new App.SingleItemModel({ id: id });
     model.fetch({
@@ -72,6 +58,22 @@ App.Router = Backbone.Router.extend({
           .prepend(imageUploadView.render().el);
         App.imager();
         App.categoryService();
+        App.displayToggle();
+      }
+    });
+  },
+
+  edit: function(id) {
+    var model = new App.SingleItemModel({ id: id }),
+        imageUploadView = new App.ImageUploadView();
+    model.fetch({
+      success: function() {
+        var singleItemEditView = new App.SingleItemEditView({ model: model });
+        $('#main')
+          .html(singleItemEditView.render().el)
+          .prepend(imageUploadView.render().el);
+        App.imager();
+        App.displayToggle();
       }
     });
   },

@@ -64,18 +64,21 @@ App.imager = function() {
 App.categoryService = function() {
   $('#category').autocomplete({
     serviceUrl: '/api/autocomplete',
-    transformResult: function(response) {
-      console.log(response);
-      return {
-        suggestions: $.map(response, function(dataItem) {
-          return { value: dataItem.valueField, data: dataItem.dataField };
-        })
-      };
-    },
-    onSelect: function (suggestion) {
-      alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
-    }
+    preventBadQueries: true
   });
+};
+
+/* Helper method */
+App.displayToggle = function() {
+  var $trigger = $('.display-toggle').find('.trigger'),
+      $siblings = $trigger.siblings();
+
+      $trigger.on('click', function(e) {
+        e.preventDefault();
+        $(this).hide();
+        $siblings.show();
+      });
+
 };
 
 // Extend the callbacks to work with Bootstrap, as used in this example

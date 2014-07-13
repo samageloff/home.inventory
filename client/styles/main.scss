@@ -8,6 +8,7 @@
 /* Variables */
 $gesso: #FFF;
 $midnight: #000;
+$darkfog: #333;
 $error: #ff0033;
 $bgcolor: #F2F2F2;
 $brand: #a4c222;
@@ -383,13 +384,14 @@ section {
 
     .media-group {
       display: table;
+      min-height: 60px;
 
       img {
         float: left;
         margin-right: 1em;
         margin-bottom: auto;
         opacity: 1;
-        min-width: 80px;
+        max-width: 80px;
       }
 
       h4 {
@@ -582,4 +584,24 @@ footer {
 
 }
 
+
+/* Autosuggest */
+.autocomplete-suggestion {
+  background-color: $brand;
+  color: $gesso;
+  cursor: pointer;
+  padding: 2px 9px;
+}
+
+
+/* Custom Form Stuff */
+.hidden {
+  display: none;
+}
+
+.utility-link {
+  a {
+    color: $darkfog;
+  }
+}
 

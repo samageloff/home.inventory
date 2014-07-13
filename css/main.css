@@ -956,13 +956,14 @@ section {
   padding: .75em;
   text-align: left; }
   .items.grid-items-lines .grid-item .media-group {
-    display: table; }
+    display: table;
+    min-height: 60px; }
     .items.grid-items-lines .grid-item .media-group img {
       float: left;
       margin-right: 1em;
       margin-bottom: auto;
       opacity: 1;
-      min-width: 80px; }
+      max-width: 80px; }
     .items.grid-items-lines .grid-item .media-group h4 {
       display: table-cell;
       color: black;
@@ -1071,3 +1072,17 @@ footer {
   height: 0; }
   .progress-bar-indication.active {
     height: 60px; }
+
+/* Autosuggest */
+.autocomplete-suggestion {
+  background-color: #a4c222;
+  color: white;
+  cursor: pointer;
+  padding: 2px 9px; }
+
+/* Custom Form Stuff */
+.hidden {
+  display: none; }
+
+.utility-link a {
+  color: #333333; }

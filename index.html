@@ -28,7 +28,7 @@
     </script>
 
     <script type="text/template" id="home-template">
-      <h1>ive got [this]</h1>
+      <h1>be·long·ings</h1>
       <div class="grid-items-lines">
         <a href="#/all" class="grid-item">
           <h2 id="count-items"><%= count %></h2>
@@ -80,7 +80,12 @@
     <script type="text/template" id="category-items-template">
       <a href="#/view/<%= _id %>" class="grid-item">
         <div class="media-group">
-          <img src="<%= image[0] %>" alt="">
+          <% if (!image[0]) { %>
+            <img src="images/no-image.gif" alt="">
+          <% }
+          else { %>
+            <img src="<%= image[0] %>" alt="">
+          <% } %>
           <h4><%= title %></h4>
         </div>
         <div class="controls">
@@ -93,7 +98,7 @@
       <section class="detail">
         <% if (!image[1]) { %>
         <figure class="no-image">
-          <img src="images/no-image.png" alt="">
+          <img src="images/no-image.gif" alt="">
         <% }
         else { %>
         <figure>
@@ -110,7 +115,9 @@
           <h6><a href="#/category/<%= slug %>"><%= category %></a></h6>
           <ul>
             <li><%= description %></li>
+            <% if (quantity) { %>
             <li><b>Quantity</b>: <%= quantity %></li>
+            <% } %>
         </div>
 
         <footer>
@@ -156,8 +163,9 @@
               <input type="text" id="value" name="value" placeholder="$" value="">
               <span class="help-block hidden"></span>
             </div>
-            <div class="form-group">
-              <input type="text" id="quantity" name="quantity" placeholder="Quantity" value="">
+            <div class="form-group display-toggle">
+              <small class="utility-link trigger"><a href="#">Add quantity</a></small>
+              <input type="text" id="quantity" name="quantity" placeholder="Quantity" value="" class="hidden">
             </div>
           </div>
         </form>
@@ -181,23 +189,35 @@
           <form id="edit-item-form" action="#">
             <input id="slug" name="slug" type="hidden" value="<%= slug %>">
             <div class="form-group">
-              <input type="text" id="title" name="title" placeholder="Title" value="<%= title %>">
+              <b>Title</b>
+              <input type="text" id="title" name="title" value="<%= title %>">
               <span class="help-block hidden"></span>
             </div>
             <div class="form-group">
-              <input type="text" id="category" name="category" placeholder="Category" value="<%= category %>">
+              <b>Category</b>
+              <input type="text" id="category" name="category" value="<%= category %>">
               <span class="help-block hidden"></span>
             </div>
             <div class="form-group">
-              <textarea id="description" name="description" placeholder="Description" cols="30" rows="5"><%= description %></textarea>
+              <b>Description</b>
+              <textarea id="description" name="description" cols="30" rows="5"><%= description %></textarea>
             </div>
             <div class="form-group">
+              <b>Value</b>
               <input type="text" id="value" name="value" placeholder="$" value="<%= value %>">
               <span class="help-block hidden"></span>
             </div>
+            <% if (quantity) { %>
             <div class="form-group">
-              <input type="text" id="quantity" name="quantity" placeholder="Quantity" value="<%= quantity %>">
+              <b>Quantity</b>
+              <input type="text" id="quantity" name="quantity" value="<%= quantity %>">
             </div>
+            <% } else { %>
+            <div class="form-group display-toggle">
+              <small class="utility-link trigger"><a href="#">Add quantity</a></small>
+              <input type="text" id="quantity" name="quantity" placeholder="Quantity" value="<%= quantity %>" class="hidden">
+            </div>
+            <% } %>
           </div>
             <footer>
               <button id="save">Save</button>

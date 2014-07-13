@@ -15,10 +15,8 @@ App.SingleItemView = Backbone.View.extend({
     var markup = this.model.toJSON();
 
     this.$el.empty();
-    this.$el.html(this.template(this.model.toJSON()));
-    return this;
-
     this.setElement(this.template(markup));
+    return this;
   },
 
   close: function(e) {
