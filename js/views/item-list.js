@@ -17,6 +17,9 @@ App.ItemListView = Backbone.View.extend({
     this.listenTo(this.collection, 'reset', this.render);
     Backbone.pubSub.trigger('header-show', this);
     Backbone.pubSub.trigger('item-list', this);
+    Backbone.pubSub.on('remove-category-list', function() {
+      this.close();
+    }, this);
   },
 
   render: function() {

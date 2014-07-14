@@ -389,7 +389,7 @@ App.HeaderView = Backbone.View.extend({
 
   goBack: function(e) {
     e.preventDefault();
-    this.close();
+    Backbone.pubSub.trigger('remove-category-list', this);
     App.router.navigate('#/categories');
   },
 
@@ -398,12 +398,6 @@ App.HeaderView = Backbone.View.extend({
     $('#header')
       .removeClass()
       .addClass(config.display);
-  },
-
-  close: function() {
-    console.log('Kill: ', this);
-    this.unbind();
-    this.remove();
   }
 
 });
@@ -531,6 +525,9 @@ App.ItemListView = Backbone.View.extend({
     this.listenTo(this.collection, 'reset', this.render);
     Backbone.pubSub.trigger('header-show', this);
     Backbone.pubSub.trigger('item-list', this);
+    Backbone.pubSub.on('remove-category-list', function() {
+      this.close();
+    }, this);
   },
 
   render: function() {
