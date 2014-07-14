@@ -47,7 +47,6 @@ module.exports = function(grunt) {
 
       concat: {
         'js/vendor.js': [
-          'js/lib/energize.js',
           'js/lib/jquery.min.js',
           'js/lib/jquery.ui.widget.js',
           'js/lib/jquery.fileupload.js',
