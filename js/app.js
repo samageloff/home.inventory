@@ -14,6 +14,7 @@ $(function() {
 });
 
 App.convertToSlug = function(Text) {
+  console.log('App.convertToSlug');
   return Text
     .toLowerCase()
     .replace(/[^\w ]+/g,'')
@@ -21,18 +22,12 @@ App.convertToSlug = function(Text) {
 };
 
 App.convertLargeNum = function(Num) {
+  console.log('App.convertLargeNum');
   return Num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
-App.configxhr = function() {
-  $.getJSON( "/uploads/config", function(data) {
-    var data = 'var aws_config = ' + JSON.stringify(data);
-    var script = $('<script />').html(data);
-    $('#header').prepend(script);
-  });
-};
-
 App.imager = function() {
+  console.log('App.imager');
   var url = 'api/upload',
       $loading = $('.progress-bar-indication');
 
@@ -62,6 +57,7 @@ App.imager = function() {
 };
 
 App.categoryService = function() {
+  console.log('App.categoryService');
   $('#category').autocomplete({
     serviceUrl: '/api/autocomplete',
     preventBadQueries: true
@@ -70,6 +66,7 @@ App.categoryService = function() {
 
 /* Helper method */
 App.displayToggle = function() {
+  console.log('App.displayToggle');
   var $trigger = $('.display-toggle').find('.trigger'),
       $siblings = $trigger.siblings();
 

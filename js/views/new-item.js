@@ -38,7 +38,7 @@ App.NewItemView = Backbone.View.extend({
 
     this.model.set(data);
 
-    if(this.model.isValid(true)){
+    if(this.model.isValid(true)) {
       this.model.save(data, {
         success: function(response, model) {
           App.router.navigate('#/view/' + model.id);
@@ -49,12 +49,14 @@ App.NewItemView = Backbone.View.extend({
 
   cancel: function(e) {
     e.preventDefault();
-    this.onClose();
+    this.close();
     App.router.navigate('#/');
   },
 
-  onClose: function() {
-    this.model.unbind('change', this.render);
+  close: function() {
+    console.log('Kill: ', this);
+    this.unbind();
+    this.remove();
   }
 
 });

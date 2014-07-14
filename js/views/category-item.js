@@ -13,4 +13,5 @@ App.CategoryIndexItemView = Backbone.View.extend({
     this.setElement(this.template(markup));
     return this;
   }
+
 });

@@ -1,7 +1,7 @@
 App.SingleItemView = Backbone.View.extend({
 
   events: {
-    'click .icon-close': 'close',
+    'click .icon-close': 'collapse',
     'click .icon-edit': 'edit',
     'click .icon-trash': 'trash'
   },
@@ -19,20 +19,29 @@ App.SingleItemView = Backbone.View.extend({
     return this;
   },
 
-  close: function(e) {
+  collapse: function(e) {
     e.preventDefault();
+    this.close();
     App.router.navigate("#/category/" + this.model.get('slug'), true);
   },
 
   edit: function() {
+    this.close();
     App.router.navigate("/edit/" + this.model.id, true);
   },
 
   trash: function() {
     if (window.confirm('Are you sure?')) {
       this.model.destroy();
-      this.remove();
+      this.close();
       App.router.navigate("/", true);
     }
+  },
+
+  close: function() {
+    console.log('Kill: ', this);
+    this.unbind();
+    this.remove();
   }
+
 });

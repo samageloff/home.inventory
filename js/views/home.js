@@ -5,6 +5,10 @@ App.HomeView = Backbone.View.extend({
   template: _.template($('#home-template').html()),
   getStarted: _.template($('#get-started-template').html()),
 
+  events: {
+    'click .grid-item': 'close'
+  },
+
   initialize: function() {
     Backbone.pubSub.trigger('header-show', this);
     Backbone.pubSub.trigger('header-home', this);
@@ -25,6 +29,10 @@ App.HomeView = Backbone.View.extend({
     return this;
   },
 
-
+  close: function() {
+    console.log('Kill: ', this);
+    this.unbind();
+    this.remove();
+  }
 
 });

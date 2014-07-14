@@ -45,6 +45,7 @@ App.HeaderView = Backbone.View.extend({
   },
 
   newItem: function () {
+    this.close();
     router.navigate("/new", true);
   },
 
@@ -61,6 +62,7 @@ App.HeaderView = Backbone.View.extend({
 
   goBack: function(e) {
     e.preventDefault();
+    this.close();
     App.router.navigate('#/categories');
   },
 
@@ -69,6 +71,12 @@ App.HeaderView = Backbone.View.extend({
     $('#header')
       .removeClass()
       .addClass(config.display);
+  },
+
+  close: function() {
+    console.log('Kill: ', this);
+    this.unbind();
+    this.remove();
   }
 
 });

@@ -3,6 +3,10 @@ App.ItemListView = Backbone.View.extend({
   tagName: 'section',
   className: 'items grid-items-lines',
 
+  events: {
+    'click .grid-item': 'close'
+  },
+
   initialize: function() {
     _.bindAll(this, 'render');
 
@@ -29,8 +33,10 @@ App.ItemListView = Backbone.View.extend({
     this.$el.append(categoryListView.render().el);
   },
 
-  onClose: function(){
-    this.model.unbind('change', this.render);
+  close: function() {
+    console.log('Kill: ', this);
+    this.unbind();
+    this.remove();
   }
 
 });

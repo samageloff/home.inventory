@@ -68,6 +68,7 @@ App.SingleItemEditView = Backbone.View.extend({
 
   save: function(e) {
     e.preventDefault();
+    var self = this;
     var data = $('#edit-item-form').serializeObject();
     var value = $(e.currentTarget).val();
     var slugVal = App.convertToSlug($('#category').val());
@@ -79,6 +80,7 @@ App.SingleItemEditView = Backbone.View.extend({
     if(this.model.isValid(true)){
       this.model.save(data, {
         success: function(response, model) {
+          self.close();
           App.router.navigate('#/view/' + model.id);
         }
       });
@@ -87,12 +89,14 @@ App.SingleItemEditView = Backbone.View.extend({
 
   cancel: function(e) {
     e.preventDefault();
-    this.onClose();
+    this.close();
     App.router.navigate('#/view/' + this.model.id);
   },
 
-  onClose: function() {
-    this.model.unbind('change', this.render);
+  close: function() {
+    console.log('Kill: ', this);
+    this.unbind();
+    this.remove();
   }
 
 });

@@ -56,7 +56,12 @@ App.ImageUploadView = Backbone.View.extend({
         console.log('Failed to remove the image.');
       })
     }
+  },
 
+  close: function() {
+    console.log('Kill: ', this);
+    this.unbind();
+    this.remove();
   }
 
 });

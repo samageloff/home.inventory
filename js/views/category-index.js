@@ -3,6 +3,10 @@ App.CategoryIndexView = Backbone.View.extend({
   tagName: 'section',
   className: 'groups grid-items-lines',
 
+  events: {
+    'click .grid-item': 'close'
+  },
+
   initialize: function() {
     this.collection = new App.CategoryIndexCollection();
     this.collection.fetch({reset: true});
@@ -24,9 +28,10 @@ App.CategoryIndexView = Backbone.View.extend({
     this.$el.append(categoryView.render().el);
   },
 
-  onClose: function() {
-    console.log('on close fired');
-    this.model.unbind('change', this.render);
+  close: function() {
+    console.log('Kill: ', this);
+    this.unbind();
+    this.remove();
   }
 
 });

@@ -31,15 +31,6 @@ App.SingleItemModel = Backbone.Model.extend({
     }
   },
 
-  initialize: function() {
-    this.on('change', function() {
-      console.log('- Values for this model have changed.');
-    });
-    this.on('invalid', function(model, error) {
-      console.log(error);
-    });
-  },
-
   edit: function(e) {
     e.preventDefault();
     this.onClose();

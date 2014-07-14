@@ -16,6 +16,7 @@ App.ItemView = Backbone.View.extend({
 
   edit: function(e) {
     e.preventDefault();
+    this.close();
     App.router.navigate('#/edit/' + this.model.id);
   },
 
@@ -40,7 +41,7 @@ App.ItemView = Backbone.View.extend({
       }
 
       this.model.destroy();
-      this.remove();
+      this.close();
 
       if (collection_length > 1) {
         App.router.navigate('#/category/' + category);
@@ -50,5 +51,12 @@ App.ItemView = Backbone.View.extend({
       }
 
     }
+  },
+
+  close: function() {
+    console.log('Kill: ', this);
+    this.unbind();
+    this.remove();
   }
+
 });

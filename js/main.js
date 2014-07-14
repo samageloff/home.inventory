@@ -81,15 +81,6 @@ App.NewItemModel = Backbone.Model.extend({
     }
   },
 
-  initialize: function() {
-    this.on('change', function() {
-      console.log('- Values for this model have changed.');
-    });
-    this.on('invalid', function(model, error) {
-      console.log(error);
-    });
-  },
-
   parse: function(response) {
     response.id = response._id;
     return response;
@@ -126,15 +117,6 @@ App.SingleItemModel = Backbone.Model.extend({
       required: true,
       msg: 'Please enter a category'
     }
-  },
-
-  initialize: function() {
-    this.on('change', function() {
-      console.log('- Values for this model have changed.');
-    });
-    this.on('invalid', function(model, error) {
-      console.log(error);
-    });
   },
 
   edit: function(e) {
@@ -192,6 +174,10 @@ App.CategoryIndexView = Backbone.View.extend({
   tagName: 'section',
   className: 'groups grid-items-lines',
 
+  events: {
+    'click .grid-item': 'close'
+  },
+
   initialize: function() {
     this.collection = new App.CategoryIndexCollection();
     this.collection.fetch({reset: true});
@@ -213,9 +199,10 @@ App.CategoryIndexView = Backbone.View.extend({
     this.$el.append(categoryView.render().el);
   },
 
-  onClose: function() {
-    console.log('on close fired');
-    this.model.unbind('change', this.render);
+  close: function() {
+    console.log('Kill: ', this);
+    this.unbind();
+    this.remove();
   }
 
 });
@@ -234,6 +221,7 @@ App.CategoryIndexItemView = Backbone.View.extend({
     this.setElement(this.template(markup));
     return this;
   }
+
 });
 App.SingleItemEditView = Backbone.View.extend({
 
@@ -305,6 +293,7 @@ App.SingleItemEditView = Backbone.View.extend({
 
   save: function(e) {
     e.preventDefault();
+    var self = this;
     var data = $('#edit-item-form').serializeObject();
     var value = $(e.currentTarget).val();
     var slugVal = App.convertToSlug($('#category').val());
@@ -316,6 +305,7 @@ App.SingleItemEditView = Backbone.View.extend({
     if(this.model.isValid(true)){
       this.model.save(data, {
         success: function(response, model) {
+          self.close();
           App.router.navigate('#/view/' + model.id);
         }
       });
@@ -324,12 +314,14 @@ App.SingleItemEditView = Backbone.View.extend({
 
   cancel: function(e) {
     e.preventDefault();
-    this.onClose();
+    this.close();
     App.router.navigate('#/view/' + this.model.id);
   },
 
-  onClose: function() {
-    this.model.unbind('change', this.render);
+  close: function() {
+    console.log('Kill: ', this);
+    this.unbind();
+    this.remove();
   }
 
 });
@@ -380,6 +372,7 @@ App.HeaderView = Backbone.View.extend({
   },
 
   newItem: function () {
+    this.close();
     router.navigate("/new", true);
   },
 
@@ -396,6 +389,7 @@ App.HeaderView = Backbone.View.extend({
 
   goBack: function(e) {
     e.preventDefault();
+    this.close();
     App.router.navigate('#/categories');
   },
 
@@ -404,6 +398,12 @@ App.HeaderView = Backbone.View.extend({
     $('#header')
       .removeClass()
       .addClass(config.display);
+  },
+
+  close: function() {
+    console.log('Kill: ', this);
+    this.unbind();
+    this.remove();
   }
 
 });
@@ -413,6 +413,10 @@ App.HomeView = Backbone.View.extend({
   className: 'landing',
   template: _.template($('#home-template').html()),
   getStarted: _.template($('#get-started-template').html()),
+
+  events: {
+    'click .grid-item': 'close'
+  },
 
   initialize: function() {
     Backbone.pubSub.trigger('header-show', this);
@@ -434,7 +438,11 @@ App.HomeView = Backbone.View.extend({
     return this;
   },
 
-
+  close: function() {
+    console.log('Kill: ', this);
+    this.unbind();
+    this.remove();
+  }
 
 });
 App.ImageUploadView = Backbone.View.extend({
@@ -495,7 +503,12 @@ App.ImageUploadView = Backbone.View.extend({
         console.log('Failed to remove the image.');
       })
     }
+  },
 
+  close: function() {
+    console.log('Kill: ', this);
+    this.unbind();
+    this.remove();
   }
 
 });
@@ -503,6 +516,10 @@ App.ItemListView = Backbone.View.extend({
 
   tagName: 'section',
   className: 'items grid-items-lines',
+
+  events: {
+    'click .grid-item': 'close'
+  },
 
   initialize: function() {
     _.bindAll(this, 'render');
@@ -530,8 +547,10 @@ App.ItemListView = Backbone.View.extend({
     this.$el.append(categoryListView.render().el);
   },
 
-  onClose: function(){
-    this.model.unbind('change', this.render);
+  close: function() {
+    console.log('Kill: ', this);
+    this.unbind();
+    this.remove();
   }
 
 });
@@ -553,6 +572,7 @@ App.ItemView = Backbone.View.extend({
 
   edit: function(e) {
     e.preventDefault();
+    this.close();
     App.router.navigate('#/edit/' + this.model.id);
   },
 
@@ -577,7 +597,7 @@ App.ItemView = Backbone.View.extend({
       }
 
       this.model.destroy();
-      this.remove();
+      this.close();
 
       if (collection_length > 1) {
         App.router.navigate('#/category/' + category);
@@ -587,7 +607,14 @@ App.ItemView = Backbone.View.extend({
       }
 
     }
+  },
+
+  close: function() {
+    console.log('Kill: ', this);
+    this.unbind();
+    this.remove();
   }
+
 });
 App.NewItemView = Backbone.View.extend({
 
@@ -629,7 +656,7 @@ App.NewItemView = Backbone.View.extend({
 
     this.model.set(data);
 
-    if(this.model.isValid(true)){
+    if(this.model.isValid(true)) {
       this.model.save(data, {
         success: function(response, model) {
           App.router.navigate('#/view/' + model.id);
@@ -640,19 +667,21 @@ App.NewItemView = Backbone.View.extend({
 
   cancel: function(e) {
     e.preventDefault();
-    this.onClose();
+    this.close();
     App.router.navigate('#/');
   },
 
-  onClose: function() {
-    this.model.unbind('change', this.render);
+  close: function() {
+    console.log('Kill: ', this);
+    this.unbind();
+    this.remove();
   }
 
 });
 App.SingleItemView = Backbone.View.extend({
 
   events: {
-    'click .icon-close': 'close',
+    'click .icon-close': 'collapse',
     'click .icon-edit': 'edit',
     'click .icon-trash': 'trash'
   },
@@ -670,22 +699,31 @@ App.SingleItemView = Backbone.View.extend({
     return this;
   },
 
-  close: function(e) {
+  collapse: function(e) {
     e.preventDefault();
+    this.close();
     App.router.navigate("#/category/" + this.model.get('slug'), true);
   },
 
   edit: function() {
+    this.close();
     App.router.navigate("/edit/" + this.model.id, true);
   },
 
   trash: function() {
     if (window.confirm('Are you sure?')) {
       this.model.destroy();
-      this.remove();
+      this.close();
       App.router.navigate("/", true);
     }
+  },
+
+  close: function() {
+    console.log('Kill: ', this);
+    this.unbind();
+    this.remove();
   }
+
 });
 App.Router = Backbone.Router.extend({
 
@@ -788,6 +826,7 @@ $(function() {
 });
 
 App.convertToSlug = function(Text) {
+  console.log('App.convertToSlug');
   return Text
     .toLowerCase()
     .replace(/[^\w ]+/g,'')
@@ -795,18 +834,12 @@ App.convertToSlug = function(Text) {
 };
 
 App.convertLargeNum = function(Num) {
+  console.log('App.convertLargeNum');
   return Num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
-App.configxhr = function() {
-  $.getJSON( "/uploads/config", function(data) {
-    var data = 'var aws_config = ' + JSON.stringify(data);
-    var script = $('<script />').html(data);
-    $('#header').prepend(script);
-  });
-};
-
 App.imager = function() {
+  console.log('App.imager');
   var url = 'api/upload',
       $loading = $('.progress-bar-indication');
 
@@ -836,6 +869,7 @@ App.imager = function() {
 };
 
 App.categoryService = function() {
+  console.log('App.categoryService');
   $('#category').autocomplete({
     serviceUrl: '/api/autocomplete',
     preventBadQueries: true
@@ -844,6 +878,7 @@ App.categoryService = function() {
 
 /* Helper method */
 App.displayToggle = function() {
+  console.log('App.displayToggle');
   var $trigger = $('.display-toggle').find('.trigger'),
       $siblings = $trigger.siblings();
 
