@@ -171,6 +171,7 @@ header {
 
 #{$all-text-inputs},
 textarea {
+  box-shadow: none;
   font-weight: $light;
 }
 
@@ -601,7 +602,7 @@ footer {
   overflow: auto;
 
   .autocomplete-suggestion {
-    padding: 2px 8px;
+    padding: 6px 8px;
     white-space: nowrap;
     overflow: hidden;
 
