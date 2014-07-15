@@ -15,7 +15,7 @@ App.SingleItemView = Backbone.View.extend({
     var markup = this.model.toJSON();
 
     this.$el.empty();
-    this.setElement(this.template(markup));
+    this.$el.html(this.template(markup)).fadeIn('slow');
     return this;
   },
 

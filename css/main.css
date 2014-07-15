@@ -364,8 +364,8 @@ input[type="submit"] {
   font-size: inherit;
   font-weight: bold;
   background-color: #efefef;
-  background-image: -webkit-linear-gradient(#efefef, lightgrey);
-  background-image: linear-gradient(#efefef, lightgrey);
+  background-image: -webkit-linear-gradient(#efefef, lightgray);
+  background-image: linear-gradient(#efefef, lightgray);
   padding: 7px 18px;
   text-decoration: none;
   text-shadow: 0 1px 0 #f9f9f9;
@@ -627,7 +627,6 @@ dl {
   src: url("../fonts/icons.eot?#iefix") format("embedded-opentype"), url("../fonts/icons.woff") format("woff"), url("../fonts/icons.ttf") format("truetype"), url("../fonts/icons.svg#icons") format("svg");
   font-weight: normal;
   font-style: normal; }
-
 [data-icon]:before {
   font-family: "icons" !important;
   content: attr(data-icon);
@@ -713,9 +712,12 @@ body {
 h1 {
   color: #a4c222;
   font-weight: 100;
-  font-size: 58px;
-  margin: .5em 0;
+  font-size: 50px;
+  margin: .35em 0;
   text-align: center; }
+
+h2 {
+  font-weight: initial; }
 
 #header + #main {
   padding-top: 60px; }
@@ -903,7 +905,6 @@ section {
 /* Grid Item Overrides */
 /* Landing Page */
 .landing .grid-item {
-  padding: 1.25em;
   text-align: center; }
 .landing .grid-item,
 .landing .grid-item a {
@@ -925,6 +926,8 @@ section {
   text-align: left; }
   .landing nav .grid-item [class^="icon-"]:before {
     margin-right: 1em; }
+  .landing nav .grid-item:last-child {
+    margin-bottom: 0; }
 
 /* Groups Page */
 .groups.grid-items-lines .grid-item {

@@ -21,7 +21,7 @@ App.NewItemView = Backbone.View.extend({
 
   render: function() {
     var markup = this.model.toJSON();
-    this.setElement(this.template(markup));
+    this.$el.html(this.template(markup)).fadeIn('fast');
     return this;
   },
 
@@ -55,6 +55,7 @@ App.NewItemView = Backbone.View.extend({
 
   close: function() {
     console.log('Kill: ', this);
+    App.categoryService('dispose');
     this.unbind();
     this.remove();
   }

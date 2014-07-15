@@ -10,7 +10,7 @@ App.CategoryIndexItemView = Backbone.View.extend({
     // TODO: configure API response to include slug
     this.model.set('value', App.convertLargeNum(totalVal));
 
-    this.setElement(this.template(markup));
+    this.$el.html(this.template(markup)).fadeIn('fast');
     return this;
   }
 

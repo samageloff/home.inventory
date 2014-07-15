@@ -29,7 +29,7 @@ App.SingleItemEditView = Backbone.View.extend({
     var markup = this.model.toJSON();
 
     this.$el.empty();
-    this.setElement(this.template(markup));
+    this.$el.html(this.template(markup)).fadeIn('fast');
 
     return this;
   },
@@ -95,6 +95,7 @@ App.SingleItemEditView = Backbone.View.extend({
 
   close: function() {
     console.log('Kill: ', this);
+    App.categoryService('dispose');
     this.unbind();
     this.remove();
   }

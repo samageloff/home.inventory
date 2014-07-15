@@ -108,7 +108,7 @@ module.exports = {
 
   // Update an item
   update: function(request, response) {
-    console.log('Updating item ' + request);
+    console.log('Updating item ' + request.params.id, request.body.title);
     return models.ItemModel.findById(request.params.id, function(err, item) {
       item.title = request.body.title;
       item.category = request.body.category;

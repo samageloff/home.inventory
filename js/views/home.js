@@ -21,7 +21,7 @@ App.HomeView = Backbone.View.extend({
     if (count) {
       var totalVal = this.model.get('value');
       this.model.set('value', App.convertLargeNum(totalVal));
-      this.$el.html(this.template(this.model.toJSON()));
+      this.$el.html(this.template(this.model.toJSON())).fadeIn('fast');
     }
     else {
       this.$el.html(this.getStarted());

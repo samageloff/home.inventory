@@ -218,7 +218,7 @@ App.CategoryIndexItemView = Backbone.View.extend({
     // TODO: configure API response to include slug
     this.model.set('value', App.convertLargeNum(totalVal));
 
-    this.setElement(this.template(markup));
+    this.$el.html(this.template(markup)).fadeIn('fast');
     return this;
   }
 
@@ -254,7 +254,7 @@ App.SingleItemEditView = Backbone.View.extend({
     var markup = this.model.toJSON();
 
     this.$el.empty();
-    this.setElement(this.template(markup));
+    this.$el.html(this.template(markup)).fadeIn('fast');
 
     return this;
   },
@@ -320,6 +320,7 @@ App.SingleItemEditView = Backbone.View.extend({
 
   close: function() {
     console.log('Kill: ', this);
+    App.categoryService('dispose');
     this.unbind();
     this.remove();
   }
@@ -424,7 +425,7 @@ App.HomeView = Backbone.View.extend({
     if (count) {
       var totalVal = this.model.get('value');
       this.model.set('value', App.convertLargeNum(totalVal));
-      this.$el.html(this.template(this.model.toJSON()));
+      this.$el.html(this.template(this.model.toJSON())).fadeIn('fast');
     }
     else {
       this.$el.html(this.getStarted());
@@ -454,7 +455,7 @@ App.ImageUploadView = Backbone.View.extend({
   },
 
   render: function() {
-    this.setElement(this.template());
+    this.$el.html(this.template()).fadeIn('fast');
     return this;
   },
 
@@ -469,7 +470,7 @@ App.ImageUploadView = Backbone.View.extend({
     $('#upload-placeholder').empty();
 
     // add image + close button
-    placeholder.append('<img />').append('<a />')
+    placeholder.append('<img />').append('<a />').fadeIn('fast');
 
     // find image + add image src
     placeholder.find('img').attr('src', App.imager.image_store[0]);
@@ -563,7 +564,7 @@ App.ItemView = Backbone.View.extend({
   render: function() {
     var markup = this.model.toJSON();
     this.$el.empty();
-    this.setElement(this.template(markup));
+    this.$el.html(this.template(markup)).fadeIn('fast');
     return this;
   },
 
@@ -636,7 +637,7 @@ App.NewItemView = Backbone.View.extend({
 
   render: function() {
     var markup = this.model.toJSON();
-    this.setElement(this.template(markup));
+    this.$el.html(this.template(markup)).fadeIn('fast');
     return this;
   },
 
@@ -670,6 +671,7 @@ App.NewItemView = Backbone.View.extend({
 
   close: function() {
     console.log('Kill: ', this);
+    App.categoryService('dispose');
     this.unbind();
     this.remove();
   }
@@ -692,7 +694,7 @@ App.SingleItemView = Backbone.View.extend({
     var markup = this.model.toJSON();
 
     this.$el.empty();
-    this.setElement(this.template(markup));
+    this.$el.html(this.template(markup)).fadeIn('slow');
     return this;
   },
 
@@ -865,12 +867,19 @@ App.imager = function() {
   })
 };
 
-App.categoryService = function() {
-  console.log('App.categoryService');
-  $('#category').autocomplete({
+App.categoryService = function(mode) {
+  console.log('App.categoryService', mode);
+
+  var config = {
     serviceUrl: '/api/autocomplete',
     preventBadQueries: true
-  });
+  }
+  if (mode !== 'dispose') {
+    $('#category').autocomplete(config);
+  }
+  else {
+    $('#category').autocomplete('dispose');
+  }
 };
 
 /* Helper method */
@@ -882,7 +891,7 @@ App.displayToggle = function() {
       $trigger.on('click', function(e) {
         e.preventDefault();
         $(this).hide();
-        $siblings.show();
+        $siblings.show().focus();
       });
 
 };

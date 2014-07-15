@@ -56,12 +56,19 @@ App.imager = function() {
   })
 };
 
-App.categoryService = function() {
-  console.log('App.categoryService');
-  $('#category').autocomplete({
+App.categoryService = function(mode) {
+  console.log('App.categoryService', mode);
+
+  var config = {
     serviceUrl: '/api/autocomplete',
     preventBadQueries: true
-  });
+  }
+  if (mode !== 'dispose') {
+    $('#category').autocomplete(config);
+  }
+  else {
+    $('#category').autocomplete('dispose');
+  }
 };
 
 /* Helper method */
@@ -73,7 +80,7 @@ App.displayToggle = function() {
       $trigger.on('click', function(e) {
         e.preventDefault();
         $(this).hide();
-        $siblings.show();
+        $siblings.show().focus();
       });
 
 };

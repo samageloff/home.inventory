@@ -13,7 +13,7 @@ App.ImageUploadView = Backbone.View.extend({
   },
 
   render: function() {
-    this.setElement(this.template());
+    this.$el.html(this.template()).fadeIn('fast');
     return this;
   },
 
@@ -28,7 +28,7 @@ App.ImageUploadView = Backbone.View.extend({
     $('#upload-placeholder').empty();
 
     // add image + close button
-    placeholder.append('<img />').append('<a />')
+    placeholder.append('<img />').append('<a />').fadeIn('fast');
 
     // find image + add image src
     placeholder.find('img').attr('src', App.imager.image_store[0]);
