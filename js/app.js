@@ -68,16 +68,24 @@ App.imager = function() {
 App.categoryService = function(mode) {
   console.log('App.categoryService', mode);
 
-  var config = {
-    serviceUrl: '/api/autocomplete',
-    preventBadQueries: true
+  function getCategories() {
+    return $.ajax('api/autocomplete');
   }
-  if (mode !== 'dispose') {
-    $('#category').autocomplete(config);
-  }
-  else {
-    $('#category').autocomplete('dispose');
-  }
+
+  getCategories()
+    .done(function(result) {
+      var categories = result.suggestions;
+      if (!mode) {
+        $('#category').autocomplete({
+          lookup: categories,
+          preventBadQueries: true
+        });
+      }
+      else {
+        $('#category').autocomplete(mode);
+      }
+  });
+
 };
 
 /* Helper method */

@@ -135,17 +135,9 @@ App.SingleItemModel = Backbone.Model.extend({
     return response;
   }
 });
-var App = App || {};
-
 App.CategoryIndexCollection = Backbone.Collection.extend({
   url: 'api/categories',
   model: App.CategoryIndexModel,
-
-  initialize: function() {
-    this.on('reset', this.render, this);
-    this.on('remove', this.render, this);
-  }
-
 });
 var App = App || {};
 
@@ -179,11 +171,8 @@ App.CategoryIndexView = Backbone.View.extend({
   },
 
   initialize: function() {
-    this.collection = new App.CategoryIndexCollection();
-    this.collection.fetch({reset: true});
-    this.render();
-    this.listenTo(this.collection, 'reset', this.render);
     Backbone.pubSub.trigger('header-default', this);
+    this.listenTo(this.collection, 'reset', this.render);
   },
 
   render: function() {
@@ -196,9 +185,11 @@ App.CategoryIndexView = Backbone.View.extend({
 
     // iterate over collection and create subview
     // for each category item
-    this.collection.each(function(item) {
-      this.renderCategory(item);
-    }, this);
+    else {
+      this.collection.each(function(item) {
+        this.renderCategory(item);
+      }, this);
+    }
     return this;
   },
 
@@ -249,7 +240,7 @@ App.SingleItemEditView = Backbone.View.extend({
     Backbone.pubSub.trigger('header-hide', this);
 
     Backbone.pubSub.on('image-upload-complete', function() {
-      this.getImage();
+      this.setImagePath();
     }, this);
 
     Backbone.pubSub.on('image-remove', function() {
@@ -267,8 +258,9 @@ App.SingleItemEditView = Backbone.View.extend({
     return this;
   },
 
-  getImage: function() {
-    this.model.save('image', App.imager.image_store);
+  setImagePath: function() {
+    this.model.set('image', App.imager.image_store);
+    this.updatePlaceholder(App.imager.image_store[3]);
   },
 
   removeImage: function(e) {
@@ -279,7 +271,8 @@ App.SingleItemEditView = Backbone.View.extend({
 
     if (image_id) {
       $.get('api/remove/' + image_id, function(data) {
-        $self.closest('.media-block').fadeOut('250');
+        $self.closest('.media-block').find('img').remove();
+        $self.remove();
         Backbone.pubSub.trigger('image-remove', this);
       })
       .fail(function() {
@@ -315,6 +308,10 @@ App.SingleItemEditView = Backbone.View.extend({
         success: function(response, model) {
           self.close();
           App.router.navigate('#/view/' + model.id);
+        },
+        error: function(model, xhr, options) {
+          alert(xhr.responseText);
+          App.router.navigate('#/');
         }
       });
     }
@@ -382,7 +379,7 @@ App.HeaderView = Backbone.View.extend({
 
   newItem: function () {
     this.close();
-    router.navigate("/new", true);
+    App.router.navigate("/new", true);
   },
 
   setCurrentView: function(view, config) {
@@ -417,8 +414,8 @@ App.HomeView = Backbone.View.extend({
   template: _.template($('#home-template').html()),
 
   events: {
-    'click #add-item': 'close',
-    'click #browse-categories': 'close'
+    'click #add-item': 'addItem',
+    'click #browse-categories': 'browseCategories'
   },
 
   initialize: function() {
@@ -442,6 +439,16 @@ App.HomeView = Backbone.View.extend({
     }
 
     this.$el.html(this.template(markup)).fadeIn('fast');
+  },
+
+  addItem: function() {
+    this.close();
+    App.router.navigate('/new', {trigger: true});
+  },
+
+  browseCategories: function() {
+    this.close();
+    App.router.navigate('/categories', {trigger: true});
   },
 
   close: function() {
@@ -703,12 +710,13 @@ App.NewItemView = Backbone.View.extend({
   removeImage: function(e) {
     e.preventDefault();
 
-    var $self = $(e.target),
+    var $self = $(e.target).closest('.media-block'),
         image_id = $self.data('id');
 
     if (image_id) {
       $.get('api/remove/' + image_id, function(data) {
-        $self.closest('.media-block').fadeOut('250');
+        $self.find('img, a').remove();
+        $self.append('<div />').addClass('.progress-bar-indication');
         Backbone.pubSub.trigger('image-remove', this);
       })
       .fail(function() {
@@ -807,13 +815,16 @@ App.Router = Backbone.Router.extend({
   },
 
   categoryList: function(id) {
-    var categoryIndexView = new App.CategoryIndexView();
-    $('#main').html(categoryIndexView.render().el);
+    var categoryCollection = new App.CategoryIndexCollection();
+    categoryCollection.fetch({ success: function(categoryCollection) {
+      var categoryIndexView = new App.CategoryIndexView({collection: categoryCollection});
+      $('#main').html(categoryIndexView.render().el);
+    }});
   },
 
   groupList: function(id) {
-    var category = new App.ItemListModel({ id: id });
-    var categoryListView = new App.ItemListView({ model: category });
+    var category = new App.ItemListModel({ id: id }),
+        categoryListView = new App.ItemListView({ model: category });
     $('#main').html(categoryListView.render().el);
   },
 
@@ -847,6 +858,7 @@ App.Router = Backbone.Router.extend({
         var singleItemEditView = new App.SingleItemEditView({ model: model });
         $('#main').html(singleItemEditView.render().el);
         App.imager();
+        App.categoryService();
         App.displayToggle();
       }
     });
@@ -927,16 +939,24 @@ App.imager = function() {
 App.categoryService = function(mode) {
   console.log('App.categoryService', mode);
 
-  var config = {
-    serviceUrl: '/api/autocomplete',
-    preventBadQueries: true
+  function getCategories() {
+    return $.ajax('api/autocomplete');
   }
-  if (mode !== 'dispose') {
-    $('#category').autocomplete(config);
-  }
-  else {
-    $('#category').autocomplete('dispose');
-  }
+
+  getCategories()
+    .done(function(result) {
+      var categories = result.suggestions;
+      if (!mode) {
+        $('#category').autocomplete({
+          lookup: categories,
+          preventBadQueries: true
+        });
+      }
+      else {
+        $('#category').autocomplete(mode);
+      }
+  });
+
 };
 
 /* Helper method */

@@ -107,9 +107,13 @@ module.exports = {
   },
 
   // Update an item
-  update: function(request, response) {
+  update: function(request, response, next) {
     console.log('Updating item ' + request.params.id, request.body.title);
     return models.ItemModel.findById(request.params.id, function(err, item) {
+      console.log(arguments);
+      if (err) return next(err);
+      if (!item) return response.send(404, "Hi, there was an error." );
+
       item.title = request.body.title;
       item.category = request.body.category;
       item.description = request.body.description;
@@ -171,7 +175,7 @@ module.exports = {
     return models.ItemModel.aggregate({
       $group: {
         _id: '$items',
-        suggestions: { $addToSet: '$category' }
+        suggestions: { $addToSet: {value: '$category'} }
       }
     },
     function(err, items) {

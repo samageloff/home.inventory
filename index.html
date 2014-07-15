@@ -41,7 +41,7 @@
         </nav>
         <% }
         else { %>
-        <a href="#/all" class="grid-item">
+        <a href="#" class="grid-item">
           <h2 id="count-items"><%= count %></h2>
           <p>Items</p>
         </a>
@@ -54,7 +54,7 @@
           <p>Total Value</p>
         </a>
         <nav>
-          <a href="#/new" class="grid-item grid-item-big" id="add-item">
+          <a href="#/add" class="grid-item grid-item-big" id="add-item">
             <span class="icon-add icon-forward-r">Add an item</span>
           </a>
           <a href="#/categories" class="grid-item grid-item-big" id="browse-categories">
@@ -116,7 +116,6 @@
             <li><b>Quantity</b>: <%= quantity %></li>
             <% } %>
         </div>
-
         <footer>
           <button class="icon-edit"></button>
           <button class="icon-trash pull-right"></button>
@@ -160,7 +159,6 @@
             </div>
           </div>
         </form>
-
         <footer>
           <button type="submit" id="save">Save</button>
           <button class="pull-right" id="cancel">Cancel</button>
@@ -177,6 +175,17 @@
             <img src="<%= image[0] %>" alt="">
             <a href="#" class="icon-close" data-id="<%= image[3] %>"></a>
           </div>
+          <% }
+          else { %>
+          <div class="media-block upload-placeholder">
+            <div class="progress-bar-indication"></div>
+          </div>
+          <form action="/api/upload" role="form" method="post" enctype="multipart/form-data" class="direct-upload">
+            <button class="file-upload">
+              <span class="icon-plus">Image</span>
+              <input capture="camera" type="file" name="image" id="fileupload">
+            </button>
+          </form>
           <% } %>
           <form id="edit-item-form" action="#">
             <input id="slug" name="slug" type="hidden" value="<%= slug %>">

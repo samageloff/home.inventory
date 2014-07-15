@@ -5,8 +5,8 @@ App.HomeView = Backbone.View.extend({
   template: _.template($('#home-template').html()),
 
   events: {
-    'click #add-item': 'close',
-    'click #browse-categories': 'close'
+    'click #add-item': 'addItem',
+    'click #browse-categories': 'browseCategories'
   },
 
   initialize: function() {
@@ -30,6 +30,16 @@ App.HomeView = Backbone.View.extend({
     }
 
     this.$el.html(this.template(markup)).fadeIn('fast');
+  },
+
+  addItem: function() {
+    this.close();
+    App.router.navigate('/new', {trigger: true});
+  },
+
+  browseCategories: function() {
+    this.close();
+    App.router.navigate('/categories', {trigger: true});
   },
 
   close: function() {

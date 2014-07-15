@@ -8,11 +8,8 @@ App.CategoryIndexView = Backbone.View.extend({
   },
 
   initialize: function() {
-    this.collection = new App.CategoryIndexCollection();
-    this.collection.fetch({reset: true});
-    this.render();
-    this.listenTo(this.collection, 'reset', this.render);
     Backbone.pubSub.trigger('header-default', this);
+    this.listenTo(this.collection, 'reset', this.render);
   },
 
   render: function() {
@@ -25,9 +22,11 @@ App.CategoryIndexView = Backbone.View.extend({
 
     // iterate over collection and create subview
     // for each category item
-    this.collection.each(function(item) {
-      this.renderCategory(item);
-    }, this);
+    else {
+      this.collection.each(function(item) {
+        this.renderCategory(item);
+      }, this);
+    }
     return this;
   },
 

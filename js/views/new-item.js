@@ -76,12 +76,13 @@ App.NewItemView = Backbone.View.extend({
   removeImage: function(e) {
     e.preventDefault();
 
-    var $self = $(e.target),
+    var $self = $(e.target).closest('.media-block'),
         image_id = $self.data('id');
 
     if (image_id) {
       $.get('api/remove/' + image_id, function(data) {
-        $self.closest('.media-block').fadeOut('250');
+        $self.find('img, a').remove();
+        $self.append('<div />').addClass('.progress-bar-indication');
         Backbone.pubSub.trigger('image-remove', this);
       })
       .fail(function() {

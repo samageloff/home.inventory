@@ -16,7 +16,7 @@ App.SingleItemEditView = Backbone.View.extend({
     Backbone.pubSub.trigger('header-hide', this);
 
     Backbone.pubSub.on('image-upload-complete', function() {
-      this.getImage();
+      this.setImagePath();
     }, this);
 
     Backbone.pubSub.on('image-remove', function() {
@@ -34,8 +34,9 @@ App.SingleItemEditView = Backbone.View.extend({
     return this;
   },
 
-  getImage: function() {
-    this.model.save('image', App.imager.image_store);
+  setImagePath: function() {
+    this.model.set('image', App.imager.image_store);
+    this.updatePlaceholder(App.imager.image_store[3]);
   },
 
   removeImage: function(e) {
@@ -46,7 +47,8 @@ App.SingleItemEditView = Backbone.View.extend({
 
     if (image_id) {
       $.get('api/remove/' + image_id, function(data) {
-        $self.closest('.media-block').fadeOut('250');
+        $self.closest('.media-block').find('img').remove();
+        $self.remove();
         Backbone.pubSub.trigger('image-remove', this);
       })
       .fail(function() {
@@ -82,6 +84,10 @@ App.SingleItemEditView = Backbone.View.extend({
         success: function(response, model) {
           self.close();
           App.router.navigate('#/view/' + model.id);
+        },
+        error: function(model, xhr, options) {
+          alert(xhr.responseText);
+          App.router.navigate('#/');
         }
       });
     }

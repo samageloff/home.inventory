@@ -46,7 +46,7 @@ App.HeaderView = Backbone.View.extend({
 
   newItem: function () {
     this.close();
-    router.navigate("/new", true);
+    App.router.navigate("/new", true);
   },
 
   setCurrentView: function(view, config) {

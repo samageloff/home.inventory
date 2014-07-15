@@ -27,13 +27,16 @@ App.Router = Backbone.Router.extend({
   },
 
   categoryList: function(id) {
-    var categoryIndexView = new App.CategoryIndexView();
-    $('#main').html(categoryIndexView.render().el);
+    var categoryCollection = new App.CategoryIndexCollection();
+    categoryCollection.fetch({ success: function(categoryCollection) {
+      var categoryIndexView = new App.CategoryIndexView({collection: categoryCollection});
+      $('#main').html(categoryIndexView.render().el);
+    }});
   },
 
   groupList: function(id) {
-    var category = new App.ItemListModel({ id: id });
-    var categoryListView = new App.ItemListView({ model: category });
+    var category = new App.ItemListModel({ id: id }),
+        categoryListView = new App.ItemListView({ model: category });
     $('#main').html(categoryListView.render().el);
   },
 
@@ -67,6 +70,7 @@ App.Router = Backbone.Router.extend({
         var singleItemEditView = new App.SingleItemEditView({ model: model });
         $('#main').html(singleItemEditView.render().el);
         App.imager();
+        App.categoryService();
         App.displayToggle();
       }
     });

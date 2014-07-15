@@ -594,13 +594,29 @@ footer {
 
 
 /* Autosuggest */
-.autocomplete-suggestion {
-  background-color: $brand;
-  color: $gesso;
-  cursor: pointer;
-  padding: 2px 9px;
-}
+.autocomplete-suggestions {
+  background: #FFF;
+  border: 1px solid #DDD;
+  border-top: 0;
+  overflow: auto;
 
+  .autocomplete-suggestion {
+    padding: 2px 8px;
+    white-space: nowrap;
+    overflow: hidden;
+
+    &.autocomplete-selected {
+      background: #F0F0F0;
+    }
+
+    strong {
+      font-weight: normal;
+      color: #3399FF;
+    }
+
+  }
+
+}
 
 /* Custom Form Stuff */
 .hidden {
