@@ -17,6 +17,14 @@ App.CategoryIndexView = Backbone.View.extend({
 
   render: function() {
     this.$el.empty();
+
+    // if there are no categories, redirect
+    if (this.collection.length === 0) {
+      App.router.navigate('#/');
+    }
+
+    // iterate over collection and create subview
+    // for each category item
     this.collection.each(function(item) {
       this.renderCategory(item);
     }, this);

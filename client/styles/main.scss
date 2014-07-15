@@ -110,7 +110,7 @@ header {
 
   img {
     float: left;
-    margin-right: 1em;
+    margin: 1em 0 0;
     max-width: 100px;
   }
 
@@ -123,8 +123,8 @@ header {
     font-size: 1em;
     padding: 10px;
     position: absolute;
-    right: 0;
-    top: 22%;
+    right: -10px;
+    top: 33%;
 
     &:hover {
       color: $midnight;
@@ -141,6 +141,7 @@ header {
 /* File Upload */
 .file-upload {
   overflow: hidden;
+  margin-bottom: 1em;
   position: relative;
 
   input {

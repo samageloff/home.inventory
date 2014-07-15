@@ -30,6 +30,17 @@
     <script type="text/template" id="home-template">
       <h1>be·long·ings</h1>
       <div class="grid-items-lines">
+        <% if (!count) { %>
+        <span class="grid-item grid-item-big">
+          <p>Lets get started!</p>
+        </span>
+        <nav>
+          <a href="#/new" class="grid-item grid-item-big" id="add-item">
+            <span class="icon-add icon-forward-r">Add an item</span>
+          </a>
+        </nav>
+        <% }
+        else { %>
         <a href="#/all" class="grid-item">
           <h2 id="count-items"><%= count %></h2>
           <p>Items</p>
@@ -50,20 +61,7 @@
             <span class="icon-tags icon-forward-r">Browse</span>
           </a>
         </nav>
-      </div>
-    </script>
-
-    <script type="text/template" id="get-started-template">
-      <h1>be·long·ings</h1>
-      <div class="grid-items-lines">
-        <span class="grid-item grid-item-big">
-          <p>Lets get started!</p>
-        </span>
-        <nav>
-          <a href="#/new" class="grid-item grid-item-big" id="add-item">
-            <span class="icon-add icon-forward-r">Add an item</span>
-          </a>
-        </nav>
+        <% } %>
       </div>
     </script>
 
@@ -126,10 +124,10 @@
       </section>
     </script>
 
-    <script type="text/template" id="image-upload-template">
+    <script type="text/template" id="new-item-template">
       <section class="form-layout">
         <h2>New Item</h2>
-        <div class="bd trim">
+        <div class="bd">
           <div class="media-block upload-placeholder">
             <div class="progress-bar-indication"></div>
           </div>
@@ -139,13 +137,6 @@
               <input capture="camera" type="file" name="image" id="fileupload">
             </button>
           </form>
-        </div>
-      </section>
-    </script>
-
-    <script type="text/template" id="new-item-template">
-      <section class="form-layout">
-        <div class="bd">
           <form id="new-item-form" action="#">
             <input type="hidden" name="slug" id="slug" value="">
             <div class="form-group">
@@ -179,6 +170,7 @@
 
     <script type="text/template" id="edit-item-template">
       <section class="form-layout">
+        <p>Editing: <b><%= title %></b></p>
         <div class="bd">
           <% if (image[0]) { %>
           <div class="media-block" id="upload-placeholder">

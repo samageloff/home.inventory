@@ -3,10 +3,10 @@ App.HomeView = Backbone.View.extend({
   tagName: 'section',
   className: 'landing',
   template: _.template($('#home-template').html()),
-  getStarted: _.template($('#get-started-template').html()),
 
   events: {
-    'click .grid-item': 'close'
+    'click #add-item': 'close',
+    'click #browse-categories': 'close'
   },
 
   initialize: function() {
@@ -16,17 +16,20 @@ App.HomeView = Backbone.View.extend({
 
   render: function() {
     this.$el.empty();
-    var count = this.model.get('count');
+    this.setHomeView();
+    return this;
+  },
+
+  setHomeView: function() {
+    var markup = this.model.toJSON(),
+        count = this.model.get('count');
 
     if (count) {
       var totalVal = this.model.get('value');
       this.model.set('value', App.convertLargeNum(totalVal));
-      this.$el.html(this.template(this.model.toJSON())).fadeIn('fast');
     }
-    else {
-      this.$el.html(this.getStarted());
-    }
-    return this;
+
+    this.$el.html(this.template(markup)).fadeIn('fast');
   },
 
   close: function() {

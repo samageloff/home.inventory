@@ -188,6 +188,14 @@ App.CategoryIndexView = Backbone.View.extend({
 
   render: function() {
     this.$el.empty();
+
+    // if there are no categories, redirect
+    if (this.collection.length === 0) {
+      App.router.navigate('#/');
+    }
+
+    // iterate over collection and create subview
+    // for each category item
     this.collection.each(function(item) {
       this.renderCategory(item);
     }, this);
@@ -407,10 +415,10 @@ App.HomeView = Backbone.View.extend({
   tagName: 'section',
   className: 'landing',
   template: _.template($('#home-template').html()),
-  getStarted: _.template($('#get-started-template').html()),
 
   events: {
-    'click .grid-item': 'close'
+    'click #add-item': 'close',
+    'click #browse-categories': 'close'
   },
 
   initialize: function() {
@@ -420,17 +428,20 @@ App.HomeView = Backbone.View.extend({
 
   render: function() {
     this.$el.empty();
-    var count = this.model.get('count');
+    this.setHomeView();
+    return this;
+  },
+
+  setHomeView: function() {
+    var markup = this.model.toJSON(),
+        count = this.model.get('count');
 
     if (count) {
       var totalVal = this.model.get('value');
       this.model.set('value', App.convertLargeNum(totalVal));
-      this.$el.html(this.template(this.model.toJSON())).fadeIn('fast');
     }
-    else {
-      this.$el.html(this.getStarted());
-    }
-    return this;
+
+    this.$el.html(this.template(markup)).fadeIn('fast');
   },
 
   close: function() {
@@ -440,73 +451,73 @@ App.HomeView = Backbone.View.extend({
   }
 
 });
-App.ImageUploadView = Backbone.View.extend({
+// App.ImageUploadView = Backbone.View.extend({
 
-  events: {
-    'click .icon-close': 'removeImage'
-  },
+//   events: {
+//     'click .icon-close': 'removeImage'
+//   },
 
-  template: _.template($('#image-upload-template').html()),
+//   template: _.template($('#image-upload-template').html()),
 
-  initialize: function(options) {
-    Backbone.pubSub.on('image-upload-complete', function() {
-      this.updatePlaceholder(App.imager.image_store[3]);
-    }, this);
-  },
+//   initialize: function(options) {
+//     Backbone.pubSub.on('image-upload-complete', function() {
+//       this.updatePlaceholder(App.imager.image_store[3]);
+//     }, this);
+//   },
 
-  render: function() {
-    this.$el.html(this.template()).fadeIn('fast');
-    return this;
-  },
+//   render: function() {
+//     this.$el.html(this.template()).fadeIn('fast');
+//     return this;
+//   },
 
-  updatePlaceholder: function(src) {
-    var placeholder = $('.upload-placeholder'),
-        path = src;
+//   updatePlaceholder: function(src) {
+//     var placeholder = $('.upload-placeholder'),
+//         path = src;
 
-    // clear placeholder
-    // TODO: this may eventually be an array
-    // handle it, hacky
-    placeholder.empty();
-    $('#upload-placeholder').empty();
+//     // clear placeholder
+//     // TODO: this may eventually be an array
+//     // handle it, hacky
+//     placeholder.empty();
+//     $('#upload-placeholder').empty();
 
-    // add image + close button
-    placeholder.append('<img />').append('<a />').fadeIn('fast');
+//     // add image + close button
+//     placeholder.append('<img />').append('<a />').fadeIn('fast');
 
-    // find image + add image src
-    placeholder.find('img').attr('src', App.imager.image_store[0]);
+//     // find image + add image src
+//     placeholder.find('img').attr('src', App.imager.image_store[0]);
 
-    // find close button add icon + href
-    placeholder
-      .find('a')
-      .addClass('icon-close')
-      .attr('href', '#')
-      .attr('data-id', path)
-  },
+//     // find close button add icon + href
+//     placeholder
+//       .find('a')
+//       .addClass('icon-close')
+//       .attr('href', '#')
+//       .attr('data-id', path)
+//   },
 
-  removeImage: function(e) {
-    e.preventDefault();
+//   removeImage: function(e) {
+//     e.preventDefault();
 
-    var $self = $(e.target),
-        image_id = $self.data('id');
+//     var $self = $(e.target),
+//         image_id = $self.data('id');
 
-    if (image_id) {
-      $.get('api/remove/' + image_id, function(data) {
-        $self.closest('.media-block').fadeOut('250');
-        Backbone.pubSub.trigger('image-remove', this);
-      })
-      .fail(function() {
-        console.log('Failed to remove the image.');
-      })
-    }
-  },
+//     if (image_id) {
+//       $.get('api/remove/' + image_id, function(data) {
+//         $self.closest('.media-block').fadeOut('250');
+//         Backbone.pubSub.trigger('image-remove', this);
+//       })
+//       .fail(function() {
+//         console.log('Failed to remove the image.');
+//       })
+//     }
+//   },
 
-  close: function() {
-    console.log('Kill: ', this);
-    this.unbind();
-    this.remove();
-  }
+//   close: function() {
+//     console.log('Kill: ', this);
+//     this.unbind();
+//     this.remove();
+//   }
 
-});
+// });
 App.ItemListView = Backbone.View.extend({
 
   tagName: 'section',
@@ -619,7 +630,8 @@ App.NewItemView = Backbone.View.extend({
   events: {
     'submit #new-item-form': 'save',
     'click #save': 'save',
-    'click #cancel': 'cancel'
+    'click #cancel': 'cancel',
+    'click .icon-close': 'removeImage'
   },
 
   template: _.template($('#new-item-template').html()),
@@ -643,6 +655,7 @@ App.NewItemView = Backbone.View.extend({
 
   setImagePath: function() {
     this.model.set('image', App.imager.image_store);
+    this.updatePlaceholder(App.imager.image_store[3]);
   },
 
   save: function(e) {
@@ -660,6 +673,47 @@ App.NewItemView = Backbone.View.extend({
           App.router.navigate('#/view/' + model.id);
         }
       });
+    }
+  },
+
+  updatePlaceholder: function(src) {
+    var placeholder = $('.upload-placeholder'),
+        path = src;
+
+    // clear placeholder
+    // TODO: this may eventually be an array
+    // handle it, hacky
+    placeholder.empty();
+    $('#upload-placeholder').empty();
+
+    // add image + close button
+    placeholder.append('<img />').append('<a />').fadeIn('fast');
+
+    // find image + add image src
+    placeholder.find('img').attr('src', App.imager.image_store[0]);
+
+    // find close button add icon + href
+    placeholder
+      .find('a')
+      .addClass('icon-close')
+      .attr('href', '#')
+      .attr('data-id', path)
+  },
+
+  removeImage: function(e) {
+    e.preventDefault();
+
+    var $self = $(e.target),
+        image_id = $self.data('id');
+
+    if (image_id) {
+      $.get('api/remove/' + image_id, function(data) {
+        $self.closest('.media-block').fadeOut('250');
+        Backbone.pubSub.trigger('image-remove', this);
+      })
+      .fail(function() {
+        console.log('Failed to remove the image.');
+      })
     }
   },
 
@@ -777,11 +831,8 @@ App.Router = Backbone.Router.extend({
     var model = new App.NewItemModel();
     model.fetch({
       success: function() {
-        var newItemView = new App.NewItemView({ model: model }),
-            imageUploadView = new App.ImageUploadView();
-        $('#main')
-          .html(newItemView.render().el)
-          .prepend(imageUploadView.render().el);
+        var newItemView = new App.NewItemView({ model: model });
+        $('#main').html(newItemView.render().el);
         App.imager();
         App.categoryService();
         App.displayToggle();
@@ -790,14 +841,11 @@ App.Router = Backbone.Router.extend({
   },
 
   edit: function(id) {
-    var model = new App.SingleItemModel({ id: id }),
-        imageUploadView = new App.ImageUploadView();
+    var model = new App.SingleItemModel({ id: id });
     model.fetch({
       success: function() {
         var singleItemEditView = new App.SingleItemEditView({ model: model });
-        $('#main')
-          .html(singleItemEditView.render().el)
-          .prepend(imageUploadView.render().el);
+        $('#main').html(singleItemEditView.render().el);
         App.imager();
         App.displayToggle();
       }
@@ -849,6 +897,15 @@ App.imager = function() {
     add: function (e, data) {
       $loading.addClass('active');
       data.submit();
+    },
+
+    error: function(jqXHR, textStatus, errorThrown) {
+      if (errorThrown === 'abort') {
+        console.log('File Upload has been canceled');
+      }
+      else {
+        console.log('An error has occured', errorThrown);
+      }
     },
 
     done: function (e, data) {

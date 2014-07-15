@@ -40,6 +40,15 @@ App.imager = function() {
       data.submit();
     },
 
+    error: function(jqXHR, textStatus, errorThrown) {
+      if (errorThrown === 'abort') {
+        console.log('File Upload has been canceled');
+      }
+      else {
+        console.log('An error has occured', errorThrown);
+      }
+    },
+
     done: function (e, data) {
       $loading.removeClass('active');
       $.each(data.files, function (index, file) {

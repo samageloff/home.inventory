@@ -769,7 +769,7 @@ header {
     clear: both; }
   .media-block img {
     float: left;
-    margin-right: 1em;
+    margin: 1em 0 0;
     max-width: 100px; }
   .media-block .media-body {
     float: left; }
@@ -778,8 +778,8 @@ header {
     font-size: 1em;
     padding: 10px;
     position: absolute;
-    right: 0;
-    top: 22%; }
+    right: -10px;
+    top: 33%; }
     .media-block [class^="icon-"]:hover {
       color: black; }
   .media-block:empty {
@@ -788,6 +788,7 @@ header {
 /* File Upload */
 .file-upload {
   overflow: hidden;
+  margin-bottom: 1em;
   position: relative; }
   .file-upload input {
     position: absolute;
