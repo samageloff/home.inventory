@@ -8,18 +8,13 @@ App.ItemListView = Backbone.View.extend({
   },
 
   initialize: function() {
-    _.bindAll(this, 'render');
-
-    this.collection = new App.ItemListCollection();
-    this.collection.fetch({reset: true});
-    this.render();
-
-    this.listenTo(this.collection, 'reset', this.render);
     Backbone.pubSub.trigger('header-show', this);
     Backbone.pubSub.trigger('item-list', this);
     Backbone.pubSub.on('remove-category-list', function() {
       this.close();
     }, this);
+
+    this.listenTo(this.collection, 'reset', this.render);
   },
 
   render: function() {
@@ -37,7 +32,7 @@ App.ItemListView = Backbone.View.extend({
   },
 
   close: function() {
-    console.log('Kill: ', this);
+    console.log('Kill:App.ItemListView ', this);
     this.unbind();
     this.remove();
   }

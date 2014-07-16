@@ -35,8 +35,34 @@ App.SingleItemEditView = Backbone.View.extend({
   },
 
   setImagePath: function() {
-    this.model.set('image', App.imager.image_store);
+    this.model.save('image', App.imager.image_store);
     this.updatePlaceholder(App.imager.image_store[3]);
+  },
+
+  updatePlaceholder: function(src) {
+    var $placeholder = $('.upload-placeholder'),
+        $uploadButton = $('.direct-upload'),
+        path = src;
+
+    // clear placeholder
+    // TODO: this may eventually be an array
+    // handle it, hacky
+    $placeholder.empty();
+    $('#upload-placeholder').empty();
+    $uploadButton.hide();
+
+    // add image + close button
+    $placeholder.append('<img />').append('<a />').fadeIn('fast');
+
+    // find image + add image src
+    $placeholder.find('img').attr('src', App.imager.image_store[0]);
+
+    // find close button add icon + href
+    $placeholder
+      .find('a')
+      .addClass('icon-close')
+      .attr('href', '#')
+      .attr('data-id', path)
   },
 
   removeImage: function(e) {
@@ -45,8 +71,13 @@ App.SingleItemEditView = Backbone.View.extend({
     var $self = $(e.target),
         image_id = $self.data('id');
 
+        console.log('image_id', image_id);
+
     if (image_id) {
       $.get('api/remove/' + image_id, function(data) {
+
+        console.log('data', data);
+
         $self.closest('.media-block').find('img').remove();
         $self.remove();
         Backbone.pubSub.trigger('image-remove', this);
@@ -57,7 +88,6 @@ App.SingleItemEditView = Backbone.View.extend({
     }
     else {
       $self.closest('.media-block').fadeOut('250');
-      Backbone.pubSub.trigger('image-remove', this);
     }
 
   },
@@ -100,7 +130,7 @@ App.SingleItemEditView = Backbone.View.extend({
   },
 
   close: function() {
-    console.log('Kill: ', this);
+    console.log('Kill:App.SingleItemEditView ', this);
     App.categoryService('dispose');
     this.unbind();
     this.remove();

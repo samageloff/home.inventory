@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="no-js" lang="">
   <head>
-    <title>I've Got [This]</title>
+    <title>i've got this</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="">
@@ -28,15 +28,15 @@
     </script>
 
     <script type="text/template" id="home-template">
-      <h1>be·long·ings</h1>
+      <h1>i&#39;ve <i>got</i> this</h1>
       <div class="grid-items-lines">
         <% if (!count) { %>
         <span class="grid-item grid-item-big">
           <p>Lets get started!</p>
         </span>
         <nav>
-          <a href="#/new" class="grid-item grid-item-big" id="add-item">
-            <span class="icon-add icon-forward-r">Add an item</span>
+          <a href="#/new" class="grid-item grid-item-big">
+            <span class="icon-add icon-forward-r">New item</span>
           </a>
         </nav>
         <% }
@@ -54,8 +54,8 @@
           <p>Total Value</p>
         </a>
         <nav>
-          <a href="#/add" class="grid-item grid-item-big" id="add-item">
-            <span class="icon-add icon-forward-r">Add an item</span>
+          <a href="#/new" class="grid-item grid-item-big">
+            <span class="icon-add icon-forward-r">New item</span>
           </a>
           <a href="#/categories" class="grid-item grid-item-big" id="browse-categories">
             <span class="icon-tags icon-forward-r">Browse</span>
@@ -118,7 +118,7 @@
         </div>
         <footer>
           <button class="icon-edit"></button>
-          <button class="icon-trash pull-right"></button>
+          <button class="icon-trash pull-right" data-id="<%= image[3] %>"></button>
         </footer>
       </section>
     </script>

@@ -397,6 +397,7 @@ section {
 
       img {
         float: left;
+        height: 80px;
         margin-right: 1em;
         margin-bottom: auto;
         opacity: 1;
@@ -628,5 +629,12 @@ footer {
   a {
     color: $darkfog;
   }
+}
+
+
+/* Prevent Focus Jumping */
+.fixfixed footer {
+  bottom: 0;
+  position: absolute;
 }
 

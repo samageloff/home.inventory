@@ -43,7 +43,7 @@ App.HomeView = Backbone.View.extend({
   },
 
   close: function() {
-    console.log('Kill: ', this);
+    console.log('Kill:App.HomeView ', this);
     this.unbind();
     this.remove();
   }

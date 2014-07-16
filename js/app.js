@@ -1,20 +1,4 @@
-/*
-$.support.touch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;
-events: (function() {
-  var events = {};
-  var clickEvent = $.support.touch ? 'touchend' : 'click';
-  events[clickEvent + ' .icon']  = "open";
-  return events;
-})()
-*/
-
-$(function() {
-  App.router = new App.Router();
-  Backbone.history.start();
-});
-
 App.convertToSlug = function(Text) {
-  console.log('App.convertToSlug');
   return Text
     .toLowerCase()
     .replace(/[^\w ]+/g,'')
@@ -22,12 +6,10 @@ App.convertToSlug = function(Text) {
 };
 
 App.convertLargeNum = function(Num) {
-  console.log('App.convertLargeNum');
   return Num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
 App.imager = function() {
-  console.log('App.imager');
   var url = 'api/upload',
       $loading = $('.progress-bar-indication');
 
@@ -66,8 +48,6 @@ App.imager = function() {
 };
 
 App.categoryService = function(mode) {
-  console.log('App.categoryService', mode);
-
   function getCategories() {
     return $.ajax('api/autocomplete');
   }
@@ -90,7 +70,6 @@ App.categoryService = function(mode) {
 
 /* Helper method */
 App.displayToggle = function() {
-  console.log('App.displayToggle');
   var $trigger = $('.display-toggle').find('.trigger'),
       $siblings = $trigger.siblings();
 
@@ -100,6 +79,16 @@ App.displayToggle = function() {
         $siblings.show().focus();
       });
 
+};
+
+App.fixFixed = function() {
+  // Only on touch devices
+  if (Modernizr.touch) {
+    $("body").mobileFix({
+      inputElements: "input, textarea, select",
+      addClass: "fixfixed"
+    });
+  }
 };
 
 // Extend the callbacks to work with Bootstrap, as used in this example
@@ -130,5 +119,40 @@ $.fn.serializeObject = function () {
   return $.each(this.serializeArray(), b), a
 };
 
+$.fn.mobileFix = function (options) {
+  var $parent = $(this),
+  $fixedElements = $(options.fixedElements);
+
+  $(document)
+  .on('focus', options.inputElements, function(e) {
+    $parent.addClass(options.addClass);
+  })
+  .on('blur', options.inputElements, function(e) {
+    $parent.removeClass(options.addClass);
+
+    // Fix for some scenarios where you need to start scrolling
+    setTimeout(function() {
+        $(document).scrollTop($(document).scrollTop())
+    }, 1);
+  });
+
+  return this; // Allowing chaining
+};
+
+$.support.touch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;
+events: (function() {
+  var events = {};
+  var clickEvent = $.support.touch ? 'touchend' : 'click';
+  events[clickEvent + ' .icon']  = "open";
+  console.log(events, clickEvent);
+  return events;
+})();
+
 /* Barebones Pub/Sub */
 Backbone.pubSub = _.extend({}, Backbone.Events);
+
+
+$(function() {
+  App.router = new App.Router();
+  Backbone.history.start();
+});

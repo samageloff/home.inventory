@@ -51,10 +51,13 @@ App.ItemView = Backbone.View.extend({
       }
 
     }
+
+    e.stopImmediatePropagation();
+
   },
 
   close: function() {
-    console.log('Kill: ', this);
+    console.log('Kill:App.ItemView ', this);
     this.unbind();
     this.remove();
   }

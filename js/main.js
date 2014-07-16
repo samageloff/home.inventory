@@ -199,7 +199,7 @@ App.CategoryIndexView = Backbone.View.extend({
   },
 
   close: function() {
-    console.log('Kill: ', this);
+    console.log('Kill:App.CategoryIndexView ', this);
     this.unbind();
     this.remove();
   }
@@ -259,8 +259,34 @@ App.SingleItemEditView = Backbone.View.extend({
   },
 
   setImagePath: function() {
-    this.model.set('image', App.imager.image_store);
+    this.model.save('image', App.imager.image_store);
     this.updatePlaceholder(App.imager.image_store[3]);
+  },
+
+  updatePlaceholder: function(src) {
+    var $placeholder = $('.upload-placeholder'),
+        $uploadButton = $('.direct-upload'),
+        path = src;
+
+    // clear placeholder
+    // TODO: this may eventually be an array
+    // handle it, hacky
+    $placeholder.empty();
+    $('#upload-placeholder').empty();
+    $uploadButton.hide();
+
+    // add image + close button
+    $placeholder.append('<img />').append('<a />').fadeIn('fast');
+
+    // find image + add image src
+    $placeholder.find('img').attr('src', App.imager.image_store[0]);
+
+    // find close button add icon + href
+    $placeholder
+      .find('a')
+      .addClass('icon-close')
+      .attr('href', '#')
+      .attr('data-id', path)
   },
 
   removeImage: function(e) {
@@ -269,8 +295,13 @@ App.SingleItemEditView = Backbone.View.extend({
     var $self = $(e.target),
         image_id = $self.data('id');
 
+        console.log('image_id', image_id);
+
     if (image_id) {
       $.get('api/remove/' + image_id, function(data) {
+
+        console.log('data', data);
+
         $self.closest('.media-block').find('img').remove();
         $self.remove();
         Backbone.pubSub.trigger('image-remove', this);
@@ -281,7 +312,6 @@ App.SingleItemEditView = Backbone.View.extend({
     }
     else {
       $self.closest('.media-block').fadeOut('250');
-      Backbone.pubSub.trigger('image-remove', this);
     }
 
   },
@@ -324,7 +354,7 @@ App.SingleItemEditView = Backbone.View.extend({
   },
 
   close: function() {
-    console.log('Kill: ', this);
+    console.log('Kill:App.SingleItemEditView ', this);
     App.categoryService('dispose');
     this.unbind();
     this.remove();
@@ -452,7 +482,7 @@ App.HomeView = Backbone.View.extend({
   },
 
   close: function() {
-    console.log('Kill: ', this);
+    console.log('Kill:App.HomeView ', this);
     this.unbind();
     this.remove();
   }
@@ -535,18 +565,13 @@ App.ItemListView = Backbone.View.extend({
   },
 
   initialize: function() {
-    _.bindAll(this, 'render');
-
-    this.collection = new App.ItemListCollection();
-    this.collection.fetch({reset: true});
-    this.render();
-
-    this.listenTo(this.collection, 'reset', this.render);
     Backbone.pubSub.trigger('header-show', this);
     Backbone.pubSub.trigger('item-list', this);
     Backbone.pubSub.on('remove-category-list', function() {
       this.close();
     }, this);
+
+    this.listenTo(this.collection, 'reset', this.render);
   },
 
   render: function() {
@@ -564,7 +589,7 @@ App.ItemListView = Backbone.View.extend({
   },
 
   close: function() {
-    console.log('Kill: ', this);
+    console.log('Kill:App.ItemListView ', this);
     this.unbind();
     this.remove();
   }
@@ -623,10 +648,13 @@ App.ItemView = Backbone.View.extend({
       }
 
     }
+
+    e.stopImmediatePropagation();
+
   },
 
   close: function() {
-    console.log('Kill: ', this);
+    console.log('Kill:App.ItemView ', this);
     this.unbind();
     this.remove();
   }
@@ -733,7 +761,7 @@ App.NewItemView = Backbone.View.extend({
   },
 
   close: function() {
-    console.log('Kill: ', this);
+    console.log('Kill:App.NewItemView ', this);
     App.categoryService('dispose');
     this.unbind();
     this.remove();
@@ -772,16 +800,33 @@ App.SingleItemView = Backbone.View.extend({
     App.router.navigate("/edit/" + this.model.id, true);
   },
 
-  trash: function() {
+  trash: function(e) {
     if (window.confirm('Are you sure?')) {
+      this.removeImage(e);
       this.model.destroy();
       this.close();
       App.router.navigate("/", true);
     }
   },
 
+  removeImage: function(e) {
+    var $self = $(e.target),
+        image_id = $self.data('id');
+
+        console.log('image_id', image_id);
+
+    if (image_id) {
+      $.get('api/remove/' + image_id, function(data) {
+      })
+      .fail(function() {
+        console.log('Failed to remove the image.');
+      })
+    }
+
+  },
+
   close: function() {
-    console.log('Kill: ', this);
+    console.log('Kill:App.SingleItemView ', this);
     this.unbind();
     this.remove();
   }
@@ -824,9 +869,12 @@ App.Router = Backbone.Router.extend({
   },
 
   groupList: function(id) {
-    var category = new App.ItemListModel({ id: id }),
-        categoryListView = new App.ItemListView({ model: category });
-    $('#main').html(categoryListView.render().el);
+    var itemCollection = new App.ItemListCollection();
+    itemCollection.fetch({ success: function(itemCollection) {
+      console.log(itemCollection);
+      var categoryListView = new App.ItemListView({ collection: itemCollection });
+      $('#main').html(categoryListView.render().el);
+    }});
   },
 
   view: function(id) {
@@ -848,6 +896,7 @@ App.Router = Backbone.Router.extend({
         App.imager();
         App.categoryService();
         App.displayToggle();
+        App.fixFixed();
       }
     });
   },
@@ -870,23 +919,7 @@ App.Router = Backbone.Router.extend({
   }
 
 });
-/*
-$.support.touch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;
-events: (function() {
-  var events = {};
-  var clickEvent = $.support.touch ? 'touchend' : 'click';
-  events[clickEvent + ' .icon']  = "open";
-  return events;
-})()
-*/
-
-$(function() {
-  App.router = new App.Router();
-  Backbone.history.start();
-});
-
 App.convertToSlug = function(Text) {
-  console.log('App.convertToSlug');
   return Text
     .toLowerCase()
     .replace(/[^\w ]+/g,'')
@@ -894,12 +927,10 @@ App.convertToSlug = function(Text) {
 };
 
 App.convertLargeNum = function(Num) {
-  console.log('App.convertLargeNum');
   return Num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
 App.imager = function() {
-  console.log('App.imager');
   var url = 'api/upload',
       $loading = $('.progress-bar-indication');
 
@@ -938,8 +969,6 @@ App.imager = function() {
 };
 
 App.categoryService = function(mode) {
-  console.log('App.categoryService', mode);
-
   function getCategories() {
     return $.ajax('api/autocomplete');
   }
@@ -962,7 +991,6 @@ App.categoryService = function(mode) {
 
 /* Helper method */
 App.displayToggle = function() {
-  console.log('App.displayToggle');
   var $trigger = $('.display-toggle').find('.trigger'),
       $siblings = $trigger.siblings();
 
@@ -972,6 +1000,16 @@ App.displayToggle = function() {
         $siblings.show().focus();
       });
 
+};
+
+App.fixFixed = function() {
+  // Only on touch devices
+  if (Modernizr.touch) {
+    $("body").mobileFix({
+      inputElements: "input, textarea, select",
+      addClass: "fixfixed"
+    });
+  }
 };
 
 // Extend the callbacks to work with Bootstrap, as used in this example
@@ -1002,5 +1040,40 @@ $.fn.serializeObject = function () {
   return $.each(this.serializeArray(), b), a
 };
 
+$.fn.mobileFix = function (options) {
+  var $parent = $(this),
+  $fixedElements = $(options.fixedElements);
+
+  $(document)
+  .on('focus', options.inputElements, function(e) {
+    $parent.addClass(options.addClass);
+  })
+  .on('blur', options.inputElements, function(e) {
+    $parent.removeClass(options.addClass);
+
+    // Fix for some scenarios where you need to start scrolling
+    setTimeout(function() {
+        $(document).scrollTop($(document).scrollTop())
+    }, 1);
+  });
+
+  return this; // Allowing chaining
+};
+
+$.support.touch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;
+events: (function() {
+  var events = {};
+  var clickEvent = $.support.touch ? 'touchend' : 'click';
+  events[clickEvent + ' .icon']  = "open";
+  console.log(events, clickEvent);
+  return events;
+})();
+
 /* Barebones Pub/Sub */
 Backbone.pubSub = _.extend({}, Backbone.Events);
+
+
+$(function() {
+  App.router = new App.Router();
+  Backbone.history.start();
+});

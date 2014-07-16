@@ -30,16 +30,33 @@ App.SingleItemView = Backbone.View.extend({
     App.router.navigate("/edit/" + this.model.id, true);
   },
 
-  trash: function() {
+  trash: function(e) {
     if (window.confirm('Are you sure?')) {
+      this.removeImage(e);
       this.model.destroy();
       this.close();
       App.router.navigate("/", true);
     }
   },
 
+  removeImage: function(e) {
+    var $self = $(e.target),
+        image_id = $self.data('id');
+
+        console.log('image_id', image_id);
+
+    if (image_id) {
+      $.get('api/remove/' + image_id, function(data) {
+      })
+      .fail(function() {
+        console.log('Failed to remove the image.');
+      })
+    }
+
+  },
+
   close: function() {
-    console.log('Kill: ', this);
+    console.log('Kill:App.SingleItemView ', this);
     this.unbind();
     this.remove();
   }
