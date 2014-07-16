@@ -65,6 +65,15 @@ module.exports = function(grunt) {
         ]
       },
 
+      jshint: {
+        all: [
+          'js/models/*.js',
+          'js/collections/*.js',
+          'js/views/*.js',
+          'js/routes/*.js'
+        ]
+      },
+
       copy: {
         dev: {
           files: [{
@@ -86,6 +95,28 @@ module.exports = function(grunt) {
             dest: 'dist/img/'
           }]
         }
+      },
+
+      // CSS minification.
+      cssmin: {
+          minify: {
+              src: ['css/main.css'],
+              dest: 'css/main-min.css'
+          }
+      },
+
+      // Javascript minification.
+      uglify: {
+          compile: {
+              options: {
+                  compress: true,
+                  verbose: true
+              },
+              files: [{
+                  src: 'js/main.js',
+                  dest: 'js/main-min.js'
+              }]
+          }
       },
 
       // For changes to the front-end code
@@ -137,7 +168,7 @@ module.exports = function(grunt) {
       }
   });
 
-  grunt.loadNpmTasks('grunt-contrib-sass');
+  grunt.loadNpmTasks('grunt-contrib-sass', 'grunt-contrib-uglify');
 
   grunt.registerTask('default', ['sass']);
   grunt.registerTask('init:dev', ['clean']);
@@ -148,7 +179,8 @@ module.exports = function(grunt) {
     'sass',
     'concat',
     'cssmin',
-    'copy:prod'
+    'uglify',
+    'copy:prod',
   ]);
 
   grunt.registerTask('heroku', [

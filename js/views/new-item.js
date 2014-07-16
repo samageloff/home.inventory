@@ -37,7 +37,7 @@ App.NewItemView = Backbone.View.extend({
     var data = $('#new-item-form').serializeObject();
     var value = $(e.currentTarget).val();
     var slugVal = App.convertToSlug($('#category').val());
-    data['slug'] = slugVal;
+    data.slug = slugVal;
 
     this.model.set(data);
 
@@ -71,7 +71,7 @@ App.NewItemView = Backbone.View.extend({
       .find('a')
       .addClass('icon-close')
       .attr('href', '#')
-      .attr('data-id', path)
+      .attr('data-id', path);
   },
 
   removeImage: function(e) {
@@ -88,7 +88,7 @@ App.NewItemView = Backbone.View.extend({
       })
       .fail(function() {
         console.log('Failed to remove the image.');
-      })
+      });
     }
   },
 

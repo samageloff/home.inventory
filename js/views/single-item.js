@@ -50,7 +50,7 @@ App.SingleItemView = Backbone.View.extend({
       })
       .fail(function() {
         console.log('Failed to remove the image.');
-      })
+      });
     }
 
   },

@@ -62,7 +62,7 @@ App.SingleItemEditView = Backbone.View.extend({
       .find('a')
       .addClass('icon-close')
       .attr('href', '#')
-      .attr('data-id', path)
+      .attr('data-id', path);
   },
 
   removeImage: function(e) {
@@ -84,7 +84,7 @@ App.SingleItemEditView = Backbone.View.extend({
       })
       .fail(function() {
         console.log('Failed to remove the image.');
-      })
+      });
     }
     else {
       $self.closest('.media-block').fadeOut('250');
@@ -104,7 +104,7 @@ App.SingleItemEditView = Backbone.View.extend({
     var data = $('#edit-item-form').serializeObject();
     var value = $(e.currentTarget).val();
     var slugVal = App.convertToSlug($('#category').val());
-    data['slug'] = slugVal;
+    data.slug = slugVal;
 
     this.model.set(data);
     console.log('data', data);

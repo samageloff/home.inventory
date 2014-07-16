@@ -37,7 +37,7 @@ App.ItemView = Backbone.View.extend({
         })
         .fail(function() {
           console.log('Failed to remove the image.');
-        })
+        });
       }
 
       this.model.destroy();

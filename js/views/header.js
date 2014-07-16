@@ -50,14 +50,14 @@ App.HeaderView = Backbone.View.extend({
   },
 
   setCurrentView: function(view, config) {
-    var config = config,
+    var conf = config,
         location = $('.location'),
         navigation = $('.navigation');
 
-      location.text(config.text);
+      location.text(conf.text);
       navigation.find('a')
-        .addClass(config.currentClass)
-        .removeClass(config.lastClass);
+        .addClass(conf.currentClass)
+        .removeClass(conf.lastClass);
   },
 
   goBack: function(e) {
@@ -67,10 +67,10 @@ App.HeaderView = Backbone.View.extend({
   },
 
   displayHeader: function(config) {
-    var config = config;
+    var conf = config;
     $('#header')
       .removeClass()
-      .addClass(config.display);
+      .addClass(conf.display);
   }
 
 });

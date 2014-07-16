@@ -10,7 +10,7 @@ App.HomeModel = Backbone.Model.extend({
   },
 
   url: function() {
-    return 'api/home/'
+    return 'api/home/';
   },
 
   parse: function(response) {

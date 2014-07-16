@@ -44,7 +44,7 @@ App.imager = function() {
         Backbone.pubSub.trigger('image-upload-complete', App.imager.image_store);
       });
     }
-  })
+  });
 };
 
 App.categoryService = function(mode) {
@@ -114,9 +114,9 @@ $.fn.serializeObject = function () {
   "use strict";
   var a = {}, b = function (b, c) {
       var d = a[c.name];
-      "undefined" != typeof d && d !== null ? $.isArray(d) ? d.push(c.value) : a[c.name] = [d, c.value] : a[c.name] = c.value
+      "undefined" != typeof d && d !== null ? $.isArray(d) ? d.push(c.value) : a[c.name] = [d, c.value] : a[c.name] = c.value;
   };
-  return $.each(this.serializeArray(), b), a
+  return $.each(this.serializeArray(), b), a;
 };
 
 $.fn.mobileFix = function (options) {
@@ -132,21 +132,21 @@ $.fn.mobileFix = function (options) {
 
     // Fix for some scenarios where you need to start scrolling
     setTimeout(function() {
-        $(document).scrollTop($(document).scrollTop())
+        $(document).scrollTop($(document).scrollTop());
     }, 1);
   });
 
   return this; // Allowing chaining
 };
 
-$.support.touch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;
-events: (function() {
-  var events = {};
-  var clickEvent = $.support.touch ? 'touchend' : 'click';
-  events[clickEvent + ' .icon']  = "open";
-  console.log(events, clickEvent);
-  return events;
-})();
+// $.support.touch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;
+// events: (function() {
+//   var events = {};
+//   var clickEvent = $.support.touch ? 'touchend' : 'click';
+//   events[clickEvent + ' .icon']  = "open";
+//   console.log(events, clickEvent);
+//   return events;
+// })();
 
 /* Barebones Pub/Sub */
 Backbone.pubSub = _.extend({}, Backbone.Events);

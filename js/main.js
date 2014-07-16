@@ -22,7 +22,7 @@ App.HomeModel = Backbone.Model.extend({
   },
 
   url: function() {
-    return 'api/home/'
+    return 'api/home/';
   },
 
   parse: function(response) {
@@ -286,7 +286,7 @@ App.SingleItemEditView = Backbone.View.extend({
       .find('a')
       .addClass('icon-close')
       .attr('href', '#')
-      .attr('data-id', path)
+      .attr('data-id', path);
   },
 
   removeImage: function(e) {
@@ -308,7 +308,7 @@ App.SingleItemEditView = Backbone.View.extend({
       })
       .fail(function() {
         console.log('Failed to remove the image.');
-      })
+      });
     }
     else {
       $self.closest('.media-block').fadeOut('250');
@@ -328,7 +328,7 @@ App.SingleItemEditView = Backbone.View.extend({
     var data = $('#edit-item-form').serializeObject();
     var value = $(e.currentTarget).val();
     var slugVal = App.convertToSlug($('#category').val());
-    data['slug'] = slugVal;
+    data.slug = slugVal;
 
     this.model.set(data);
     console.log('data', data);
@@ -413,14 +413,14 @@ App.HeaderView = Backbone.View.extend({
   },
 
   setCurrentView: function(view, config) {
-    var config = config,
+    var conf = config,
         location = $('.location'),
         navigation = $('.navigation');
 
-      location.text(config.text);
+      location.text(conf.text);
       navigation.find('a')
-        .addClass(config.currentClass)
-        .removeClass(config.lastClass);
+        .addClass(conf.currentClass)
+        .removeClass(conf.lastClass);
   },
 
   goBack: function(e) {
@@ -430,10 +430,10 @@ App.HeaderView = Backbone.View.extend({
   },
 
   displayHeader: function(config) {
-    var config = config;
+    var conf = config;
     $('#header')
       .removeClass()
-      .addClass(config.display);
+      .addClass(conf.display);
   }
 
 });
@@ -634,7 +634,7 @@ App.ItemView = Backbone.View.extend({
         })
         .fail(function() {
           console.log('Failed to remove the image.');
-        })
+        });
       }
 
       this.model.destroy();
@@ -699,7 +699,7 @@ App.NewItemView = Backbone.View.extend({
     var data = $('#new-item-form').serializeObject();
     var value = $(e.currentTarget).val();
     var slugVal = App.convertToSlug($('#category').val());
-    data['slug'] = slugVal;
+    data.slug = slugVal;
 
     this.model.set(data);
 
@@ -733,7 +733,7 @@ App.NewItemView = Backbone.View.extend({
       .find('a')
       .addClass('icon-close')
       .attr('href', '#')
-      .attr('data-id', path)
+      .attr('data-id', path);
   },
 
   removeImage: function(e) {
@@ -750,7 +750,7 @@ App.NewItemView = Backbone.View.extend({
       })
       .fail(function() {
         console.log('Failed to remove the image.');
-      })
+      });
     }
   },
 
@@ -820,7 +820,7 @@ App.SingleItemView = Backbone.View.extend({
       })
       .fail(function() {
         console.log('Failed to remove the image.');
-      })
+      });
     }
 
   },
@@ -965,7 +965,7 @@ App.imager = function() {
         Backbone.pubSub.trigger('image-upload-complete', App.imager.image_store);
       });
     }
-  })
+  });
 };
 
 App.categoryService = function(mode) {
@@ -1035,9 +1035,9 @@ $.fn.serializeObject = function () {
   "use strict";
   var a = {}, b = function (b, c) {
       var d = a[c.name];
-      "undefined" != typeof d && d !== null ? $.isArray(d) ? d.push(c.value) : a[c.name] = [d, c.value] : a[c.name] = c.value
+      "undefined" != typeof d && d !== null ? $.isArray(d) ? d.push(c.value) : a[c.name] = [d, c.value] : a[c.name] = c.value;
   };
-  return $.each(this.serializeArray(), b), a
+  return $.each(this.serializeArray(), b), a;
 };
 
 $.fn.mobileFix = function (options) {
@@ -1053,21 +1053,21 @@ $.fn.mobileFix = function (options) {
 
     // Fix for some scenarios where you need to start scrolling
     setTimeout(function() {
-        $(document).scrollTop($(document).scrollTop())
+        $(document).scrollTop($(document).scrollTop());
     }, 1);
   });
 
   return this; // Allowing chaining
 };
 
-$.support.touch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;
-events: (function() {
-  var events = {};
-  var clickEvent = $.support.touch ? 'touchend' : 'click';
-  events[clickEvent + ' .icon']  = "open";
-  console.log(events, clickEvent);
-  return events;
-})();
+// $.support.touch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;
+// events: (function() {
+//   var events = {};
+//   var clickEvent = $.support.touch ? 'touchend' : 'click';
+//   events[clickEvent + ' .icon']  = "open";
+//   console.log(events, clickEvent);
+//   return events;
+// })();
 
 /* Barebones Pub/Sub */
 Backbone.pubSub = _.extend({}, Backbone.Events);
