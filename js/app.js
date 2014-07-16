@@ -75,16 +75,16 @@ App.categoryService = function(mode) {
   getCategories()
     .done(function(result) {
       var categories = result.suggestions;
-      if (!mode) {
         $('#category').autocomplete({
           lookup: categories,
           preventBadQueries: true
         });
-      }
-      else {
-        $('#category').autocomplete(mode);
-      }
   });
+
+  // remove instance
+  if (mode) {
+    $('#category').autocomplete(mode);
+  }
 
 };
 

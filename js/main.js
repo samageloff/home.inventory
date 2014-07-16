@@ -647,6 +647,7 @@ App.NewItemView = Backbone.View.extend({
     _.bindAll(this, 'save');
     Backbone.Validation.bind(this);
     Backbone.pubSub.trigger('header-hide', this);
+    Backbone.pubSub.trigger('header-default', this);
 
     // Listen for image upload and pass to current model
     Backbone.pubSub.on('image-upload-complete', function() {
@@ -946,16 +947,16 @@ App.categoryService = function(mode) {
   getCategories()
     .done(function(result) {
       var categories = result.suggestions;
-      if (!mode) {
         $('#category').autocomplete({
           lookup: categories,
           preventBadQueries: true
         });
-      }
-      else {
-        $('#category').autocomplete(mode);
-      }
   });
+
+  // remove instance
+  if (mode) {
+    $('#category').autocomplete(mode);
+  }
 
 };
 
