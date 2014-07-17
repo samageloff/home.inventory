@@ -24,10 +24,12 @@ App.imager = function() {
 
     error: function(jqXHR, textStatus, errorThrown) {
       if (errorThrown === 'abort') {
-        console.log('File Upload has been canceled');
+        $loading.removeClass('active');
+        $loading.parent().text('File Upload has been canceled');
       }
       else {
-        console.log('An error has occured', errorThrown);
+        $loading.removeClass('active');
+        $loading.parent().text('Invalid file type. Please try again.');
       }
     },
 

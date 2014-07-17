@@ -152,7 +152,7 @@ module.exports = {
   upload: function(request, response) {
     var imager = new Imager(config, 'S3') // 'Rackspace' or 'S3'
     imager.upload([request.files.image], function (err, cdnUri, uploaded) {
-      if (err) return response.send(err.toString())
+      if (err) return response.send(err.toString());
       response.send(JSON.stringify({
         cdnUri: cdnUri,
         uploaded: uploaded
