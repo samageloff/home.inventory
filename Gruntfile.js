@@ -187,8 +187,8 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('heroku', [
-    'init:dev',
-    'build:dev'
+    'build:dev',
+    'concurrent:dev'
   ]);
 
   grunt.registerTask('server', [
