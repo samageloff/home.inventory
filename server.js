@@ -29,7 +29,8 @@ app.configure('development', function() {
 });
 
 // Connect to database
-mongoose.connect('mongodb://localhost/inventory_database');
+// mongoose.connect('mongodb://localhost/inventory_database');
+mongoose.connect('mongodb://sageloff:Y4.t3.r2@kahana.mongohq.com:10092/app27522078');
 mongoose.connection.on('open', function() {
   console.log("Connected to Mongoose...");
 });

@@ -32,6 +32,28 @@ module.exports = function(grunt) {
         prod: ['dist']
       },
 
+      concat: {
+        'build/vendor.js': [
+          'client/requires/modernizr/js/modernizr.js',
+          'client/requires/jquery/js/jquery.js',
+          'client/requires/underscore/js/underscore.js',
+          'client/requires/backbone/js/backbone.js'
+        ],
+        'build/plugins.js': [
+          'client/plugins/jquery.ui.widget.js',
+          'client/plugins/jquery.fileupload.js',
+          'client/plugins/jquery.autocomplete.js',
+          'client/plugins/backbone.validation.js'
+        ],
+        'build/app.js': [
+          'js/models/*.js',
+          'js/collections/*.js',
+          'js/views/*.js',
+          'js/routes/*.js',
+          'js/app.js'
+        ]
+      },
+
       sass: {
         dist: {
           options: {
@@ -43,26 +65,6 @@ module.exports = function(grunt) {
             'css/main.css': 'client/styles/main.scss'
           }
         }
-      },
-
-      concat: {
-        'js/vendor.js': [
-          'js/lib/modernizr.js',
-          'js/lib/jquery.min.js',
-          'js/lib/jquery.ui.widget.js',
-          'js/lib/jquery.fileupload.js',
-          'js/lib/jquery.autocomplete.js',
-          'js/lib/underscore.min.js',
-          'js/lib/backbone.js',
-          'js/lib/backbone.validation.js'
-        ],
-        'js/main.js': [
-          'js/models/*.js',
-          'js/collections/*.js',
-          'js/views/*.js',
-          'js/routes/*.js',
-          'js/app.js'
-        ]
       },
 
       jshint: {
@@ -113,7 +115,7 @@ module.exports = function(grunt) {
                   verbose: true
               },
               files: [{
-                  src: 'js/main.js',
+                  src: ' build/main.js',
                   dest: 'js/main-min.js'
               }]
           }
@@ -168,11 +170,12 @@ module.exports = function(grunt) {
       }
   });
 
-  grunt.loadNpmTasks('grunt-contrib-sass', 'grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-sass');
 
   grunt.registerTask('default', ['sass']);
-  grunt.registerTask('init:dev', ['clean']);
+  grunt.registerTask('init:dev', ['clean', 'bower', 'concat']);
   grunt.registerTask('build:dev', ['sass', 'concat']);
+
   grunt.registerTask('build:prod', [
     'clean:prod',
     'jshint:all',

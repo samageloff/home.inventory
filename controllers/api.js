@@ -3,7 +3,7 @@ var mongoose = require('mongoose'),
     ObjectId = Schema.ObjectId,
     models = require('../app/models'),
     config = require('../app/imager'),
-    Imager = require('../js/lib/imager');
+    Imager = require('../client/plugins/node.imager');
 
 module.exports = {
 
