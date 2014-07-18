@@ -24,8 +24,8 @@ module.exports = {
       mode: 0777
     },
     S3: {
-      key: 'AKIAIQQA65XK3DM6372Q',
-      secret: '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',
+      key: 'AKIAJWP4TU5YQX76VLJQ',
+      secret: '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',
       bucket: 'belongings-global',
       cdn: 'http://belongings-global.s3.amazonaws.com', // (optional)
       storageClass: 'REDUCED_REDUNDANCY' // (optional)
