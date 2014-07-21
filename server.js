@@ -11,17 +11,15 @@ var application_root = __dirname,
 var app = express();
 
 // Configure server
-app.configure(function() {
-  app.set('port', process.env.PORT || 3001);
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'hjs');
-  app.use(express.static(__dirname));
-  app.use(express.methodOverride());
-  app.use(express.logger('dev'));
-  app.use(express.favicon());
-  app.use(express.bodyParser());
-  app.use(app.router);
-});
+app.set('port', process.env.PORT || 3001);
+app.set('views', __dirname + '/views');
+app.set('view engine', 'hjs');
+app.use(express.static(__dirname));
+app.use(express.methodOverride());
+app.use(express.logger('dev'));
+app.use(express.favicon());
+app.use(express.bodyParser());
+app.use(app.router);
 
 // Development only
 app.configure('development', function() {
@@ -39,6 +37,6 @@ mongoose.connection.on('open', function() {
 routes.initialize(app);
 
 // Boot up the server:
-app.listen(app.get('port'), function() {
+http.createServer(app).listen(app.get('port'), function() {
   console.log('Server up: http://localhost:' + app.get('port'));
 });
