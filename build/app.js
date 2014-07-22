@@ -931,6 +931,9 @@ App.convertLargeNum = function(Num) {
 };
 
 App.imager = function() {
+
+  console.log('file upload');
+
   var url = 'api/upload',
       $loading = $('.progress-bar-indication');
 
@@ -944,13 +947,9 @@ App.imager = function() {
     },
 
     error: function(jqXHR, textStatus, errorThrown) {
-      if (errorThrown === 'abort') {
+      if (errorThrown) {
         $loading.removeClass('active');
-        $loading.parent().text('File Upload has been canceled');
-      }
-      else {
-        $loading.removeClass('active');
-        $loading.parent().text('Invalid file type. Please try again.');
+        $loading.parent().text('There\'s been an error: ' + errorThrown);
       }
     },
 

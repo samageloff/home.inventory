@@ -110,7 +110,6 @@ module.exports = {
   update: function(request, response, next) {
     console.log('Updating item ' + request.params.id, request.body.title);
     return models.ItemModel.findById(request.params.id, function(err, item) {
-      console.log(arguments);
       if (err) return next(err);
       if (!item) return response.send(404, "Hi, there was an error." );
 
@@ -138,6 +137,8 @@ module.exports = {
   delete: function(request, response) {
     console.log('Deleting item with id: ' + request.params.id);
     return models.ItemModel.findById(request.params.id, function(err, item) {
+      if (err) return next(err);
+      if (!item) return response.send(404, "Hi, there was an error." );
       return item.remove(function(err) {
         if(!err) {
             console.log('Item removed');

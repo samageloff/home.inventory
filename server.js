@@ -26,6 +26,8 @@ app.configure('development', function() {
   app.use(express.errorHandler());
 });
 
+if (app.settings.env === 'development') process.env.NODE_ENV = 'development';
+
 // Connect to database
 // mongoose.connect('mongodb://localhost/inventory_database');
 mongoose.connect('mongodb://sageloff:Y4.t3.r2@kahana.mongohq.com:10092/app27522078');
