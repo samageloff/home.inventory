@@ -1,3 +1,6 @@
 {"name":"newrelic","hostname":"sagelo-ny-04926.ad.hugeinc.com","pid":31086,"level":30,"msg":"Starting New Relic for Node.js connection process.","time":"2014-07-22T20:08:33.193Z","v":0}
 {"name":"newrelic","hostname":"sagelo-ny-04926.ad.hugeinc.com","pid":31086,"component":"new_relic_response","level":30,"msg":"Reporting to: https://rpm.newrelic.com/accounts/723165/applications/4323978","time":"2014-07-22T20:08:34.881Z","v":0}
 {"name":"newrelic","hostname":"sagelo-ny-04926.ad.hugeinc.com","pid":31086,"component":"collector_api","level":30,"msg":"Connected to collector-137.newrelic.com:443 with agent run ID 968806186.","time":"2014-07-22T20:08:34.882Z","v":0}
+{"name":"newrelic","hostname":"sagelo-ny-04926.ad.hugeinc.com","pid":31160,"level":30,"msg":"Starting New Relic for Node.js connection process.","time":"2014-07-22T20:12:24.601Z","v":0}
+{"name":"newrelic","hostname":"sagelo-ny-04926.ad.hugeinc.com","pid":31160,"component":"new_relic_response","level":30,"msg":"Reporting to: https://rpm.newrelic.com/accounts/723165/applications/4323978","time":"2014-07-22T20:12:25.430Z","v":0}
+{"name":"newrelic","hostname":"sagelo-ny-04926.ad.hugeinc.com","pid":31160,"component":"collector_api","level":30,"msg":"Connected to collector-137.newrelic.com:443 with agent run ID 968816432.","time":"2014-07-22T20:12:25.431Z","v":0}
