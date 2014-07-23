@@ -1,5 +1,3 @@
-var App = App || {};
-
 App.ItemListModel = Backbone.Model.extend({
   defaults: {
     title: '',

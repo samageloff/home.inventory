@@ -1,5 +1,3 @@
-var App = App || {};
-
 App.HomeModel = Backbone.Model.extend({
 
   defaults: {

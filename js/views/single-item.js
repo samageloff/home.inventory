@@ -5,7 +5,8 @@ App.SingleItemView = Backbone.View.extend({
     'click .icon-edit': 'edit',
     'click .icon-trash': 'trash'
   },
-  template: _.template($('#single-view-template').html()),
+
+  template: App.TemplateCache.get('#single-view-template'),
 
   initialize: function() {
     Backbone.pubSub.trigger('header-hide', this);

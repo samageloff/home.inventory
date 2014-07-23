@@ -1,5 +1,3 @@
-var App = App || {};
-
 App.CategoryIndexModel = Backbone.Model.extend({
   defaults: {
     _id: '',

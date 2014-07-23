@@ -1,5 +1,6 @@
 App.CategoryIndexItemView = Backbone.View.extend({
-  template: _.template($('#category-summary-template').html()),
+
+  template: App.TemplateCache.get('#category-summary-template'),
 
   render: function() {
     this.$el.empty();

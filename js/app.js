@@ -10,9 +10,6 @@ App.convertLargeNum = function(Num) {
 };
 
 App.imager = function() {
-
-  console.log('file upload');
-
   var url = 'api/upload',
       $loading = $('.progress-bar-indication');
 

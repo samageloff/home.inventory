@@ -1,5 +1,21 @@
 var App = App || {};
 
+App.TemplateCache = {
+  get: function(selector){
+    if (!this.templates){ this.templates = {}; }
+
+    var template = this.templates[selector];
+    if (!template){
+      template = $(selector).html();
+
+      // precompile the template, for underscore.js templates
+      template = _.template(template);
+
+      this.templates[selector] = template;
+    }
+    return template;
+  }
+};
 App.CategoryIndexModel = Backbone.Model.extend({
   defaults: {
     _id: '',
@@ -10,8 +26,6 @@ App.CategoryIndexModel = Backbone.Model.extend({
     count: 0
   }
 });
-var App = App || {};
-
 App.HomeModel = Backbone.Model.extend({
 
   defaults: {
@@ -29,8 +43,6 @@ App.HomeModel = Backbone.Model.extend({
     return response[0];
   }
 });
-var App = App || {};
-
 App.ItemListModel = Backbone.Model.extend({
   defaults: {
     title: '',
@@ -50,8 +62,6 @@ App.ItemListModel = Backbone.Model.extend({
     return response;
   }
 });
-var App = App || {};
-
 App.NewItemModel = Backbone.Model.extend({
 
   urlRoot: 'api/items/',
@@ -86,8 +96,6 @@ App.NewItemModel = Backbone.Model.extend({
     return response;
   }
 });
-var App = App || {};
-
 App.SingleItemModel = Backbone.Model.extend({
 
   events: {
@@ -206,7 +214,8 @@ App.CategoryIndexView = Backbone.View.extend({
 
 });
 App.CategoryIndexItemView = Backbone.View.extend({
-  template: _.template($('#category-summary-template').html()),
+
+  template: App.TemplateCache.get('#category-summary-template'),
 
   render: function() {
     this.$el.empty();
@@ -231,7 +240,7 @@ App.SingleItemEditView = Backbone.View.extend({
     'click .icon-close': 'removeImage'
   },
 
-  template: _.template($('#edit-item-template').html()),
+  template: App.TemplateCache.get('#edit-item-template'),
 
   initialize: function() {
     _.bindAll(this, 'save');
@@ -362,7 +371,8 @@ App.SingleItemEditView = Backbone.View.extend({
 
 });
 App.HeaderView = Backbone.View.extend({
-  template: _.template($('#header-template').html()),
+
+  template: App.TemplateCache.get('#header-template'),
 
   events: {
     'click .new' : 'newItem',
@@ -441,7 +451,7 @@ App.HomeView = Backbone.View.extend({
 
   tagName: 'section',
   className: 'landing',
-  template: _.template($('#home-template').html()),
+  template: App.TemplateCache.get('#home-template'),
 
   events: {
     'click #add-item': 'addItem',
@@ -488,73 +498,6 @@ App.HomeView = Backbone.View.extend({
   }
 
 });
-// App.ImageUploadView = Backbone.View.extend({
-
-//   events: {
-//     'click .icon-close': 'removeImage'
-//   },
-
-//   template: _.template($('#image-upload-template').html()),
-
-//   initialize: function(options) {
-//     Backbone.pubSub.on('image-upload-complete', function() {
-//       this.updatePlaceholder(App.imager.image_store[3]);
-//     }, this);
-//   },
-
-//   render: function() {
-//     this.$el.html(this.template()).fadeIn('fast');
-//     return this;
-//   },
-
-//   updatePlaceholder: function(src) {
-//     var placeholder = $('.upload-placeholder'),
-//         path = src;
-
-//     // clear placeholder
-//     // TODO: this may eventually be an array
-//     // handle it, hacky
-//     placeholder.empty();
-//     $('#upload-placeholder').empty();
-
-//     // add image + close button
-//     placeholder.append('<img />').append('<a />').fadeIn('fast');
-
-//     // find image + add image src
-//     placeholder.find('img').attr('src', App.imager.image_store[0]);
-
-//     // find close button add icon + href
-//     placeholder
-//       .find('a')
-//       .addClass('icon-close')
-//       .attr('href', '#')
-//       .attr('data-id', path)
-//   },
-
-//   removeImage: function(e) {
-//     e.preventDefault();
-
-//     var $self = $(e.target),
-//         image_id = $self.data('id');
-
-//     if (image_id) {
-//       $.get('api/remove/' + image_id, function(data) {
-//         $self.closest('.media-block').fadeOut('250');
-//         Backbone.pubSub.trigger('image-remove', this);
-//       })
-//       .fail(function() {
-//         console.log('Failed to remove the image.');
-//       })
-//     }
-//   },
-
-//   close: function() {
-//     console.log('Kill: ', this);
-//     this.unbind();
-//     this.remove();
-//   }
-
-// });
 App.ItemListView = Backbone.View.extend({
 
   tagName: 'section',
@@ -602,7 +545,7 @@ App.ItemView = Backbone.View.extend({
     'click .edit': 'edit',
     'click .delete': 'delete'
   },
-  template: _.template($('#category-items-template').html()),
+  template: App.TemplateCache.get('#category-items-template'),
 
   render: function() {
     var markup = this.model.toJSON();
@@ -669,7 +612,7 @@ App.NewItemView = Backbone.View.extend({
     'click .icon-close': 'removeImage'
   },
 
-  template: _.template($('#new-item-template').html()),
+  template: App.TemplateCache.get('#new-item-template'),
 
   initialize: function() {
     _.bindAll(this, 'save');
@@ -775,7 +718,8 @@ App.SingleItemView = Backbone.View.extend({
     'click .icon-edit': 'edit',
     'click .icon-trash': 'trash'
   },
-  template: _.template($('#single-view-template').html()),
+
+  template: App.TemplateCache.get('#single-view-template'),
 
   initialize: function() {
     Backbone.pubSub.trigger('header-hide', this);
@@ -931,9 +875,6 @@ App.convertLargeNum = function(Num) {
 };
 
 App.imager = function() {
-
-  console.log('file upload');
-
   var url = 'api/upload',
       $loading = $('.progress-bar-indication');
 

@@ -5,7 +5,7 @@ App.ItemView = Backbone.View.extend({
     'click .edit': 'edit',
     'click .delete': 'delete'
   },
-  template: _.template($('#category-items-template').html()),
+  template: App.TemplateCache.get('#category-items-template'),
 
   render: function() {
     var markup = this.model.toJSON();

@@ -46,6 +46,7 @@ module.exports = function(grunt) {
           'client/plugins/backbone.validation.js'
         ],
         'build/app.js': [
+          'js/cache.js',
           'js/models/*.js',
           'js/collections/*.js',
           'js/views/*.js',

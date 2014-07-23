@@ -1,5 +1,6 @@
 App.HeaderView = Backbone.View.extend({
-  template: _.template($('#header-template').html()),
+
+  template: App.TemplateCache.get('#header-template'),
 
   events: {
     'click .new' : 'newItem',

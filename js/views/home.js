@@ -2,7 +2,7 @@ App.HomeView = Backbone.View.extend({
 
   tagName: 'section',
   className: 'landing',
-  template: _.template($('#home-template').html()),
+  template: App.TemplateCache.get('#home-template'),
 
   events: {
     'click #add-item': 'addItem',

@@ -1,5 +1,3 @@
-var App = App || {};
-
 App.NewItemModel = Backbone.Model.extend({
 
   urlRoot: 'api/items/',

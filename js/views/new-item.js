@@ -7,7 +7,7 @@ App.NewItemView = Backbone.View.extend({
     'click .icon-close': 'removeImage'
   },
 
-  template: _.template($('#new-item-template').html()),
+  template: App.TemplateCache.get('#new-item-template'),
 
   initialize: function() {
     _.bindAll(this, 'save');

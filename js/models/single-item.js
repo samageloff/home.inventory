@@ -1,5 +1,3 @@
-var App = App || {};
-
 App.SingleItemModel = Backbone.Model.extend({
 
   events: {

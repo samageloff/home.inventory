@@ -7,7 +7,7 @@ App.SingleItemEditView = Backbone.View.extend({
     'click .icon-close': 'removeImage'
   },
 
-  template: _.template($('#edit-item-template').html()),
+  template: App.TemplateCache.get('#edit-item-template'),
 
   initialize: function() {
     _.bindAll(this, 'save');
