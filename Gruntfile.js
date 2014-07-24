@@ -27,27 +27,26 @@ module.exports = function(grunt) {
       clean: {
         build: ['build'],
         dev: {
-          src: ['build/app.js', 'build/main.css', 'build/<%= pkg.name %>.js']
+          src: ['build/app.js', 'build/main.css']
         },
         prod: ['dist']
       },
 
       concat: {
-        'build/vendor.js': [
+        'client/main.js': [
+          // frameworks
           'client/requires/modernizr/js/modernizr.js',
           'client/requires/jquery/js/jquery.js',
           'client/requires/underscore/js/underscore.js',
-          'client/requires/backbone/js/backbone.js'
-        ],
-        'build/plugins.js': [
+          'client/requires/backbone/js/backbone.js',
+          // plugins
           'client/plugins/jquery.ui.widget.js',
           'client/plugins/jquery.fileupload.js',
           // 'client/plugins/resampler.js',
           // 'client/plugins/filereader.js',
           'client/plugins/jquery.autocomplete.js',
-          'client/plugins/backbone.validation.js'
-        ],
-        'build/app.js': [
+          'client/plugins/backbone.validation.js',
+          // application
           'js/cache.js',
           'js/models/*.js',
           'js/collections/*.js',
@@ -65,7 +64,7 @@ module.exports = function(grunt) {
             style: 'nested'
           },
           files: {
-            'css/main.css': 'client/styles/main.scss'
+            'client/styles/main.css': 'client/styles/main.scss'
           }
         }
       },
@@ -105,8 +104,8 @@ module.exports = function(grunt) {
       // CSS minification.
       cssmin: {
           minify: {
-              src: ['css/main.css'],
-              dest: 'css/main-min.css'
+              src: ['client/styles/main.css'],
+              dest: 'css/main.css'
           }
       },
 
@@ -118,8 +117,8 @@ module.exports = function(grunt) {
                   verbose: true
               },
               files: [{
-                  src: ' build/main.js',
-                  dest: 'js/main-min.js'
+                  src: 'client/main.js',
+                  dest: 'build/main.js'
               }]
           }
       },
