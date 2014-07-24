@@ -26,8 +26,6 @@ App.ItemView = Backbone.View.extend({
 
     e.preventDefault();
 
-    if (window.confirm('Are you sure?')) {
-
       var $self = $(e.target),
           image_id = $self.data('id');
 
@@ -49,8 +47,6 @@ App.ItemView = Backbone.View.extend({
       else {
         App.router.navigate('#/categories');
       }
-
-    }
 
     e.stopImmediatePropagation();
 

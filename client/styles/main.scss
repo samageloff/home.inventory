@@ -348,6 +348,7 @@ section {
 
   .grid-item img {
     margin: .5em auto;
+    min-height: 80px;
   }
 
   h3 {
@@ -401,7 +402,7 @@ section {
         margin-right: 1em;
         margin-bottom: auto;
         opacity: 1;
-        max-width: 80px;
+        min-width: 80px;
       }
 
       h4 {
@@ -449,8 +450,10 @@ section {
 .detail {
 
   figure {
+    background: url("../images/ajax-loader.gif") no-repeat center;
     color: $gesso;
     margin: 0;
+    min-height: 332px;
     position: relative;
 
     img {
