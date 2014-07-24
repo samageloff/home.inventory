@@ -90,6 +90,13 @@ App.fixFixed = function() {
   }
 };
 
+App.splash = function() {
+  var splash = $('#splash');
+  window.setTimeout(function(){
+    splash.addClass('out');
+  }, 750);
+};
+
 // Extend the callbacks to work with Bootstrap, as used in this example
 // See: http://thedersen.com/projects/backbone-validation/#configuration/callbacks
 _.extend(Backbone.Validation.callbacks, {
@@ -154,4 +161,5 @@ Backbone.pubSub = _.extend({}, Backbone.Events);
 $(function() {
   App.router = new App.Router();
   Backbone.history.start();
+  App.splash();
 });

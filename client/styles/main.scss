@@ -641,3 +641,27 @@ footer {
   position: absolute;
 }
 
+
+/* Splash Screen */
+#splash {
+  background-color: $brand;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  @include transition (top 0.5s ease-in-out);
+  position: fixed;
+  z-index: 100;
+
+  &.out {
+    top: 100%;
+  }
+
+  h1 {
+    color: $gesso;
+    margin-top: 1.55em;
+  }
+
+}
+
+
