@@ -42,6 +42,8 @@ module.exports = function(grunt) {
         'build/plugins.js': [
           'client/plugins/jquery.ui.widget.js',
           'client/plugins/jquery.fileupload.js',
+          // 'client/plugins/resampler.js',
+          // 'client/plugins/filereader.js',
           'client/plugins/jquery.autocomplete.js',
           'client/plugins/backbone.validation.js'
         ],

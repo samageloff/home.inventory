@@ -883,6 +883,7 @@ App.imager = function() {
     dataType: 'json',
 
     add: function (e, data) {
+      console.log('data', data);
       $loading.addClass('active');
       data.submit();
     },
