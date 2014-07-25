@@ -1,27 +1,32 @@
 require('newrelic');
 
+
 // Module dependencies.
 var application_root = __dirname,
+    flash = require('connect-flash'),
     express = require('express'),
-    routes = require('./app/routes'),
     http = require('http'),
-    path = require('path'),
+    routes = require('./app/routes'),
     config = require('./app/imager'),
-    mongoose = require('mongoose');
+    mongoose = require('mongoose'),
+    passport = require('passport'),
+    LocalStrategy = require('passport-local').Strategy;
 
 // Create server
 var app = express();
 
 // Configure server
-app.set('port', process.env.PORT || 3001);
-app.set('views', __dirname + '/views');
-app.set('view engine', 'hjs');
-app.use(express.static(__dirname));
-app.use(express.methodOverride());
-app.use(express.logger('dev'));
-app.use(express.favicon());
-app.use(express.bodyParser());
-app.use(app.router);
+app.configure(function() {
+  app.set('port', process.env.PORT || 3001);
+  app.use(express.static(__dirname));
+  app.use(express.cookieParser());
+  app.use(express.bodyParser());
+  app.use(express.session({ secret: 'keyboard cat' }));
+  app.use(passport.initialize());
+  app.use(passport.session());
+  app.use(app.router);
+  app.use(flash());
+});
 
 // Development only
 app.configure('development', function() {

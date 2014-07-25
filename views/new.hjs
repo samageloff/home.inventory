@@ -1,1 +1,0 @@
-{bucket_dir: "{{ bucket_dir }}", aws_key: "{{ aws_key }}", acl: "public-read", redirect: "{{ redirect_host }}"}
