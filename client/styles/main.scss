@@ -215,7 +215,7 @@ section {
     height: $grid-item-height;
     overflow: hidden;
     margin-bottom: .5em;
-    padding: 1em;
+    padding: .75em;
     position: relative;
     width: 100%;
     @include transition (all 0.2s ease-in-out);
@@ -231,7 +231,6 @@ section {
   }
 
   .grid-item img {
-    border-radius: 50%;
     display: block;
     margin-bottom: 1.2em;
   }
@@ -296,6 +295,7 @@ section {
 
   .grid-item {
     text-align: center;
+    padding: 1em;
   }
 
   .grid-item,
@@ -328,7 +328,13 @@ section {
     text-align: left;
 
     [class^="icon-"]:before {
+      position: relative;
       margin-right: 1em;
+      top: 2px;
+    }
+
+    [class^="icon-"]:after {
+      top: 28%;
     }
 
     &:last-child {
@@ -345,7 +351,6 @@ section {
   .grid-item img {
     height: $thumbnail;
     float: left;
-    @include filter(grayscale(80%));
     margin: 0 1em 0 0;
     max-width: $thumbnail;
     min-height: $thumbnail;
@@ -355,7 +360,7 @@ section {
   h3 {
     color: $midnight;
     font-size: 1.25em;
-    margin: .75em 0 -5px;
+    margin: .85em 0 -5px;
 
     +small {
       color: $blue;
@@ -400,7 +405,6 @@ section {
       min-height: 60px;
 
       img {
-        border-radius: 50%;
         float: left;
         height: $thumbnail;
         margin-right: 1em;
@@ -432,8 +436,6 @@ section {
 
     &.icon-close {
       font-size: 1.35em;
-      right: -5px;
-      padding: 10px;
       position: relative;
       top: 4px;
     }
