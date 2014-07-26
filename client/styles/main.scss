@@ -17,6 +17,7 @@ $light: 200;
 $medium: 400;
 $heavy: 600;
 
+$thumbnail: 80px;
 
 /* Mixins */
 .hide-text {
@@ -212,11 +213,10 @@ section {
     cursor: pointer;
     float: left;
     height: $grid-item-height;
-    margin-bottom: 1em;
     overflow: hidden;
+    margin-bottom: .5em;
     padding: 1em;
     position: relative;
-    text-align: center;
     width: 100%;
     @include transition (all 0.2s ease-in-out);
 
@@ -231,9 +231,9 @@ section {
   }
 
   .grid-item img {
+    border-radius: 50%;
     display: block;
     margin-bottom: 1.2em;
-    opacity: .2;
   }
 
   .grid-item h1 {
@@ -342,18 +342,20 @@ section {
 /* Groups Page */
 .groups.grid-items-lines {
 
-  .grid-item {
-    height: 12em;
-  }
-
   .grid-item img {
-    margin: .5em auto;
-    min-height: 80px;
+    height: $thumbnail;
+    float: left;
+    @include filter(grayscale(80%));
+    margin: 0 1em 0 0;
+    max-width: $thumbnail;
+    min-height: $thumbnail;
+    min-width: $thumbnail;
   }
 
   h3 {
     color: $midnight;
     font-size: 1.25em;
+    margin: .75em 0 -5px;
 
     +small {
       color: $blue;
@@ -373,11 +375,12 @@ section {
   p {
     font-size: .75em;
     line-height: 1.75em;
+    margin-bottom: 0;
     margin-right: 1em;
   }
 
   .icon-forward-r:after {
-    top: 45%;
+    top: 39%;
   }
 
 }
@@ -397,12 +400,14 @@ section {
       min-height: 60px;
 
       img {
+        border-radius: 50%;
         float: left;
-        height: 80px;
+        height: $thumbnail;
         margin-right: 1em;
         margin-bottom: auto;
         opacity: 1;
-        min-width: 80px;
+        min-width: $thumbnail;
+        max-width: $thumbnail;
       }
 
       h4 {
@@ -663,5 +668,3 @@ footer {
   }
 
 }
-
-

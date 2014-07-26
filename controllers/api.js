@@ -59,6 +59,7 @@ module.exports = {
         slug: { $first: '$slug' },
         value: { $sum: "$value" },
         count: { $sum: 1 },
+        thumb: { $first: '$image' }
       }
     },
     function(err, items) {
