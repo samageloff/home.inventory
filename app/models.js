@@ -1,5 +1,4 @@
 var mongoose = require('mongoose'),
-    flash = require('connect-flash'),
     Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId,
     passport = require('passport'),

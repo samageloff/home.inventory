@@ -3,7 +3,6 @@ require('newrelic');
 
 // Module dependencies.
 var application_root = __dirname,
-    flash = require('connect-flash'),
     express = require('express'),
     http = require('http'),
     routes = require('./app/routes'),
@@ -25,7 +24,6 @@ app.configure(function() {
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
-  app.use(flash());
 });
 
 // Development only
