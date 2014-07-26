@@ -7,9 +7,7 @@ var application_root = __dirname,
     http = require('http'),
     routes = require('./app/routes'),
     config = require('./app/imager'),
-    mongoose = require('mongoose'),
-    passport = require('passport'),
-    LocalStrategy = require('passport-local').Strategy;
+    mongoose = require('mongoose');
 
 // Create server
 var app = express();
@@ -20,9 +18,6 @@ app.configure(function() {
   app.use(express.static(__dirname));
   app.use(express.cookieParser());
   app.use(express.bodyParser());
-  app.use(express.session({ secret: 'keyboard cat' }));
-  app.use(passport.initialize());
-  app.use(passport.session());
   app.use(app.router);
 });
 
