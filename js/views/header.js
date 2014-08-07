@@ -20,7 +20,7 @@ App.HeaderView = Backbone.View.extend({
 
     Backbone.pubSub.on('item-list', function() {
       this.setCurrentView('item-list', {
-        'text': Backbone.history.fragment.split('/')[1],
+        'text': App.convertToProperTitle(Backbone.history.fragment.split('/')[1]),
         'currentClass': 'icon-back',
         'lastClass': 'icon-home'
       });

@@ -945,7 +945,8 @@ section {
 .groups.grid-items-lines h3 {
   color: black;
   font-size: 1.25em;
-  margin: .85em 0 -5px; }
+  margin: .85em 0 -5px;
+  padding-right: 1.5em; }
   .groups.grid-items-lines h3 + small {
     color: #477dca;
     margin-bottom: 0; }

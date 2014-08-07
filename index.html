@@ -67,7 +67,12 @@
 
     <script type="text/template" id="category-summary-template">
       <a href="#/category/<%= slug %>" class="grid-item icon-forward-r">
-        <img src="<%= thumb[0] %>" alt="">
+          <% if (!thumb[0]) { %>
+            <img src="images/no-image.gif" alt="">
+          <% }
+          else { %>
+            <img src="<%= thumb[0] %>" alt="">
+          <% } %>
         <h3><%= _id %><span>(<%= count %>)</span></h3>
         <small>Value: $<%= value %></small>
       </a>

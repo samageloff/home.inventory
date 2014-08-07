@@ -16937,7 +16937,7 @@ App.HeaderView = Backbone.View.extend({
 
     Backbone.pubSub.on('item-list', function() {
       this.setCurrentView('item-list', {
-        'text': Backbone.history.fragment.split('/')[1],
+        'text': App.convertToProperTitle(Backbone.history.fragment.split('/')[1]),
         'currentClass': 'icon-back',
         'lastClass': 'icon-home'
       });
@@ -17501,6 +17501,10 @@ App.splash = function() {
   window.setTimeout(function(){
     splash.addClass('out');
   }, 750);
+};
+
+App.convertToProperTitle = function(str) {
+  return str.replace(/-/g, ' ');
 };
 
 // Extend the callbacks to work with Bootstrap, as used in this example

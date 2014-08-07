@@ -97,6 +97,10 @@ App.splash = function() {
   }, 750);
 };
 
+App.convertToProperTitle = function(str) {
+  return str.replace(/-/g, ' ');
+};
+
 // Extend the callbacks to work with Bootstrap, as used in this example
 // See: http://thedersen.com/projects/backbone-validation/#configuration/callbacks
 _.extend(Backbone.Validation.callbacks, {

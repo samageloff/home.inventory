@@ -96,6 +96,8 @@ module.exports = {
         item.quantity = request.body.quantity;
         item.image = request.body.image;
 
+        console.log('item.image > ', item.image);
+
     item.save(function(err) {
       if(!err) {
           console.log('app post', item);
