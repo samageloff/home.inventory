@@ -87,6 +87,12 @@ header {
         position: relative;
         top: 2px;
         width: 1em;
+
+        &:focus,
+        &:active {
+          opacity: .5;
+          top: 3px;
+        }
       }
 
       &.location {

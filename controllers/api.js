@@ -145,7 +145,7 @@ module.exports = {
       return item.remove(function(err) {
         if(!err) {
             console.log('Item removed');
-            return response.send('');
+            return response.send(item);
         } else {
             console.log(err);
         }

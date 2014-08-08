@@ -8,10 +8,8 @@ App.CategoryIndexView = Backbone.View.extend({
   },
 
   initialize: function() {
-    Backbone.pubSub.trigger('header-default', this);
-
+    Backbone.pubSub.trigger('category-index', this);
     this.listenTo(this.collection, 'reset', this.render);
-    console.log('category-index');
   },
 
   render: function() {

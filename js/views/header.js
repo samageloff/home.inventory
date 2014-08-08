@@ -4,7 +4,8 @@ App.HeaderView = Backbone.View.extend({
 
   events: {
     'click .new' : 'newItem',
-    'click .icon-back': 'goBack'
+    'click .icon-back': 'goBack',
+    'click .root': 'goToRoot'
   },
 
   initialize: function() {
@@ -13,16 +14,28 @@ App.HeaderView = Backbone.View.extend({
     Backbone.pubSub.on('header-default', function() {
       this.setCurrentView('header-default', {
         'text': '',
-        'currentClass': 'icon-home',
-        'lastClass': 'icon-back'
+        'currentClass': 'icon-home'
+      });
+    }, this);
+
+    Backbone.pubSub.on('header-home', function() {
+      this.setCurrentView('header-home', {
+        'text': '',
+        'currentClass': 'icon-home'
       });
     }, this);
 
     Backbone.pubSub.on('item-list', function() {
       this.setCurrentView('item-list', {
         'text': App.convertToProperTitle(Backbone.history.fragment.split('/')[1]),
-        'currentClass': 'icon-back',
-        'lastClass': 'icon-home'
+        'currentClass': 'icon-back'
+      });
+    }, this);
+
+    Backbone.pubSub.on('category-index', function() {
+      this.setCurrentView('category-index', {
+        'text': 'All Categories',
+        'currentClass': 'icon-back root'
       });
     }, this);
 
@@ -57,14 +70,18 @@ App.HeaderView = Backbone.View.extend({
 
       location.text(conf.text);
       navigation.find('a')
-        .addClass(conf.currentClass)
-        .removeClass(conf.lastClass);
+        .removeClass()
+        .addClass(conf.currentClass);
   },
 
-  goBack: function(e) {
+  goBack: function(e, conf) {
     e.preventDefault();
-    Backbone.pubSub.trigger('remove-category-list', this);
     App.router.navigate('#/categories');
+  },
+
+  goToRoot: function(e) {
+    e.preventDefault();
+    App.router.navigate('#/');
   },
 
   displayHeader: function(config) {

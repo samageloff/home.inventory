@@ -40,7 +40,6 @@ App.ItemView = Backbone.View.extend({
       }
 
       this.model.destroy({
-        dataType: 'text',
         success: function(response, model) {
           if (collection_length > 1) {
             App.router.navigate('#/category/' + category);
