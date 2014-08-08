@@ -11,6 +11,7 @@ App.ItemView = Backbone.View.extend({
     var markup = this.model.toJSON();
     this.$el.empty();
     this.$el.html(this.template(markup)).fadeIn('fast');
+    console.log('item.js');
     return this;
   },
 
@@ -38,17 +39,23 @@ App.ItemView = Backbone.View.extend({
         });
       }
 
-      this.model.destroy();
-      this.close();
+      this.model.destroy({
+        dataType: 'text',
+        success: function(response, model) {
+          if (collection_length > 1) {
+            App.router.navigate('#/category/' + category);
+          }
+          else {
+            App.router.navigate('#/categories');
+          }
+          this.close();
+        },
+        error: function() {
+          console.log('An error has occurred');
+        }
+      });
 
-      if (collection_length > 1) {
-        App.router.navigate('#/category/' + category);
-      }
-      else {
-        App.router.navigate('#/categories');
-      }
-
-    e.stopImmediatePropagation();
+    // e.stopImmediatePropagation();
 
   },
 

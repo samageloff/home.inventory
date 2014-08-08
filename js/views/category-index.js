@@ -9,10 +9,15 @@ App.CategoryIndexView = Backbone.View.extend({
 
   initialize: function() {
     Backbone.pubSub.trigger('header-default', this);
+
+    this.listenTo(this.collection, 'reset', this.render);
+    console.log('category-index');
   },
 
   render: function() {
     this.$el.empty();
+
+    console.log(this.collection.length);
 
     // if there are no categories, redirect
     if (this.collection.length === 0) {
