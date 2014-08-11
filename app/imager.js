@@ -7,12 +7,12 @@ module.exports = {
       },
       resizeAndCrop: {
         gallery: {
-          resize: '320',
-          crop: '320x320'
+          resize: '320x320^',
+          crop: '320x320 center'
         },
         thumb: {
-          resize: '80',
-          crop: '80x80'
+          resize: '80x80^',
+          crop: '80x80 center'
         }
       }
     }

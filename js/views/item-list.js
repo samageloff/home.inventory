@@ -14,8 +14,6 @@ App.ItemListView = Backbone.View.extend({
       this.close();
     }, this);
 
-    console.log('item list');
-
     this.listenTo(this.collection, 'reset', this.render);
   },
 

@@ -17079,8 +17079,6 @@ App.ItemListView = Backbone.View.extend({
       this.close();
     }, this);
 
-    console.log('item list');
-
     this.listenTo(this.collection, 'reset', this.render);
   },
 
@@ -17148,18 +17146,20 @@ App.ItemView = Backbone.View.extend({
 
       this.model.destroy({
         success: function(response, model) {
+          console.log('Boom, deleted it. Nice work.');
           if (collection_length > 1) {
             App.router.navigate('#/category/' + category);
           }
           else {
             App.router.navigate('#/categories');
           }
-          this.close();
         },
         error: function() {
           console.log('An error has occurred');
         }
       });
+
+      this.close();
 
     // e.stopImmediatePropagation();
 

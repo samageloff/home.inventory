@@ -86,7 +86,7 @@ module.exports = {
 
   // Insert an item
   insert: function(request, response) {
-    console.log('Insert item ' + request);
+    console.log('Insert item ' + response);
     var item = new models.ItemModel;
         item.title = request.body.title;
         item.category = request.body.category;
@@ -95,8 +95,6 @@ module.exports = {
         item.value = request.body.value;
         item.quantity = request.body.quantity;
         item.image = request.body.image;
-
-        console.log('item.image > ', item.image);
 
     item.save(function(err) {
       if(!err) {
