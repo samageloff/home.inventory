@@ -997,7 +997,9 @@ section {
     text-decoration: underline; }
   .items.grid-items-lines .grid-item span.icon-close {
     font-size: 1.35em;
+    padding: .5em;
     position: relative;
+    right: -.5em;
     top: 4px; }
 .items.grid-items-lines .controls {
   display: table-cell;
