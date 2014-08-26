@@ -3,7 +3,7 @@ App.NewItemView = Backbone.View.extend({
   events: {
     'submit #new-item-form': 'save',
     'click #save': 'save',
-    'click #cancel': 'cancel',
+    'click #cancel': 'close',
     'click .icon-close': 'removeImage'
   },
 
@@ -17,6 +17,7 @@ App.NewItemView = Backbone.View.extend({
 
     // Listen for image upload and pass to current model
     Backbone.pubSub.on('image-upload-complete', function() {
+      console.log('image-upload-complete, trigger');
       this.setImagePath();
     }, this);
   },
@@ -29,21 +30,26 @@ App.NewItemView = Backbone.View.extend({
 
   setImagePath: function() {
     this.model.set('image', App.imager.image_store);
+    console.log('this.model.set -> setImagePath', App.imager.image_store);
     this.updatePlaceholder(App.imager.image_store[3]);
   },
 
   save: function(e) {
     e.preventDefault();
+    var self = this;
     var data = $('#new-item-form').serializeObject();
     var value = $(e.currentTarget).val();
     var slugVal = App.convertToSlug($('#category').val());
     data.slug = slugVal;
 
     this.model.set(data);
+    console.log('this.model.set -> save', data);
 
     if(this.model.isValid(true)) {
       this.model.save(data, {
         success: function(response, model) {
+          console.log('this.model.save -> success', data);
+          self.close();
           App.router.navigate('#/view/' + model.id);
         }
       });
@@ -92,17 +98,12 @@ App.NewItemView = Backbone.View.extend({
     }
   },
 
-  cancel: function(e) {
-    e.preventDefault();
-    this.close();
-    App.router.navigate('#/');
-  },
-
   close: function() {
     console.log('Kill:App.NewItemView ', this);
-    App.categoryService('dispose');
     this.unbind();
     this.remove();
+    App.categoryService('dispose');
+    App.router.navigate('#/');
   }
 
 });

@@ -37,7 +37,6 @@ App.Router = Backbone.Router.extend({
   groupList: function(id) {
     var itemCollection = new App.ItemListCollection();
     itemCollection.fetch({ success: function(itemCollection) {
-      console.log(itemCollection);
       var categoryListView = new App.ItemListView({ collection: itemCollection });
       $('#main').html(categoryListView.render().el);
     }});
@@ -62,7 +61,6 @@ App.Router = Backbone.Router.extend({
         App.imager();
         App.categoryService();
         App.displayToggle();
-        App.fixFixed();
       }
     });
   },
@@ -82,6 +80,6 @@ App.Router = Backbone.Router.extend({
 
   notFound: function() {
     $('#main').html('<h1>It\'s broken</h1>');
-  }
+  },
 
 });

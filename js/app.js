@@ -10,6 +10,7 @@ App.convertLargeNum = function(Num) {
 };
 
 App.imager = function() {
+  console.log('app imager');
   var url = 'api/upload',
       $loading = $('.progress-bar-indication');
 
@@ -41,8 +42,12 @@ App.imager = function() {
           uri + '/large_' + path,
           path];
         Backbone.pubSub.trigger('image-upload-complete', App.imager.image_store);
+        console.log('App Imager Done ->');
       });
     }
+  }).bind('fileuploaddone', function (e, data) {
+    console.log('imager fileuploaddone - > destroy', this);
+    $('#fileupload').fileupload('destroy');
   });
 };
 

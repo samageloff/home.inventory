@@ -17116,7 +17116,6 @@ App.ItemView = Backbone.View.extend({
     var markup = this.model.toJSON();
     this.$el.empty();
     this.$el.html(this.template(markup)).fadeIn('fast');
-    console.log('item.js');
     return this;
   },
 
@@ -17177,7 +17176,7 @@ App.NewItemView = Backbone.View.extend({
   events: {
     'submit #new-item-form': 'save',
     'click #save': 'save',
-    'click #cancel': 'cancel',
+    'click #cancel': 'close',
     'click .icon-close': 'removeImage'
   },
 
@@ -17191,6 +17190,7 @@ App.NewItemView = Backbone.View.extend({
 
     // Listen for image upload and pass to current model
     Backbone.pubSub.on('image-upload-complete', function() {
+      console.log('image-upload-complete, trigger');
       this.setImagePath();
     }, this);
   },
@@ -17203,21 +17203,26 @@ App.NewItemView = Backbone.View.extend({
 
   setImagePath: function() {
     this.model.set('image', App.imager.image_store);
+    console.log('this.model.set -> setImagePath', App.imager.image_store);
     this.updatePlaceholder(App.imager.image_store[3]);
   },
 
   save: function(e) {
     e.preventDefault();
+    var self = this;
     var data = $('#new-item-form').serializeObject();
     var value = $(e.currentTarget).val();
     var slugVal = App.convertToSlug($('#category').val());
     data.slug = slugVal;
 
     this.model.set(data);
+    console.log('this.model.set -> save', data);
 
     if(this.model.isValid(true)) {
       this.model.save(data, {
         success: function(response, model) {
+          console.log('this.model.save -> success', data);
+          self.close();
           App.router.navigate('#/view/' + model.id);
         }
       });
@@ -17266,17 +17271,12 @@ App.NewItemView = Backbone.View.extend({
     }
   },
 
-  cancel: function(e) {
-    e.preventDefault();
-    this.close();
-    App.router.navigate('#/');
-  },
-
   close: function() {
     console.log('Kill:App.NewItemView ', this);
-    App.categoryService('dispose');
     this.unbind();
     this.remove();
+    App.categoryService('dispose');
+    App.router.navigate('#/');
   }
 
 });
@@ -17384,7 +17384,6 @@ App.Router = Backbone.Router.extend({
   groupList: function(id) {
     var itemCollection = new App.ItemListCollection();
     itemCollection.fetch({ success: function(itemCollection) {
-      console.log(itemCollection);
       var categoryListView = new App.ItemListView({ collection: itemCollection });
       $('#main').html(categoryListView.render().el);
     }});
@@ -17409,7 +17408,6 @@ App.Router = Backbone.Router.extend({
         App.imager();
         App.categoryService();
         App.displayToggle();
-        App.fixFixed();
       }
     });
   },
@@ -17429,7 +17427,7 @@ App.Router = Backbone.Router.extend({
 
   notFound: function() {
     $('#main').html('<h1>It\'s broken</h1>');
-  }
+  },
 
 });
 App.convertToSlug = function(Text) {
@@ -17444,6 +17442,7 @@ App.convertLargeNum = function(Num) {
 };
 
 App.imager = function() {
+  console.log('app imager');
   var url = 'api/upload',
       $loading = $('.progress-bar-indication');
 
@@ -17475,8 +17474,12 @@ App.imager = function() {
           uri + '/large_' + path,
           path];
         Backbone.pubSub.trigger('image-upload-complete', App.imager.image_store);
+        console.log('App Imager Done ->');
       });
     }
+  }).bind('fileuploaddone', function (e, data) {
+    console.log('imager fileuploaddone - > destroy', this);
+    $('#fileupload').fileupload('destroy');
   });
 };
 

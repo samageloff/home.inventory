@@ -26,8 +26,8 @@ module.exports = {
     S3: {
       key: 'AKIAJSIGDTCPT22D3NEA',
       secret: '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',
-      bucket: 'belongings-global',
-      cdn: 'http://belongings-global.s3.amazonaws.com', // (optional)
+      bucket: 'belongings-test',
+      cdn: 'http://belongings-test.s3.amazonaws.com', // (optional)
       storageClass: 'REDUCED_REDUNDANCY' // (optional)
       // set `secure: false` if you want to use buckets with characters like '.' (dot)
     }
