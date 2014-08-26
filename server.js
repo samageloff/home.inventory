@@ -15,6 +15,7 @@ var app = express();
 // Configure server
 app.configure(function() {
   app.set('port', process.env.PORT || 3001);
+  app.use(express.compress());
   app.use(express.static(__dirname));
   app.use(express.cookieParser());
   app.use(express.bodyParser());
