@@ -361,3 +361,9 @@
 {"name":"newrelic","hostname":"samuels-mini.home","pid":81600,"level":30,"msg":"Starting New Relic for Node.js connection process.","time":"2014-08-16T10:58:28.077Z","v":0}
 {"name":"newrelic","hostname":"samuels-mini.home","pid":81600,"component":"new_relic_response","level":30,"msg":"Reporting to: https://rpm.newrelic.com/accounts/723165/applications/4323978","time":"2014-08-16T10:58:33.562Z","v":0}
 {"name":"newrelic","hostname":"samuels-mini.home","pid":81600,"component":"collector_api","level":30,"msg":"Connected to collector-137.newrelic.com:443 with agent run ID 1048526426.","time":"2014-08-16T10:58:33.563Z","v":0}
+{"name":"newrelic","hostname":"samuels-mini.home","pid":14331,"level":30,"msg":"Starting New Relic for Node.js connection process.","time":"2014-08-26T11:51:56.811Z","v":0}
+{"name":"newrelic","hostname":"samuels-mini.home","pid":14331,"component":"new_relic_response","level":30,"msg":"Reporting to: https://rpm.newrelic.com/accounts/723165/applications/4323978","time":"2014-08-26T11:52:01.674Z","v":0}
+{"name":"newrelic","hostname":"samuels-mini.home","pid":14331,"component":"collector_api","level":30,"msg":"Connected to collector-137.newrelic.com:443 with agent run ID 1084741664.","time":"2014-08-26T11:52:01.674Z","v":0}
+{"name":"newrelic","hostname":"samuels-mini.home","pid":14582,"level":30,"msg":"Starting New Relic for Node.js connection process.","time":"2014-08-26T12:16:05.590Z","v":0}
+{"name":"newrelic","hostname":"samuels-mini.home","pid":14582,"component":"new_relic_response","level":30,"msg":"Reporting to: https://rpm.newrelic.com/accounts/723165/applications/4323978","time":"2014-08-26T12:16:08.188Z","v":0}
+{"name":"newrelic","hostname":"samuels-mini.home","pid":14582,"component":"collector_api","level":30,"msg":"Connected to collector-137.newrelic.com:443 with agent run ID 1084804478.","time":"2014-08-26T12:16:08.189Z","v":0}
