@@ -11,12 +11,13 @@ var application_root = __dirname,
 
 // Create server
 var app = express();
+var oneDay = 86400000;
 
 // Configure server
 app.configure(function() {
   app.set('port', process.env.PORT || 3001);
   app.use(express.compress());
-  app.use(express.static(__dirname));
+  app.use(express.static(__dirname), {maxAge: oneDay});
   app.use(express.cookieParser());
   app.use(express.bodyParser());
   app.use(app.router);
