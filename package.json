@@ -29,7 +29,7 @@
     "MD5": "~1.2.0"
   },
   "devDependencies": {
-    "bcrypt": "~0.7.8",
+    "bcrypt": "~5.0.0",
     "passport": "~0.2.0",
     "passport-local": ">= 0.0.0",
     "connect-flash": "~0.1.1",
