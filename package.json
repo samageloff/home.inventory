@@ -19,7 +19,7 @@
     "gm": "1.13.x",
     "pkgcloud": "0.8.x",
     "knox": "0.8.x",
-    "mime": "1.2.x",
+    "mime": "2.4.x",
     "newrelic": "~1.8.1",
     "lodash": "2.4.1",
     "express": "~3.4.2",
