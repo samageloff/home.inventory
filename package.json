@@ -21,7 +21,7 @@
     "knox": "0.8.x",
     "mime": "1.2.x",
     "newrelic": "~1.8.1",
-    "lodash": "2.4.1",
+    "lodash": "4.17.20",
     "express": "~3.4.2",
     "mongoose": "~3.8.3",
     "handlebars-runtime": "~1.0.12",
