@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "async": "0.2.x",
-    "gm": "1.13.x",
+    "gm": "1.23.x",
     "pkgcloud": "0.8.x",
     "knox": "0.8.x",
     "mime": "1.2.x",
@@ -70,7 +70,7 @@
     "proxyquire": "~0.5.2",
     "node-uuid": "*",
     "mime": "*",
-    "gm": "1.9.0",
+    "gm": "1.23.1",
     "mime-magic": "5.14.0",
     "node-bourbon": "^1.2.3",
     "node-neat": "^1.3.0"
